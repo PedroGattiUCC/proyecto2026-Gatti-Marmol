@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Pedro Gatti, Joaquin Mármol" />
+  <meta name="description" content="Laure Joyas - Piezas exclusivas de alta joyería, anillos con diamantes y cotizador personalizado en tiempo real." />
+  <meta name="keywords" content="joyería fina, oro 18k, diamantes, anillos de compromiso, cotizador de joyas, plata 925" />
+  <title>Laure Joyas | Alta Joyería y Cotizador Personalizado</title>
+  <link rel="icon" type="image/svg+xml" href="imagenes/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="#inicio" id="logo-brand">
+        <img id="logo-icon" src="imagenes/favicon.svg" alt="Logotipo emblemático de Laure Joyas" />
+        <h1>Laure Joyas</h1>
+      </a>
+      <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#coleccion">Colección</a></li>
+        <li><a href="#valores">Valores de Referencia</a></li>
+        <li><a href="#cotizador">Cotizador</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="inicio">
+      <div id="hero-banner">
+        <div id="hero-texto">
+          <h2>Piezas Eternas Forjadas a Mano</h2>
+          <p>
+            En Laure Joyas fusionamos el arte orfebre tradicional con gemas de pureza inigualable. Cada joya cuenta una historia única, diseñada para trascender generaciones con la máxima distinción.
+          </p>
+        </div>
+        <div id="hero-imagen-wrapper">
+          <img id="hero-img" src="imagenes/joyas_hero.jpg" alt="Colección de anillos y colgantes con diamantes engarzados sobre terciopelo" />
+        </div>
+      </div>
+    </section>
+
+    <section id="coleccion">
+      <h2>Obras Destacadas</h2>
+      <p class="subtitulo-seccion">Selección curada de nuestras piezas más representativas en oro blanco, amarillo y piedras preciosas.</p>
+
+      <div class="catalogo-grid">
+        <article>
+          <div class="card-imagen-wrapper">
+            <img class="card-img" src="imagenes/joyas_hero.jpg" alt="Anillo Solitario de Oro Amarillo 18k con Diamante Central" />
+          </div>
+          <div class="card-cuerpo">
+            <span class="badge-metal">Oro Amarillo 18k</span>
+            <h3>Solitario Imperial</h3>
+            <p>Anillo solitario con diamante central talla brillante engarzado en garras y pavé lateral en el cuerpo del anillo.</p>
+            <p class="precio-texto">$ 850.000 ARS</p>
+          </div>
+        </article>
+
+        <article>
+          <div class="card-imagen-wrapper">
+            <img class="card-img" src="imagenes/joyas_collar.jpg" alt="Colgante Esmeralda de Platino con Diamante Talla Esmeralda" />
+          </div>
+          <div class="card-cuerpo">
+            <span class="badge-metal">Platino & Diamante</span>
+            <h3>Colgante Luminance</h3>
+            <p>Cadena veneciana con diamante talla esmeralda de excepcional claridad y engarce biselado en platino puro.</p>
+            <p class="precio-texto">$ 1.250.000 ARS</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="valores">
+      <h2>Tarifas de Referencia de Materiales</h2>
+      <p class="subtitulo-seccion">Costos estándar por gramo de metal y mano de obra especializada utilizados en nuestro taller.</p>
+
+      <div>
+        <table>
+          <caption>Tabla de Valores de Referencia por Gramo de Metal Precioso</caption>
+          <thead>
+            <tr>
+              <th scope="col">Metal Precioso</th>
+              <th scope="col">Pureza / Ley</th>
+              <th scope="col">Valor Estimado por Gramo</th>
+              <th scope="col">Acabado Disponible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Oro Amarillo / Blanco / Rosa</td>
+              <td>18 Quilates (750)</td>
+              <td>$ 95.000 ARS</td>
+              <td>Pulido espejo o satinado</td>
+            </tr>
+            <tr>
+              <td>Plata de Ley</td>
+              <td>925 Milésimas</td>
+              <td>$ 12.000 ARS</td>
+              <td>Envejecido o rodinado</td>
+            </tr>
+            <tr>
+              <td>Platino Noble</td>
+              <td>950 Milésimas</td>
+              <td>$ 110.000 ARS</td>
+              <td>Brillo de alta durabilidad</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="cotizador">
+      <div id="cotizador-seccion">
+        <h2>Cotizador Interactivo de Joyas</h2>
+        <p class="subtitulo-seccion">
+          Personalice su próxima joya y obtenga una estimación instantánea de presupuesto antes de coordinar su cita con nuestros orfebres.
+        </p>
+
+        <form id="cotizador-form" action="javascript:void(0);">
+          <div class="campo-grupo">
+            <label for="tipo-metal">Seleccione el metal precioso:</label>
+            <select id="tipo-metal" name="metal">
+              <option value="oro18k">Oro 18 Quilates ($95.000/g)</option>
+              <option value="plata925">Plata 925 ($12.000/g)</option>
+              <option value="platino">Platino 950 ($110.000/g)</option>
+            </select>
+          </div>
+
+          <div class="campo-grupo">
+            <label for="peso-joya">Peso aproximado en gramos (1 - 500 g):</label>
+            <input
+              type="number"
+              id="peso-joya"
+              name="peso"
+              placeholder="Ej: 10"
+              size="10"
+              maxlength="4"
+              min="1"
+              max="500"
+              required
+              onchange="validarPeso(this)"
+            />
+            <p class="campo-ayuda">El peso típico de un anillo ronda entre 4 y 12 gramos.</p>
+          </div>
+
+          <div class="campo-grupo">
+            <label for="cantidad-gemas">Cantidad de gemas a engarzar:</label>
+            <input
+              type="number"
+              id="cantidad-gemas"
+              name="gemas"
+              value="0"
+              placeholder="0"
+              size="5"
+              maxlength="2"
+              min="0"
+              max="30"
+              onchange="validarGemas(this)"
+            />
+            <p class="campo-ayuda">$25.000 ARS adicionales por engarce y gema seleccionada.</p>
+          </div>
+
+          <div class="campo-grupo">
+            <label for="texto-grabado">Grabado personalizado (opcional):</label>
+            <input
+              type="text"
+              id="texto-grabado"
+              name="grabado"
+              placeholder="Ej: Pedro & Joaquin 2026"
+              size="25"
+              maxlength="25"
+            />
+            <p class="campo-ayuda">Hasta 25 caracteres para fechas, nombres o iniciales.</p>
+          </div>
+
+          <div id="acciones-formulario">
+            <button type="button" id="btn-calcular" onclick="calcularPresupuesto()">Calcular Presupuesto</button>
+            <button type="button" id="btn-limpiar" onclick="limpiarCotizador()">Restablecer</button>
+          </div>
+
+          <div id="contenedor-resultado">
+            <h3>Presupuesto Estimativo</h3>
+            <div class="resumen-linea">
+              <span id="detalle-metal">Metal seleccionado: $0</span>
+            </div>
+            <div class="resumen-linea">
+              <span id="detalle-gemas">Gemas engarzadas: $0</span>
+            </div>
+            <div class="resumen-linea">
+              <span id="detalle-grabado">Grabado: $0</span>
+            </div>
+            <p id="monto-final">$ 0 ARS</p>
+            <p class="campo-ayuda">* Las cotizaciones son estimativas y pueden variar según la fluctuación internacional de metales finos.</p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Laure Joyas. Proyecto académico de Taller de Desarrollo Web - Universidad Católica de Córdoba.</p>
+    <p>Desarrollado por Pedro Gatti (Legajo: 2519717) y Joaquin Mármol (Legajo: 2514908).</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
