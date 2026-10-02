@@ -1,5 +1,5 @@
-﻿/* ==========================================================================
-   Laure Joyas - Estilos Generales (CSS3)
+/* ==========================================================================
+   Laure Joyas - Hoja de Estilos Centralizada (CSS3)
    Cátedra: Taller de Desarrollo Web - UCC 2026
    Autores: Pedro Gatti & Joaquin Mármol
    ========================================================================== */
@@ -14,11 +14,13 @@
 }
 
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background-color: #0b0f12;
   color: #e5e7eb;
   line-height: 1.6;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 header {
@@ -30,15 +32,46 @@ header {
   z-index: 100;
 }
 
-h1, h2, h3, h4 {
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+main {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  flex: 1 0 auto;
+}
+
+section {
+  margin-bottom: 4rem;
+}
+
+article {
+  background-color: #161e27;
+  border: 1px solid #243444;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+h1,
+h2,
+h3,
+h4 {
   font-family: "Playfair Display", Georgia, serif;
   color: #f5d77f;
   letter-spacing: 0.05em;
+  font-weight: 700;
 }
 
 h1 {
   font-size: 2.2rem;
-  font-weight: 700;
 }
 
 h2 {
@@ -52,49 +85,14 @@ h3 {
   margin-bottom: 0.5rem;
 }
 
+h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+}
+
 p {
   color: #9ca3af;
   margin-bottom: 1rem;
-}
-
-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-nav ul {
-  display: flex;
-  list-style: none;
-  gap: 1.5rem;
-}
-
-nav a {
-  color: #d1d5db;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition: color 0.3s ease;
-}
-
-main {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2.5rem 1.5rem;
-}
-
-section {
-  margin-bottom: 4rem;
-}
-
-article {
-  background-color: #161e27;
-  border: 1px solid #243444;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 table {
@@ -115,7 +113,8 @@ caption {
   text-align: left;
 }
 
-th, td {
+th,
+td {
   padding: 0.9rem 1.2rem;
   text-align: left;
   border-bottom: 1px solid #1f2b38;
@@ -130,6 +129,11 @@ th {
   letter-spacing: 0.05em;
 }
 
+td {
+  color: #d1d5db;
+  font-size: 0.95rem;
+}
+
 label {
   display: block;
   font-weight: 500;
@@ -138,7 +142,8 @@ label {
   margin-bottom: 0.4rem;
 }
 
-input, select {
+input,
+select {
   width: 100%;
   padding: 0.75rem 1rem;
   background-color: #0d1318;
@@ -150,6 +155,16 @@ input, select {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+button {
+  font-family: inherit;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  transition: all 0.25s ease;
+}
+
 footer {
   background-color: #0e141a;
   border-top: 1px solid #1e2833;
@@ -157,6 +172,23 @@ footer {
   text-align: center;
   color: #6b7280;
   font-size: 0.85rem;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+}
+
+a {
+  color: #d1d5db;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 /* --------------------------------------------------------------------------
@@ -172,6 +204,37 @@ footer {
 #logo-icon {
   width: 36px;
   height: 36px;
+  display: block;
+}
+
+#nav-enlaces {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+#badge-carrito {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #d4af37;
+  color: #0b0f12;
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  border-radius: 10px;
+  margin-left: 0.35rem;
+  vertical-align: middle;
+}
+
+#nav-usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
 }
 
 #hero-banner {
@@ -202,6 +265,25 @@ footer {
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
   border: 1px solid #33475b;
+  display: block;
+}
+
+#barra-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-end;
+  background-color: #121922;
+  border: 1px solid #223242;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+#catalogo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
 }
 
 #cotizador-seccion {
@@ -219,12 +301,127 @@ footer {
   margin-top: 1.5rem;
 }
 
+#contenedor-resultado {
+  grid-column: 1 / -1;
+  background-color: #0a0e13;
+  border: 1px solid #2d4154;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  display: none;
+}
+
 #acciones-formulario {
   grid-column: 1 / -1;
   display: flex;
   gap: 1rem;
   margin-top: 0.5rem;
   flex-wrap: wrap;
+}
+
+#monto-final {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #f5d77f;
+  margin: 0.5rem 0;
+}
+
+#seccion-carrito {
+  background-color: #141b24;
+  border: 1px solid #243547;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+#tabla-carrito {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+#resumen-carrito {
+  background-color: #0d141b;
+  border: 1px solid #253749;
+  border-radius: 10px;
+  padding: 1.75rem;
+  margin-top: 2rem;
+  max-width: 450px;
+  margin-left: auto;
+}
+
+#total-carrito-texto {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f5d77f;
+}
+
+#acciones-carrito {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+#seccion-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  padding: 2rem 1rem;
+}
+
+#card-login {
+  background-color: #141b24;
+  border: 1px solid #283a4c;
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+#form-login {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+#footer-contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+#footer-identidad {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+#footer-brand {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.2rem;
+  color: #f5d77f;
+  font-weight: 600;
+}
+
+#footer-logo {
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+
+#footer-info {
+  color: #6b7280;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: center;
 }
 
 #btn-calcular {
@@ -236,7 +433,7 @@ footer {
   padding: 0.85rem 2rem;
   border-radius: 8px;
   font-size: 1rem;
-  transition: transform 0.2s ease, filter 0.2s ease;
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
 }
 
 #btn-limpiar {
@@ -247,40 +444,26 @@ footer {
   padding: 0.85rem 1.75rem;
   border-radius: 8px;
   font-size: 0.95rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-#contenedor-resultado {
-  grid-column: 1 / -1;
-  background-color: #0a0e13;
-  border: 1px solid #2d4154;
-  border-radius: 10px;
-  padding: 1.5rem;
-  margin-top: 1rem;
-  display: none;
-}
-
-#monto-final {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #f5d77f;
-  margin: 0.5rem 0;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 /* --------------------------------------------------------------------------
    3. Estilos por Clase (.)
    -------------------------------------------------------------------------- */
-.subtitulo-seccion {
-  color: #9ca3af;
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto 2.5rem auto;
-}
-
 .catalogo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
+}
+
+.card-producto {
+  display: flex;
+  flex-direction: column;
+  background-color: #161e27;
+  border: 1px solid #243444;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card-imagen-wrapper {
@@ -295,14 +478,19 @@ footer {
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
+  display: block;
 }
 
 .card-cuerpo {
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .badge-metal {
   display: inline-block;
+  align-self: flex-start;
   padding: 0.25rem 0.6rem;
   background-color: #1e2d3b;
   color: #f5d77f;
@@ -310,13 +498,58 @@ footer {
   font-weight: 600;
   border-radius: 4px;
   margin-bottom: 0.75rem;
+  letter-spacing: 0.03em;
 }
 
 .precio-texto {
   font-size: 1.25rem;
   font-weight: 700;
   color: #f3f4f6;
-  margin-top: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+}
+
+.btn-primario {
+  background: linear-gradient(135deg, #d4af37 0%, #aa820a 100%);
+  color: #0b0f12;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  padding: 0.85rem 1.75rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-secundario {
+  background-color: transparent;
+  color: #9ca3af;
+  border: 1px solid #374151;
+  cursor: pointer;
+  padding: 0.85rem 1.75rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-peligro {
+  background-color: transparent;
+  color: #ef4444;
+  border: 1px solid #7f1d1d;
+  cursor: pointer;
+  padding: 0.85rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .campo-grupo {
@@ -334,41 +567,113 @@ footer {
 .resumen-linea {
   display: flex;
   justify-content: space-between;
-  padding: 0.35rem 0;
+  align-items: center;
+  padding: 0.45rem 0;
   border-bottom: 1px dashed #1f2937;
   font-size: 0.9rem;
+}
+
+.monto-destacado {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f5d77f;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.usuario-activo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #f5d77f;
+  font-weight: 600;
+}
+
+.subtitulo-seccion {
+  color: #9ca3af;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 2.5rem auto;
+}
+
+.carrito-vacio-mensaje {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.tabla-contenedor,
+.tabla-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* --------------------------------------------------------------------------
    4. Pseudoclases & Pseudoelementos (:hover, :focus, etc.)
    -------------------------------------------------------------------------- */
+a:hover,
 nav a:hover {
   color: #f5d77f;
 }
 
-article:hover {
+article:hover,
+.card-producto:hover {
   transform: translateY(-4px);
   border-color: #d4af37;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
-article:hover .card-img {
+article:hover .card-img,
+.card-producto:hover .card-img {
   transform: scale(1.05);
 }
 
-input:focus, select:focus {
+input:focus,
+select:focus,
+button:focus,
+a:focus {
   outline: none;
   border-color: #d4af37;
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.25);
 }
 
+.btn-primario:hover,
 #btn-calcular:hover {
-  filter: brightness(1.1);
+  filter: brightness(1.12);
   transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.35);
 }
 
+.btn-secundario:hover,
 #btn-limpiar:hover {
   background-color: #1f2937;
   color: #f3f4f6;
+  border-color: #4b5563;
+}
+
+.btn-peligro:hover {
+  background-color: #7f1d1d;
+  color: #fee2e2;
+  border-color: #ef4444;
+}
+
+.btn-primario:active,
+.btn-secundario:active,
+.btn-peligro:active,
+button:active {
+  transform: translateY(0);
 }
 
 tbody tr:hover {
@@ -382,6 +687,16 @@ tbody tr:nth-child(even) {
 /* --------------------------------------------------------------------------
    5. Diseño Responsivo (Media Queries)
    -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  #catalogo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .catalogo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   header {
     padding: 1rem;
@@ -391,21 +706,86 @@ tbody tr:nth-child(even) {
     font-size: 1.6rem;
   }
 
-  nav ul {
+  nav {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  nav ul,
+  #nav-enlaces {
     width: 100%;
-    justify-content: space-around;
-    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  #nav-usuario {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #catalogo-grid,
+  .catalogo-grid {
+    grid-template-columns: 1fr;
   }
 
   #hero-banner {
-    padding: 1.75rem 1.25rem;
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1.25rem;
+    gap: 1.5rem;
+  }
+
+  #hero-imagen-wrapper {
+    width: 100%;
+    max-width: 100%;
   }
 
   #cotizador-seccion {
     padding: 1.5rem 1rem;
   }
 
-  #acciones-formulario button {
+  #acciones-formulario button,
+  #acciones-formulario .btn-primario,
+  #acciones-formulario .btn-secundario {
+    width: 100%;
+  }
+
+  #barra-filtros {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  #tabla-carrito {
+    min-width: 550px;
+  }
+
+  #seccion-carrito {
+    padding: 1.25rem 1rem;
+  }
+
+  #resumen-carrito {
+    max-width: 100%;
+    margin-left: 0;
+  }
+
+  #acciones-carrito {
+    flex-direction: column;
+  }
+
+  #acciones-carrito button,
+  #acciones-carrito a {
+    width: 100%;
+    text-align: center;
+  }
+
+  #card-login {
+    padding: 1.75rem 1.25rem;
+  }
+
+  #form-login button {
     width: 100%;
   }
 }
