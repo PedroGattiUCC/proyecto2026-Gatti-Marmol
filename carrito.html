@@ -44,8 +44,8 @@
           <caption>Detalle de Piezas Seleccionadas en su Pedido</caption>
           <thead>
             <tr>
-              <th scope="col">Joya</th>
-              <th scope="col">Metal</th>
+              <th scope="col">Producto</th>
+              <th scope="col">Metal Precioso</th>
               <th scope="col">Precio Unitario</th>
               <th scope="col">Cantidad</th>
               <th scope="col">Subtotal</th>
@@ -62,29 +62,30 @@
         <div class="campo-grupo">
           <label for="input-cupon">Cupón de Descuento Promocional:</label>
           <input type="text" id="input-cupon" placeholder="Pruebe: LAURE10" size="15" maxlength="10" onchange="validarCupon(this)" />
+          <button type="button" class="btn-secundario" onclick="validarCupon(document.getElementById('input-cupon'))">Aplicar</button>
           <p class="campo-ayuda">Ingrese el cupón LAURE10 para obtener un 10% de bonificación en su pedido.</p>
         </div>
 
         <div class="resumen-linea">
-          <span>Subtotal de Joyas:</span>
-          <span id="resumen-subtotal-texto"><span id="subtotal-carrito-texto">$ 0,00</span></span>
+          <span>Subtotal:</span>
+          <strong id="subtotal-carrito-texto">$ 0 ARS</strong>
         </div>
 
         <div class="resumen-linea">
           <span>Descuento Promocional:</span>
-          <span id="resumen-descuento-texto"><span id="descuento-carrito-texto">$ 0,00</span></span>
+          <strong id="descuento-carrito-texto">$ 0 ARS</strong>
         </div>
 
         <div class="resumen-linea">
-          <strong>Total del Pedido:</strong>
-          <strong id="total-carrito-texto" class="monto-destacado">$ 0,00</strong>
+          <strong>Total Final:</strong>
+          <span id="total-carrito-texto" class="monto-destacado">$ 0 ARS</span>
         </div>
+      </div>
 
-        <div id="acciones-carrito">
-          <button type="button" id="btn-vaciar-carrito" class="btn-peligro" onclick="vaciarCarrito()">Vaciar Carrito</button>
-          <a href="catalogo.html" class="btn-secundario">Seguir Comprando</a>
-          <button type="button" id="btn-confirmar-compra" class="btn-primario" onclick="confirmarCompra()">Confirmar Compra</button>
-        </div>
+      <div id="acciones-carrito">
+        <button type="button" id="btn-vaciar-carrito" class="btn-peligro" onclick="vaciarCarrito()">Vaciar Carrito</button>
+        <button type="button" id="btn-confirmar-compra" class="btn-primario" onclick="confirmarCompra()">Confirmar Compra</button>
+        <a href="catalogo.html" class="btn-secundario">Seguir Comprando</a>
       </div>
     </section>
   </main>
