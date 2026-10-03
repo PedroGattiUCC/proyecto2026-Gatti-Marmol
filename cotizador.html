@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Pedro Gatti, Joaquin Mármol" />
+  <meta name="description" content="Cotizador interactivo de joyas personalizadas en Laure Joyas. Calcule en tiempo real el valor estimado de piezas exclusivas según metal precioso, peso en gramos, gemas engarzadas y grabado artesanal." />
+  <meta name="keywords" content="cotizador de joyas, joyas personalizadas, oro 18k, plata 925, platino 950, presupuesto de joyas, orfebrería a medida" />
+  <title>Cotizador Interactivo de Joyas a Medida | Laure Joyas</title>
+  <link rel="icon" type="image/svg+xml" href="imagenes/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" id="logo-brand">
+        <img id="logo-icon" src="imagenes/favicon.svg" alt="Logotipo emblemático de Laure Joyas" />
+        <h1>Laure Joyas</h1>
+      </a>
+      <ul id="nav-enlaces">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="catalogo.html">Catálogo</a></li>
+        <li><a href="cotizador.html" class="activo">Cotizador</a></li>
+        <li>
+          <a href="carrito.html">Carrito <span id="badge-carrito">0</span></a>
+        </li>
+      </ul>
+      <div id="nav-usuario">
+        <a href="login.html">Acceso</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="cotizador">
+      <div id="cotizador-seccion">
+        <h2>Cotizador Interactivo de Joyas</h2>
+        <p class="subtitulo-seccion">Configure los parámetros de su joya personalizada para obtener un cálculo estimativo inmediato según las tarifas vigentes de nuestro taller de orfebrería.</p>
+
+        <form id="cotizador-form" action="javascript:void(0);">
+          <div class="campo-grupo">
+            <label for="tipo-metal">Tipo de Metal Precioso:</label>
+            <select id="tipo-metal">
+              <option value="oro18k">Oro 18k (Amarillo / Blanco / Rosa)</option>
+              <option value="plata925">Plata 925 de Ley</option>
+              <option value="platino">Platino 950 Noble</option>
+            </select>
+            <p class="campo-ayuda">Seleccione la aleación noble que constituirá la base de su joya.</p>
+          </div>
+
+          <div class="campo-grupo">
+            <label for="peso-joya">Peso Estimado (en gramos):</label>
+            <input type="number" id="peso-joya" placeholder="Ej: 10" size="10" maxlength="4" min="1" max="500" required onchange="validarPeso(this)" />
+            <p class="campo-ayuda">Indique el peso estimado de la pieza entre 1 y 500 gramos.</p>
+          </div>
+
+          <div class="campo-grupo">
+            <label for="cantidad-gemas">Cantidad de Gemas Engarzadas:</label>
+            <input type="number" id="cantidad-gemas" value="0" placeholder="0" size="5" maxlength="2" min="0" max="30" onchange="validarGemas(this)" />
+            <p class="campo-ayuda">Opcional. Entre 0 y 30 gemas ($ 25.000 ARS por gema engarzada).</p>
+          </div>
+
+          <div class="campo-grupo">
+            <label for="texto-grabado">Grabado Personalizado (opcional):</label>
+            <input type="text" id="texto-grabado" placeholder="Ej: Pedro & Joaquin 2026" size="25" maxlength="25" />
+            <p class="campo-ayuda">Hasta 25 caracteres para leyendas o fechas conmemorativas ($ 5.000 ARS).</p>
+          </div>
+
+          <div id="acciones-formulario">
+            <button type="button" id="btn-calcular" class="btn-primario" onclick="calcularPresupuesto()">Calcular Presupuesto</button>
+            <button type="button" id="btn-limpiar" class="btn-secundario" onclick="limpiarCotizador()">Restablecer</button>
+          </div>
+
+          <div id="contenedor-resultado">
+            <h3>Desglose Estimado de su Cotización</h3>
+            <p id="detalle-metal">-</p>
+            <p id="detalle-gemas">-</p>
+            <p id="detalle-grabado">-</p>
+            <p>Total Estimado de Inversión:</p>
+            <p id="monto-final">$ 0</p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="valores">
+      <h2>Tarifas de Referencia de Materiales</h2>
+      <p class="subtitulo-seccion">Costos estándar por gramo de metal y mano de obra especializada utilizados en nuestro taller.</p>
+
+      <div class="tabla-contenedor">
+        <table>
+          <caption>Tabla de Valores de Referencia por Gramo de Metal Precioso</caption>
+          <thead>
+            <tr>
+              <th scope="col">Metal Precioso</th>
+              <th scope="col">Pureza / Ley</th>
+              <th scope="col">Valor Estimado por Gramo</th>
+              <th scope="col">Acabado Disponible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Oro 18k (Amarillo / Blanco / Rosa)</td>
+              <td>18 Quilates (750)</td>
+              <td>$ 95.000 ARS</td>
+              <td>Pulido espejo o satinado</td>
+            </tr>
+            <tr>
+              <td>Plata 925 de Ley</td>
+              <td>925 Milésimas</td>
+              <td>$ 12.000 ARS</td>
+              <td>Envejecido o rodinado</td>
+            </tr>
+            <tr>
+              <td>Platino 950 Noble</td>
+              <td>950 Milésimas</td>
+              <td>$ 110.000 ARS</td>
+              <td>Brillo de alta durabilidad</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div id="footer-contenedor">
+      <div id="footer-identidad">
+        <img id="footer-logo" src="imagenes/favicon.svg" alt="Logotipo emblemático de Laure Joyas" />
+        <span id="footer-brand">Laure Joyas</span>
+      </div>
+      <div id="footer-info">
+        <p>Obispo Trejo 323, Córdoba, Argentina &bull; Alta Joyería y Orfebrería Fina</p>
+        <p>Cátedra: Taller de Desarrollo Web &bull; Universidad Católica de Córdoba (UCC 2026)</p>
+        <p>Autores: Pedro Gatti (Legajo: 2519717) y Joaquin Mármol (Legajo: 2514908)</p>
+      </div>
+      <nav aria-label="Navegación secundaria">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li>&bull;</li>
+          <li><a href="catalogo.html">Catálogo</a></li>
+          <li>&bull;</li>
+          <li><a href="cotizador.html">Cotizador</a></li>
+          <li>&bull;</li>
+          <li><a href="carrito.html">Carrito</a></li>
+          <li>&bull;</li>
+          <li><a href="login.html">Acceso</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
