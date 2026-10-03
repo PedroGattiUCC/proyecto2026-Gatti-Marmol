@@ -212,3 +212,5 @@ El proyecto ha sido sometido a una verificación técnica automatizada garantiza
 * [x] **Navegación Relativa Consistente:** Enlaces cruzados operativos entre las 5 páginas sin enlaces rotos ni dependencias absolutas locales.
 * [x] **Persistencia de Datos:** Sincronización íntegra de carrito y sesión mediante la API nativa `localStorage`.
 * [x] **Accesibilidad Web (a11y):** Formatos semánticos, contrastes de color legibles y soporte para navegación accesible.
+
+📋 **[Consultar Checklist Oficial Completo de la Primera Entrega: primera-entrega/Requerimientos.md](primera-entrega/Requerimientos.md)**
