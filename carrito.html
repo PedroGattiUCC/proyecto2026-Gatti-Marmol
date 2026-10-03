@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Pedro Gatti, Joaquin Mármol" />
+  <meta name="description" content="Revise y confirme su selección de piezas exclusivas en Laure Joyas. Gestione cantidades, aplique cupones de descuento y complete su pedido de alta joyería de forma segura." />
+  <meta name="keywords" content="carrito de compras, joyería fina, pedido de joyas, alta joyería, cupones, descuento, Laure Joyas" />
+  <title>Carrito de Compras y Pedidos | Laure Joyas</title>
+  <link rel="icon" type="image/svg+xml" href="imagenes/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" id="logo-brand">
+        <img id="logo-icon" src="imagenes/favicon.svg" alt="Logotipo emblemático de Laure Joyas" />
+        <h1>Laure Joyas</h1>
+      </a>
+      <ul id="nav-enlaces">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="catalogo.html">Catálogo</a></li>
+        <li><a href="cotizador.html">Cotizador</a></li>
+        <li>
+          <a href="carrito.html" class="activo">Carrito <span id="badge-carrito">0</span></a>
+        </li>
+      </ul>
+      <div id="nav-usuario">
+        <a href="login.html">Acceso</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="seccion-carrito">
+      <h2>Su Carrito de Joyas</h2>
+      <p class="subtitulo-seccion">Revise el detalle de las piezas seleccionadas, gestione las cantidades deseadas o aplique un cupón promocional antes de confirmar su pedido.</p>
+
+      <div class="tabla-contenedor">
+        <table id="tabla-carrito">
+          <caption>Detalle de Piezas Seleccionadas en su Pedido</caption>
+          <thead>
+            <tr>
+              <th scope="col">Joya</th>
+              <th scope="col">Metal</th>
+              <th scope="col">Precio Unitario</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Subtotal</th>
+              <th scope="col">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla-carrito">
+          </tbody>
+        </table>
+      </div>
+
+      <div id="resumen-carrito">
+        <h3>Resumen del Pedido</h3>
+        <div class="campo-grupo">
+          <label for="input-cupon">Cupón de Descuento Promocional:</label>
+          <input type="text" id="input-cupon" placeholder="Pruebe: LAURE10" size="15" maxlength="10" onchange="validarCupon(this)" />
+          <p class="campo-ayuda">Ingrese el cupón LAURE10 para obtener un 10% de bonificación en su pedido.</p>
+        </div>
+
+        <div class="resumen-linea">
+          <span>Subtotal de Joyas:</span>
+          <span id="resumen-subtotal-texto"><span id="subtotal-carrito-texto">$ 0,00</span></span>
+        </div>
+
+        <div class="resumen-linea">
+          <span>Descuento Promocional:</span>
+          <span id="resumen-descuento-texto"><span id="descuento-carrito-texto">$ 0,00</span></span>
+        </div>
+
+        <div class="resumen-linea">
+          <strong>Total del Pedido:</strong>
+          <strong id="total-carrito-texto" class="monto-destacado">$ 0,00</strong>
+        </div>
+
+        <div id="acciones-carrito">
+          <button type="button" id="btn-vaciar-carrito" class="btn-peligro" onclick="vaciarCarrito()">Vaciar Carrito</button>
+          <a href="catalogo.html" class="btn-secundario">Seguir Comprando</a>
+          <button type="button" id="btn-confirmar-compra" class="btn-primario" onclick="confirmarCompra()">Confirmar Compra</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div id="footer-contenedor">
+      <div id="footer-identidad">
+        <img id="footer-logo" src="imagenes/favicon.svg" alt="Logotipo emblemático de Laure Joyas" />
+        <span id="footer-brand">Laure Joyas</span>
+      </div>
+      <div id="footer-info">
+        <p>Obispo Trejo 323, Córdoba, Argentina &bull; Alta Joyería y Orfebrería Fina</p>
+        <p>Cátedra: Taller de Desarrollo Web &bull; Universidad Católica de Córdoba (UCC 2026)</p>
+        <p>Autores: Pedro Gatti (Legajo: 2519717) y Joaquin Mármol (Legajo: 2514908)</p>
+      </div>
+      <nav aria-label="Navegación secundaria">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li>&bull;</li>
+          <li><a href="catalogo.html">Catálogo</a></li>
+          <li>&bull;</li>
+          <li><a href="cotizador.html">Cotizador</a></li>
+          <li>&bull;</li>
+          <li><a href="carrito.html">Carrito</a></li>
+          <li>&bull;</li>
+          <li><a href="login.html">Acceso</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
