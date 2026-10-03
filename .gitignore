@@ -1,4 +1,4 @@
-﻿# IDEs y editores
+# IDEs y editores
 .idea/
 .vscode/
 *.suo
@@ -25,3 +25,12 @@ build/
 
 # Carpeta de referencia del proyecto original (ignorado para la universidad)
 referencia-laure-joyas/
+
+# Proyecto completo de referencia para construcción progresiva
+proyecto-completo/
+
+# Temporales de testing y automatización
+.playwright-mcp/
+test-results/
+.superpowers/
+
