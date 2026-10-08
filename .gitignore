@@ -34,3 +34,7 @@ proyecto-completo/
 test-results/
 .superpowers/
 
+# Entorno y notas locales de desarrollo
+.local/
+*.local.*
+docs/

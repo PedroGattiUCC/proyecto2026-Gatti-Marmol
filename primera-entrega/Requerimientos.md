@@ -114,7 +114,7 @@ Se debe agregar funcionalidad Js a la página HTML+CSS desarrollada
 ## Sobre las Correcciones
 - [x] Se corregirá el proyecto con el último commit realizado en Github hasta las 23:59 del día anterior a la fecha de entrega *(Entrega sincronizada y disponible en el repositorio remoto)*
 - [x] Las notas serán de la siguiente manera: (Por ejemplo 55% 4; 59% 5; 67% 6; 75% 7; 82% 8; 89% 9; 97% 10) *(Criterio de escala de calificación conocido por el equipo)*
-- [x] Todas los errores o la falta de cumplimiento de los requisitos serán reportados a través de la plataforma de GitHub, en la pestaña de ISSUES *(Monitoreo y preparación para la defensa oral documentada en `DEFENSA_ORAL_PRIMERA_ENTREGA.md`)*
+- [x] Todas los errores o la falta de cumplimiento de los requisitos serán reportados a través de la plataforma de GitHub, en la pestaña de ISSUES *(Monitoreo y seguimiento de correcciones en la plataforma)*
 ![Issues en GitHub](images/correcciones.jpg)
 
 
