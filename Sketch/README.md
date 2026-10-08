@@ -1,35 +1,34 @@
 # Bocetos Iniciales (Sketch) - Laure Joyas
 
-Prototipos en baja fidelidad y bocetos de diagramación inicial para **Laure Joyas**, cubriendo vistas de escritorio, vistas móviles y gestión de errores.
+Bocetos base de baja fidelidad en blanco y negro, estructurados a partir del esquema preliminar del equipo para definir la disposición elemental de los bloques antes del diseño digital:
 
 ---
 
 ## Archivo Fuente
-* **Diagrama de Bocetos:** [`sketch_laure_joyas.drawio`](sketch_laure_joyas.drawio)
-* **Documento PDF Completo:** [`sketch_prototipo_completo.pdf`](sketch_prototipo_completo.pdf)
+* **Diagrama en blanco y negro:** [`sketch_desarrollo_web.drawio`](sketch_desarrollo_web.drawio) (archivo editable en [diagrams.net](https://app.diagrams.net)).
 
 ---
 
 ## 1. Boceto Desktop
-* **Archivo de imagen:** [`sketch_desktop.png`](sketch_desktop.png)
+* **Imagen:** [`sketch_desktop.png`](sketch_desktop.png)
 
-![Sketch Desktop](sketch_desktop.png)
+![Boceto Desktop](sketch_desktop.png)
 
 ---
 
 ## 2. Boceto Mobile
-* **Archivo de imagen:** [`sketch_mobile.png`](sketch_mobile.png)
+* **Imagen:** [`sketch_mobile.png`](sketch_mobile.png)
 
-![Sketch Mobile](sketch_mobile.png)
+![Boceto Mobile](sketch_mobile.png)
 
 ---
 
-## 3. Mensajes de Error y Alertas para el Usuario
-* **Archivo de imagen:** [`sketch_mensajes_error.png`](sketch_mensajes_error.png)
+## 3. Bocetos de Mensajes de Error y Validación
+* **Imagen:** [`sketch_mensajes_error.png`](sketch_mensajes_error.png)
 
-![Sketch Mensajes de Error](sketch_mensajes_error.png)
+![Boceto de Errores](sketch_mensajes_error.png)
 
-### Pautas Contempladas:
-* Estructura general de navegación (header, navegación, grilla de productos y footer).
-* Adaptación de columnas en pantalla reducida (mobile de 1 columna con menú colapsable).
-* Mensajes de advertencia pedagógicos para campos vacíos o valores no permitidos.
+### Elementos Contemplados:
+* Disposición de cabecera, grilla de productos 3x2 y pie de página en blanco y negro.
+* Adaptación en columna única para dispositivos móviles.
+* Esquemas de modales para validación pedagógica (alert) y confirmación interactiva.
