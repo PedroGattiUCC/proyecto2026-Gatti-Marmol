@@ -72,4 +72,5 @@ Formulario de acceso para clientes que valida correo y contraseña, guardando la
 * `js/main.js`: Lógica y funciones interactivas en JavaScript.
 * `imagenes/`: Recursos gráficos y favicon.
 * `Sketch/`: Bocetos iniciales en papel (desktop y mobile).
+* `Wireframe/`: Prototipos y diagramas digitales.
 * `primera-entrega/`: Consignas y rúbrica de evaluación.
