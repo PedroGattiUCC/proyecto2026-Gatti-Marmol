@@ -17,24 +17,30 @@ desktop.ini
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.tmp
+*.bak
+*.temp
+.temp/
+.cache/
 
-# Node / dependencias (para etapas posteriores)
+# Node / dependencias
 node_modules/
 dist/
 build/
 
-# Carpeta de referencia del proyecto original (ignorado para la universidad)
+# Carpetas de trabajo interno y referencia
 referencia-laure-joyas/
-
-# Proyecto completo de referencia para construcción progresiva
 proyecto-completo/
 
-# Temporales de testing y automatización
+# Herramientas de testing y automatización
 .playwright-mcp/
 test-results/
 .superpowers/
 
-# Entorno y notas locales de desarrollo
+# Notas y archivos de apoyo de cursada
 .local/
 *.local.*
 docs/
+scratch/
+clases taller web.txt
+*.txt
