@@ -311,6 +311,22 @@ a {
   display: none;
 }
 
+#btn-agregar-cotizacion {
+  margin-top: 1.25rem;
+  width: 100%;
+}
+
+#sin-resultados-catalogo {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background-color: #131b23;
+  border: 1px dashed #2a3c4e;
+  border-radius: 10px;
+  color: #9ca3af;
+  margin: 1.5rem 0;
+}
+
 #acciones-formulario {
   grid-column: 1 / -1;
   display: flex;
@@ -618,6 +634,29 @@ a {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+.sin-resultados {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background-color: #131b23;
+  border: 1px dashed #2a3c4e;
+  border-radius: 10px;
+  color: #9ca3af;
+  margin: 1.5rem 0;
+}
+
+.sin-resultados p {
+  font-size: 1.05rem;
+  color: #d1d5db;
+  margin-bottom: 1rem;
+}
+
+.sesion-activa-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 /* --------------------------------------------------------------------------

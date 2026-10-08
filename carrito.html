@@ -61,7 +61,7 @@
         <h3>Resumen del Pedido</h3>
         <div class="campo-grupo">
           <label for="input-cupon">Cupón de Descuento Promocional:</label>
-          <input type="text" id="input-cupon" placeholder="Pruebe: LAURE10" size="15" maxlength="10" onchange="validarCupon(this)" />
+          <input type="text" id="input-cupon" placeholder="Pruebe: LAURE10" size="15" maxlength="10" onkeydown="if(event.key==='Enter'){event.preventDefault(); validarCupon(this);}" />
           <button type="button" class="btn-secundario" onclick="validarCupon(document.getElementById('input-cupon'))">Aplicar</button>
           <p class="campo-ayuda">Ingrese el cupón LAURE10 para obtener un 10% de bonificación en su pedido.</p>
         </div>

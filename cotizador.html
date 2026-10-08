@@ -40,7 +40,7 @@
         <h2>Cotizador Interactivo de Joyas</h2>
         <p class="subtitulo-seccion">Configure los parámetros de su joya personalizada para obtener un cálculo estimativo inmediato según las tarifas vigentes de nuestro taller de orfebrería.</p>
 
-        <form id="cotizador-form" action="javascript:void(0);">
+        <form id="cotizador-form" action="javascript:void(0);" onsubmit="calcularPresupuesto(); return false;">
           <div class="campo-grupo">
             <label for="tipo-metal">Seleccione el metal precioso:</label>
             <select id="tipo-metal" name="metal">
@@ -82,6 +82,7 @@
             <p>Total Estimado de Inversión:</p>
             <p id="monto-final" class="monto-destacado">$ 0</p>
             <p class="campo-ayuda">Nota aclaratoria: Este cálculo constituye un presupuesto preliminar orientativo. El valor definitivo se confirmará en el taller según la cotización vigente y los detalles de diseño.</p>
+            <button type="button" id="btn-agregar-cotizacion" class="btn-primario" onclick="agregarCotizacionAlCarrito()">Añadir Joya Personalizada al Carrito</button>
           </div>
         </form>
       </div>

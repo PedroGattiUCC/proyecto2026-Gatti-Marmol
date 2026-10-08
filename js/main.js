@@ -83,19 +83,62 @@ const formateador = new Intl.NumberFormat("es-AR", {
 // Porcentaje de descuento global aplicado por cupón promocional
 let porcentajeDescuentoCupon = 0;
 
+// Almacena en memoria la última cotización calculada para permitir su adición al carrito
+let ultimaCotizacion = null;
+
+/* ==========================================================================
+   UTILIDADES DE SEGURIDAD Y PREVENCIÓN DE VULNERABILIDADES
+   ========================================================================== */
+
+/**
+ * Sanitiza una cadena de texto para evitar ataques de inyección de código (DOM XSS)
+ * antes de insertarla dinámicamente en el DOM.
+ * @method escaparHTML
+ * @param {string} cadena - Texto a sanitizar
+ * @return {string} Cadena segura con caracteres especiales codificados en entidades HTML
+ */
+const escaparHTML = (cadena) => {
+  if (typeof cadena !== "string") {
+    return "";
+  }
+  return cadena
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
 /* ==========================================================================
    MÓDULO DE CARRITO DE COMPRAS Y PERSISTENCIA (localStorage)
    ========================================================================== */
 
 /**
  * Recupera el listado de productos almacenados en el carrito de compras desde el almacenamiento local del navegador.
+ * Realiza una validación estricta del esquema para garantizar que sea un Array y filtrar cualquier dato corrupto.
  * @method obtenerCarrito
  * @return {Array<Object>} Arreglo con los objetos de productos presentes en el carrito, o un arreglo vacío si no existen registros
  */
 const obtenerCarrito = () => {
   try {
     const datos = localStorage.getItem("laure_carrito");
-    return datos ? JSON.parse(datos) : [];
+    if (!datos) {
+      return [];
+    }
+    const parseado = JSON.parse(datos);
+    if (!Array.isArray(parseado)) {
+      console.warn("Estructura de carrito no válida en localStorage. Restableciendo carrito.");
+      localStorage.removeItem("laure_carrito");
+      return [];
+    }
+    // Filtrar elementos corruptos o incompletos por robustez
+    return parseado.filter((item) => 
+      item &&
+      typeof item === "object" &&
+      item.id !== undefined &&
+      item.nombre &&
+      !isNaN(Number(item.precio))
+    );
   } catch (error) {
     console.error("Error al leer el carrito de localStorage:", error);
     return [];
@@ -110,7 +153,8 @@ const obtenerCarrito = () => {
  */
 const guardarCarrito = (carrito) => {
   try {
-    localStorage.setItem("laure_carrito", JSON.stringify(carrito));
+    const arregloValido = Array.isArray(carrito) ? carrito : [];
+    localStorage.setItem("laure_carrito", JSON.stringify(arregloValido));
   } catch (error) {
     console.error("Error al guardar el carrito en localStorage:", error);
   }
@@ -129,14 +173,19 @@ const actualizarBadgeCarrito = () => {
   }
 
   const carrito = obtenerCarrito();
-  const totalItems = carrito.reduce((acumulado, item) => acumulado + (item.cantidad || 0), 0);
+  const totalItems = carrito.reduce((acumulado, item) => {
+    const cant = parseInt(item.cantidad, 10);
+    return acumulado + (isNaN(cant) || cant < 0 ? 0 : cant);
+  }, 0);
+
   badge.textContent = totalItems.toString();
 };
 
 /**
- * Añade una pieza de joyería al carrito de compras utilizando su identificador único. Si ya existe, incrementa su cantidad; de lo contrario, agrega un nuevo ítem con cantidad unitaria.
+ * Añade una pieza de joyería al carrito de compras utilizando su identificador único.
+ * Si ya existe, incrementa su cantidad hasta un tope seguro de 30 unidades; de lo contrario, agrega un nuevo ítem con cantidad unitaria.
  * @method agregarAlCarrito
- * @param {number} idProducto - Identificador numérico del producto a incorporar
+ * @param {number|string} idProducto - Identificador numérico o clave del producto a incorporar
  * @return {void} No retorna ningún valor
  */
 const agregarAlCarrito = (idProducto) => {
@@ -144,7 +193,7 @@ const agregarAlCarrito = (idProducto) => {
   const productoEncontrado = PRODUCTOS.find((p) => p.id === idNumerico);
 
   if (!productoEncontrado) {
-    alert("El producto seleccionado no pudo ser encontrado.");
+    alert("El producto seleccionado no pudo ser encontrado en el catálogo.");
     return;
   }
 
@@ -152,7 +201,12 @@ const agregarAlCarrito = (idProducto) => {
   const itemExistente = carrito.find((item) => item.id === idNumerico);
 
   if (itemExistente) {
-    itemExistente.cantidad = (itemExistente.cantidad || 1) + 1;
+    const cantidadActual = parseInt(itemExistente.cantidad, 10) || 1;
+    if (cantidadActual >= 30) {
+      alert("Ha alcanzado el límite máximo de 30 unidades para este producto exclusivo.");
+      return;
+    }
+    itemExistente.cantidad = cantidadActual + 1;
   } else {
     carrito.push({
       id: productoEncontrado.id,
@@ -170,45 +224,114 @@ const agregarAlCarrito = (idProducto) => {
 };
 
 /**
+ * Añade la joya personalizada recién calculada en el cotizador directamente al carrito de compras.
+ * @method agregarCotizacionAlCarrito
+ * @return {void} No retorna ningún valor
+ */
+const agregarCotizacionAlCarrito = () => {
+  if (!ultimaCotizacion) {
+    alert("Por favor, calcule primero un presupuesto en el cotizador antes de agregarlo al carrito.");
+    return;
+  }
+
+  const carrito = obtenerCarrito();
+  carrito.push({
+    id: ultimaCotizacion.id,
+    nombre: ultimaCotizacion.nombre,
+    categoria: ultimaCotizacion.categoria,
+    precio: ultimaCotizacion.precio,
+    metal: ultimaCotizacion.metal,
+    imagen: ultimaCotizacion.imagen,
+    cantidad: 1
+  });
+
+  guardarCarrito(carrito);
+  alert(`¡Su joya personalizada ("${ultimaCotizacion.nombre}") fue añadida al carrito de compras con éxito!`);
+};
+
+/**
  * Modifica la cantidad de unidades de un producto específico en el carrito y actualiza la vista de la tabla.
+ * Protege contra errores humanos de entrada (valores negativos, cadenas no numéricas, exceso de unidades).
+ * Si el usuario introduce 0 o un valor negativo, solicita confirmación previa antes de eliminar.
  * @method modificarCantidadCarrito
- * @param {number} indice - Posición índice del elemento en el arreglo del carrito
+ * @param {number|string} indice - Posición índice del elemento en el arreglo del carrito
  * @param {number|string} nuevaCantidad - Nueva cantidad numérica deseada
  * @return {void} No retorna ningún valor
  */
 const modificarCantidadCarrito = (indice, nuevaCantidad) => {
   const carrito = obtenerCarrito();
-  const cantidadEntera = parseInt(nuevaCantidad, 10);
+  const indiceNumerico = parseInt(indice, 10);
 
-  if (isNaN(cantidadEntera) || cantidadEntera <= 0) {
-    eliminarDelCarrito(indice);
+  if (isNaN(indiceNumerico) || indiceNumerico < 0 || indiceNumerico >= carrito.length) {
+    console.error("Índice de producto inválido en el carrito.");
     return;
   }
 
-  if (carrito[indice]) {
-    carrito[indice].cantidad = cantidadEntera;
-    guardarCarrito(carrito);
+  const cantidadEntera = parseInt(nuevaCantidad, 10);
+
+  // Si el usuario dejó el campo vacío o escribió algo no numérico
+  if (isNaN(cantidadEntera)) {
+    alert("Por favor, ingrese un número entero válido de unidades.");
     renderizarTablaCarrito();
+    return;
   }
+
+  // Si ingresa 0 o negativo, confirmación preventiva para evitar borrado accidental
+  if (cantidadEntera <= 0) {
+    const confirmar = confirm(`¿Desea eliminar "${carrito[indiceNumerico].nombre}" del carrito de compras?`);
+    if (confirmar) {
+      eliminarDelCarrito(indiceNumerico, true);
+    } else {
+      renderizarTablaCarrito(); // Restablece la cantidad visual previa
+    }
+    return;
+  }
+
+  // Tope máximo por pedido
+  if (cantidadEntera > 30) {
+    alert("Por motivos de stock artesanal, el límite máximo por pieza es de 30 unidades.");
+    carrito[indiceNumerico].cantidad = 30;
+  } else {
+    carrito[indiceNumerico].cantidad = cantidadEntera;
+  }
+
+  guardarCarrito(carrito);
+  renderizarTablaCarrito();
 };
 
 /**
- * Elimina una joya del carrito de compras según su índice en la lista, guarda el cambio y actualiza la tabla de compras.
+ * Elimina una joya del carrito de compras según su índice en la lista, solicita confirmación preventiva,
+ * guarda el cambio y actualiza la tabla de compras.
  * @method eliminarDelCarrito
- * @param {number} indice - Posición del producto a remover dentro del arreglo
+ * @param {number|string} indice - Posición del producto a remover dentro del arreglo
+ * @param {boolean} [omitirConfirmacion=false] - Indica si se omite la confirmación interactiva
  * @return {void} No retorna ningún valor
  */
-const eliminarDelCarrito = (indice) => {
+const eliminarDelCarrito = (indice, omitirConfirmacion = false) => {
   const carrito = obtenerCarrito();
-  if (indice >= 0 && indice < carrito.length) {
-    carrito.splice(indice, 1);
-    guardarCarrito(carrito);
-    renderizarTablaCarrito();
+  const indiceNumerico = parseInt(indice, 10);
+
+  if (isNaN(indiceNumerico) || indiceNumerico < 0 || indiceNumerico >= carrito.length) {
+    return;
   }
+
+  const nombreProducto = carrito[indiceNumerico].nombre;
+
+  if (!omitirConfirmacion) {
+    const seguro = confirm(`¿Está seguro de que desea eliminar "${nombreProducto}" de su carrito?`);
+    if (!seguro) {
+      return;
+    }
+  }
+
+  carrito.splice(indiceNumerico, 1);
+  guardarCarrito(carrito);
+  renderizarTablaCarrito();
+  alert(`"${nombreProducto}" ha sido removido del carrito.`);
 };
 
 /**
- * Remueve la totalidad de los artículos del carrito de compras tras comprobar su existencia, resetea cupones y actualiza la interfaz.
+ * Remueve la totalidad de los artículos del carrito de compras tras comprobar su existencia y solicitar confirmación interactiva.
  * @method vaciarCarrito
  * @return {void} No retorna ningún valor
  */
@@ -216,6 +339,11 @@ const vaciarCarrito = () => {
   const carrito = obtenerCarrito();
   if (carrito.length === 0) {
     alert("El carrito ya se encuentra vacío.");
+    return;
+  }
+
+  const seguro = confirm("¿Está seguro de que desea vaciar la totalidad de los artículos de su carrito de compras?");
+  if (!seguro) {
     return;
   }
 
@@ -227,9 +355,10 @@ const vaciarCarrito = () => {
 };
 
 /**
- * Valida el código de cupón promocional ingresado por el usuario. Si coincide con 'LAURE10', aplica un 10% de descuento y recalcula los totales; si es incorrecto, notifica mediante alert, blanquea el campo y devuelve el foco.
+ * Valida el código de cupón promocional ingresado por el usuario. Si coincide con 'LAURE10', aplica un 10% de descuento y recalcula los totales;
+ * si es incorrecto, notifica mediante alert, blanquea el campo y devuelve el foco.
  * @method validarCupon
- * @param {HTMLInputElement} inputElement - Elemento de entrada de texto que contiene el código de cupón
+ * @param {HTMLInputElement} [inputElement] - Elemento de entrada de texto que contiene el código de cupón
  * @return {void} No retorna ningún valor
  */
 const validarCupon = (inputElement) => {
@@ -240,13 +369,30 @@ const validarCupon = (inputElement) => {
 
   const codigo = input.value.trim().toUpperCase();
 
+  if (codigo === "") {
+    alert("Por favor, ingrese un código de cupón antes de aplicar.");
+    input.focus();
+    return;
+  }
+
+  const carrito = obtenerCarrito();
+  if (carrito.length === 0) {
+    alert("Su carrito está vacío. Agregue productos desde el catálogo antes de aplicar un cupón de descuento.");
+    input.value = "";
+    return;
+  }
+
   if (codigo === "LAURE10") {
+    if (porcentajeDescuentoCupon > 0) {
+      alert("El cupón 'LAURE10' ya se encuentra aplicado sobre su pedido.");
+      return;
+    }
     porcentajeDescuentoCupon = 0.10;
     alert("¡Cupón 'LAURE10' aplicado con éxito! Se aplicó un 10% de descuento sobre el total.");
     renderizarTablaCarrito();
   } else {
     porcentajeDescuentoCupon = 0;
-    alert("El cupón ingresado no es válido o ha expirado. Ingrese un cupón vigente.");
+    alert("El cupón ingresado no es válido o ha expirado. Puede probar ingresando el código 'LAURE10'.");
     input.value = "";
     input.focus();
     renderizarTablaCarrito();
@@ -254,7 +400,7 @@ const validarCupon = (inputElement) => {
 };
 
 /**
- * Procesa la orden de compra si existen artículos en el carrito, emite mensaje de confirmación, limpia el almacenamiento y redirige a la página principal.
+ * Procesa la orden de compra si existen artículos en el carrito, solicita confirmación, emite mensaje de confirmación, limpia el almacenamiento y redirige a la página principal.
  * @method confirmarCompra
  * @return {void} No retorna ningún valor
  */
@@ -266,7 +412,12 @@ const confirmarCompra = () => {
     return;
   }
 
-  alert("¡Muchas gracias por su compra en Laure Joyas! Su pedido ha sido registrado con éxito. Uno de nuestros asesores se comunicará para coordinar la entrega.");
+  const confirmar = confirm("¿Desea confirmar su pedido en Laure Joyas y enviar los detalles a nuestro taller de orfebrería?");
+  if (!confirmar) {
+    return;
+  }
+
+  alert("¡Muchas gracias por su compra en Laure Joyas! Su pedido ha sido registrado con éxito. Uno de nuestros asesores se comunicará a la brevedad para coordinar la entrega y detalles de facturación.");
   localStorage.removeItem("laure_carrito");
   porcentajeDescuentoCupon = 0;
   actualizarBadgeCarrito();
@@ -275,6 +426,7 @@ const confirmarCompra = () => {
 
 /**
  * Renderiza dinámicamente las filas de la tabla del carrito de compras en el DOM, calculando subtotales por ítem, descuentos de cupones y el total general.
+ * Incluye sanitización HTML completa para prevenir cualquier vulnerabilidad XSS.
  * @method renderizarTablaCarrito
  * @return {void} No retorna ningún valor
  */
@@ -295,9 +447,9 @@ const renderizarTablaCarrito = () => {
         <td colspan="6">Su carrito se encuentra actualmente vacío. Lo invitamos a explorar nuestro catálogo de piezas exclusivas.</td>
       </tr>
     `;
-    if (elementoSubtotal) elementoSubtotal.textContent = formateador.format(0);
-    if (elementoDescuento) elementoDescuento.textContent = formateador.format(0);
-    if (elementoTotal) elementoTotal.textContent = formateador.format(0);
+    if (elementoSubtotal) elementoSubtotal.textContent = formateador.format(0) + " ARS";
+    if (elementoDescuento) elementoDescuento.textContent = formateador.format(0) + " ARS";
+    if (elementoTotal) elementoTotal.textContent = formateador.format(0) + " ARS";
     return;
   }
 
@@ -305,15 +457,18 @@ const renderizarTablaCarrito = () => {
   let htmlFilas = "";
 
   carrito.forEach((item, indice) => {
-    const cantidad = item.cantidad || 1;
-    const precioUnitario = item.precio || 0;
+    const cantidad = Math.max(1, Math.min(30, parseInt(item.cantidad, 10) || 1));
+    const precioUnitario = Math.max(0, parseFloat(item.precio) || 0);
     const subtotalItem = cantidad * precioUnitario;
     subtotalAcumulado += subtotalItem;
 
+    const nombreSeguro = escaparHTML(item.nombre || "Joya Exclusiva");
+    const metalSeguro = escaparHTML(item.metal || "Aleación Noble");
+
     htmlFilas += `
       <tr>
-        <td><strong>${item.nombre}</strong></td>
-        <td><span class="badge-metal">${item.metal}</span></td>
+        <td><strong>${nombreSeguro}</strong></td>
+        <td><span class="badge-metal">${metalSeguro}</span></td>
         <td>${formateador.format(precioUnitario)}</td>
         <td>
           <input
@@ -322,7 +477,7 @@ const renderizarTablaCarrito = () => {
             max="30"
             value="${cantidad}"
             onchange="modificarCantidadCarrito(${indice}, this.value)"
-            aria-label="Cantidad para ${item.nombre}"
+            aria-label="Cantidad para ${nombreSeguro}"
           />
         </td>
         <td>${formateador.format(subtotalItem)}</td>
@@ -338,52 +493,68 @@ const renderizarTablaCarrito = () => {
   cuerpoTabla.innerHTML = htmlFilas;
 
   const montoDescuento = subtotalAcumulado * porcentajeDescuentoCupon;
-  const montoTotal = subtotalAcumulado - montoDescuento;
+  const montoTotal = Math.max(0, subtotalAcumulado - montoDescuento);
 
   if (elementoSubtotal) {
-    elementoSubtotal.textContent = formateador.format(subtotalAcumulado);
+    elementoSubtotal.textContent = `${formateador.format(subtotalAcumulado)} ARS`;
   }
   if (elementoDescuento) {
     elementoDescuento.textContent = porcentajeDescuentoCupon > 0
-      ? `- ${formateador.format(montoDescuento)} (10%)`
-      : formateador.format(0);
+      ? `- ${formateador.format(montoDescuento)} (10%) ARS`
+      : `${formateador.format(0)} ARS`;
   }
   if (elementoTotal) {
-    elementoTotal.textContent = formateador.format(montoTotal);
+    elementoTotal.textContent = `${formateador.format(montoTotal)} ARS`;
   }
 };
 
 /* ==========================================================================
-   MÓDULO DE CATÁLOGO (FILTROS Y BÚSQUEDA EN TIEMPO REAL)
+   MÓDULO DE CATÁLOGO (FILTROS Y BÚSQUEDA INTEGRADA EN TIEMPO REAL)
    ========================================================================== */
 
 /**
- * Filtra las tarjetas de productos por categoría y las ordena en el DOM según el criterio seleccionado (precio menor, precio mayor o nombre alfabético).
+ * Filtra las tarjetas de productos combinando armónicamente la categoría seleccionada y el texto de búsqueda en tiempo real,
+ * ordenándolas en el DOM según el criterio seleccionado. Si no hay coincidencias, muestra un mensaje descriptivo de estado vacío.
  * @method filtrarYOrdenar
  * @return {void} No retorna ningún valor
  */
 const filtrarYOrdenar = () => {
   const selectCategoria = document.getElementById("select-categoria");
   const selectOrden = document.getElementById("select-orden");
+  const inputBusqueda = document.getElementById("input-busqueda");
   const contenedorGrid = document.getElementById("catalogo-grid");
 
   if (!contenedorGrid) {
     return;
   }
 
-  const categoriaSeleccionada = selectCategoria ? selectCategoria.value.toLowerCase() : "todas";
+  const categoriaSeleccionada = selectCategoria ? selectCategoria.value.toLowerCase().trim() : "todas";
   const ordenSeleccionado = selectOrden ? selectOrden.value : "defecto";
+  const textoBusqueda = inputBusqueda ? inputBusqueda.value.toLowerCase().trim() : "";
 
   const tarjetas = Array.from(contenedorGrid.querySelectorAll(".card-producto"));
   if (tarjetas.length === 0) {
     return;
   }
 
-  // Filtrado por categoría
+  let elementosVisibles = 0;
+
+  // Filtrado simultáneo por categoría Y texto de búsqueda
   tarjetas.forEach((tarjeta) => {
     const catTarjeta = (tarjeta.getAttribute("data-categoria") || "").toLowerCase();
-    const coincide = (categoriaSeleccionada === "todas" || categoriaSeleccionada === "" || catTarjeta === categoriaSeleccionada);
-    tarjeta.style.display = coincide ? "flex" : "none";
+    const nombre = (tarjeta.getAttribute("data-nombre") || "").toLowerCase();
+    const badgeMetal = tarjeta.querySelector(".badge-metal");
+    const metal = badgeMetal ? badgeMetal.textContent.toLowerCase() : "";
+
+    const coincideCategoria = (categoriaSeleccionada === "todas" || categoriaSeleccionada === "" || catTarjeta === categoriaSeleccionada);
+    const coincideTexto = (textoBusqueda === "" || nombre.includes(textoBusqueda) || catTarjeta.includes(textoBusqueda) || metal.includes(textoBusqueda));
+
+    if (coincideCategoria && coincideTexto) {
+      tarjeta.style.display = "flex";
+      elementosVisibles++;
+    } else {
+      tarjeta.style.display = "none";
+    }
   });
 
   // Ordenamiento en el DOM
@@ -410,34 +581,50 @@ const filtrarYOrdenar = () => {
   tarjetas.forEach((tarjeta) => {
     contenedorGrid.appendChild(tarjeta);
   });
+
+  // Gestión de estado vacío (Empty State) para una experiencia de usuario amigable
+  let mensajeSinResultados = document.getElementById("sin-resultados-catalogo");
+  if (elementosVisibles === 0) {
+    if (!mensajeSinResultados) {
+      mensajeSinResultados = document.createElement("div");
+      mensajeSinResultados.id = "sin-resultados-catalogo";
+      mensajeSinResultados.className = "sin-resultados";
+      contenedorGrid.appendChild(mensajeSinResultados);
+    }
+    mensajeSinResultados.innerHTML = `
+      <p>No se encontraron piezas exclusivas que coincidan con los criterios seleccionados.</p>
+      <button type="button" class="btn-secundario" onclick="restablecerFiltrosCatalogo()">Restablecer Filtros</button>
+    `;
+    mensajeSinResultados.style.display = "block";
+  } else if (mensajeSinResultados) {
+    mensajeSinResultados.style.display = "none";
+  }
 };
 
 /**
- * Realiza una búsqueda en tiempo real sobre las tarjetas de productos del catálogo comparando el texto ingresado con el nombre y la categoría de cada pieza.
+ * Ejecuta el filtrado en tiempo real al ingresar texto en el campo de búsqueda del catálogo.
  * @method buscarProductos
  * @return {void} No retorna ningún valor
  */
 const buscarProductos = () => {
+  filtrarYOrdenar();
+};
+
+/**
+ * Restablece los filtros del catálogo a sus valores por defecto (todas las categorías, sin texto y orden por defecto).
+ * @method restablecerFiltrosCatalogo
+ * @return {void} No retorna ningún valor
+ */
+const restablecerFiltrosCatalogo = () => {
+  const selectCategoria = document.getElementById("select-categoria");
+  const selectOrden = document.getElementById("select-orden");
   const inputBusqueda = document.getElementById("input-busqueda");
-  const contenedorGrid = document.getElementById("catalogo-grid");
 
-  if (!inputBusqueda || !contenedorGrid) {
-    return;
-  }
+  if (selectCategoria) selectCategoria.value = "todas";
+  if (selectOrden) selectOrden.value = "defecto";
+  if (inputBusqueda) inputBusqueda.value = "";
 
-  const texto = inputBusqueda.value.toLowerCase().trim();
-  const tarjetas = contenedorGrid.querySelectorAll(".card-producto");
-
-  tarjetas.forEach((tarjeta) => {
-    const nombre = (tarjeta.getAttribute("data-nombre") || "").toLowerCase();
-    const categoria = (tarjeta.getAttribute("data-categoria") || "").toLowerCase();
-
-    if (texto === "" || nombre.includes(texto) || categoria.includes(texto)) {
-      tarjeta.style.display = "flex";
-    } else {
-      tarjeta.style.display = "none";
-    }
-  });
+  filtrarYOrdenar();
 };
 
 /* ==========================================================================
@@ -445,7 +632,8 @@ const buscarProductos = () => {
    ========================================================================== */
 
 /**
- * Valida que el peso numérico ingresado por el usuario se encuentre en el rango permitido (1 a 500 gramos). Si el valor no es válido, notifica al usuario con alert, blanquea el campo de texto y devuelve el foco.
+ * Valida que el peso numérico ingresado por el usuario se encuentre en el rango permitido (1 a 500 gramos).
+ * Aplica el patrón pedagógico de la cátedra: notifica con alert, blanquea el campo y devuelve el foco.
  * @method validarPeso
  * @param {HTMLInputElement} inputElement - Elemento input del DOM que contiene el valor del peso
  * @return {boolean} Retorna true si el valor es válido; de lo contrario false
@@ -455,7 +643,16 @@ const validarPeso = (inputElement) => {
     return false;
   }
 
-  const valor = parseFloat(inputElement.value);
+  const valorTexto = (inputElement.value || "").trim();
+
+  if (valorTexto === "") {
+    alert("Por favor, ingrese un peso válido en gramos (entre 1 y 500 gramos).");
+    inputElement.value = "";
+    inputElement.focus();
+    return false;
+  }
+
+  const valor = parseFloat(valorTexto);
 
   if (isNaN(valor) || valor < 1 || valor > 500) {
     alert("Por favor, ingrese un peso válido en gramos (entre 1 y 500 gramos).");
@@ -468,7 +665,8 @@ const validarPeso = (inputElement) => {
 };
 
 /**
- * Valida que la cantidad de gemas ingresada sea un entero positivo no mayor a 30 piedras. En caso de error, emite una advertencia con alert, restablece el campo a '0' y devuelve el foco.
+ * Valida que la cantidad de gemas ingresada sea un entero positivo no mayor a 30 piedras.
+ * En caso de error, emite una advertencia con alert, restablece el campo a '0' y devuelve el foco.
  * @method validarGemas
  * @param {HTMLInputElement} inputElement - Elemento input del DOM con la cantidad de gemas
  * @return {boolean} Retorna true si la cantidad es admisible; false en caso contrario
@@ -478,7 +676,13 @@ const validarGemas = (inputElement) => {
     return false;
   }
 
-  const cantidad = parseInt(inputElement.value, 10);
+  const valorTexto = (inputElement.value || "").trim();
+  if (valorTexto === "") {
+    inputElement.value = "0";
+    return true;
+  }
+
+  const cantidad = parseInt(valorTexto, 10);
 
   if (isNaN(cantidad) || cantidad < 0 || cantidad > 30) {
     alert("La cantidad de gemas debe ser un número entero entre 0 y 30.");
@@ -491,9 +695,11 @@ const validarGemas = (inputElement) => {
 };
 
 /**
- * Calcula el presupuesto total estimativo de la joya seleccionada considerando tipo de metal, peso, cantidad de gemas y servicio de grabado. Despliega el resumen desglosado y el monto final dentro del contenedor del resultado en la interfaz.
+ * Calcula el presupuesto total estimativo de la joya seleccionada considerando tipo de metal, peso, cantidad de gemas y servicio de grabado.
+ * Despliega el resumen desglosado y el monto final dentro del contenedor del resultado en la interfaz.
+ * Evita la duplicación de alertas ante datos inválidos.
  * @method calcularPresupuesto
- * @return {void} No retorna ningún valor, actualiza directamente los elementos del DOM
+ * @return {void} No retorna ningún valor
  */
 const calcularPresupuesto = () => {
   const inputPeso = document.getElementById("peso-joya");
@@ -510,15 +716,13 @@ const calcularPresupuesto = () => {
     return;
   }
 
-  // Validación previa de peso obligatorio y en rango
-  if (!inputPeso.value || !validarPeso(inputPeso)) {
-    alert("Debe ingresar un peso válido en gramos (entre 1 y 500) antes de calcular el presupuesto.");
-    inputPeso.focus();
+  // Validación de peso (notificación única mediante validarPeso)
+  if (!validarPeso(inputPeso)) {
     return;
   }
 
   // Validación de cantidad de gemas
-  if (inputGemas.value && !validarGemas(inputGemas)) {
+  if (!validarGemas(inputGemas)) {
     return;
   }
 
@@ -554,6 +758,19 @@ const calcularPresupuesto = () => {
     textoMontoFinal.textContent = formateador.format(total);
   }
 
+  // Guardar en memoria para permitir incorporar al carrito
+  ultimaCotizacion = {
+    id: "cotizacion-" + Date.now(),
+    nombre: `Joya a Medida (${nombreMetal.split("(")[0].trim()})`,
+    categoria: "personalizada",
+    precio: total,
+    metal: nombreMetal.split("(")[0].trim(),
+    peso: peso,
+    gemas: cantidadGemas,
+    grabado: textoGrabado,
+    imagen: "imagenes/joyas_hero.jpg"
+  };
+
   contenedorResultado.style.display = "block";
 };
 
@@ -574,6 +791,7 @@ const limpiarCotizador = () => {
   if (inputGemas) inputGemas.value = "0";
   if (inputGrabado) inputGrabado.value = "";
   if (contenedorResultado) contenedorResultado.style.display = "none";
+  ultimaCotizacion = null;
 };
 
 /* ==========================================================================
@@ -581,7 +799,8 @@ const limpiarCotizador = () => {
    ========================================================================== */
 
 /**
- * Valida las credenciales ingresadas en el formulario de inicio de sesión (correo electrónico con formato válido y contraseña de al menos 6 caracteres), almacena los datos de sesión en localStorage y redirige al inicio. Si hay errores, muestra un alert, blanquea el campo respectivo y devuelve el foco.
+ * Valida las credenciales ingresadas en el formulario de inicio de sesión con chequeo de formato estricto de correo electrónico y longitud de contraseña.
+ * Almacena los datos de sesión en localStorage y redirige al inicio. Si hay errores, muestra un alert, blanquea el campo respectivo y devuelve el foco.
  * @method validarLogin
  * @param {Event} event - Objeto de evento del formulario al ejecutarse submit
  * @return {boolean} Retorna true si las credenciales son válidas; de lo contrario false
@@ -601,13 +820,9 @@ const validarLogin = (event) => {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
 
-  // Validación de formato de correo: debe contener @ y punto luego de la @
-  const tieneArroba = email.includes("@");
-  const tienePunto = email.includes(".");
-  const posicionArroba = email.indexOf("@");
-  const posicionPunto = email.lastIndexOf(".");
-
-  if (!tieneArroba || !tienePunto || posicionPunto <= posicionArroba + 1 || posicionArroba === 0 || posicionPunto === email.length - 1) {
+  // Validación estricta de correo electrónico
+  const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!email || !regexEmail.test(email)) {
     alert("Por favor, ingrese un correo electrónico válido (ejemplo: usuario@dominio.com).");
     emailInput.value = "";
     emailInput.focus();
@@ -615,7 +830,7 @@ const validarLogin = (event) => {
   }
 
   // Validación de longitud de contraseña
-  if (password.length < 6) {
+  if (!password || password.trim().length < 6) {
     alert("La contraseña debe contener al menos 6 caracteres por razones de seguridad.");
     passwordInput.value = "";
     passwordInput.focus();
@@ -624,7 +839,10 @@ const validarLogin = (event) => {
 
   // Creación del objeto de usuario para la sesión
   const aliasUsuario = email.split("@")[0];
-  const nombreFormateado = aliasUsuario.charAt(0).toUpperCase() + aliasUsuario.slice(1);
+  const nombreLimpio = aliasUsuario.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, " ").trim();
+  const nombreFormateado = nombreLimpio.length > 0
+    ? (nombreLimpio.charAt(0).toUpperCase() + nombreLimpio.slice(1))
+    : "Cliente";
 
   const usuario = {
     email: email,
@@ -633,7 +851,12 @@ const validarLogin = (event) => {
     fecha: new Date().toISOString()
   };
 
-  localStorage.setItem("laure_usuario", JSON.stringify(usuario));
+  try {
+    localStorage.setItem("laure_usuario", JSON.stringify(usuario));
+  } catch (err) {
+    console.error("Error al persistir usuario en localStorage:", err);
+  }
+
   alert(`¡Bienvenido/a a Laure Joyas, ${usuario.nombre}! Ha iniciado sesión correctamente.`);
   window.location.href = "index.html";
   return true;
@@ -652,7 +875,8 @@ const cerrarSesion = () => {
 };
 
 /**
- * Comprueba si existe una sesión de usuario almacenada en localStorage y actualiza el contenedor de usuario en la barra de navegación para mostrar su nombre y botón de salida, o el enlace de acceso.
+ * Comprueba si existe una sesión de usuario almacenada en localStorage y actualiza el contenedor de usuario en la barra de navegación
+ * para mostrar su nombre y botón de salida, o el enlace de acceso. Aplica sanitización para prevenir XSS.
  * @method verificarSesionEnNav
  * @return {void} No retorna ningún valor
  */
@@ -666,16 +890,15 @@ const verificarSesionEnNav = () => {
     const sesion = localStorage.getItem("laure_usuario");
     if (sesion) {
       const usuario = JSON.parse(sesion);
+      const nombreSeguro = escaparHTML(usuario.nombre || "Cliente");
       contenedorNavUsuario.innerHTML = `
         <span class="usuario-activo">
-          Hola, <strong>${usuario.nombre || "Cliente"}</strong>
+          Hola, <strong>${nombreSeguro}</strong>
         </span>
         <button type="button" class="btn-secundario" onclick="cerrarSesion()">Salir</button>
       `;
     } else {
-      contenedorNavUsuario.innerHTML = `
-        <a href="login.html">Acceso</a>
-      `;
+      contenedorNavUsuario.innerHTML = `<a href="login.html">Acceso</a>`;
     }
   } catch (error) {
     console.error("Error al verificar la sesión en el nav:", error);
@@ -683,24 +906,65 @@ const verificarSesionEnNav = () => {
   }
 };
 
+/**
+ * En caso de hallarse en la vista de login y contar con una sesión activa preexistente,
+ * adapta la tarjeta para mostrar el estado actual y evitar confusión en el usuario.
+ * @method verificarEstadoLoginCard
+ * @return {void} No retorna ningún valor
+ */
+const verificarEstadoLoginCard = () => {
+  const cardLogin = document.getElementById("card-login");
+  if (!cardLogin) {
+    return;
+  }
+
+  try {
+    const sesion = localStorage.getItem("laure_usuario");
+    if (sesion) {
+      const usuario = JSON.parse(sesion);
+      const nombreSeguro = escaparHTML(usuario.nombre || "Cliente");
+      const emailSeguro = escaparHTML(usuario.email || "");
+
+      cardLogin.innerHTML = `
+        <h2>Sesión Activa</h2>
+        <p class="subtitulo-seccion">Actualmente ha iniciado sesión con la cuenta de <strong>${nombreSeguro}</strong> (${emailSeguro}).</p>
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+          <a href="index.html" class="btn-primario" style="flex: 1; text-align: center;">Continuar al Inicio</a>
+          <button type="button" class="btn-secundario" onclick="cerrarSesion()" style="flex: 1;">Cerrar Sesión</button>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error("Error al verificar estado de la tarjeta de login:", error);
+  }
+};
+
 /* ==========================================================================
-   AUTO-INICIALIZACIÓN DE LA APLICACIÓN
+   AUTO-INICIALIZACIÓN DE LA APLICACIÓN Y BLINDAJE GLOBAL
    ========================================================================== */
 
 /**
- * Inicializa los módulos de la aplicación al cargarse completamente el documento DOM: actualiza el distintivo del carrito, valida la sesión activa y renderiza la tabla de compras si se encuentra en la vista del carrito.
+ * Inicializa los módulos de la aplicación al cargarse completamente el documento DOM:
+ * actualiza el distintivo del carrito, valida la sesión activa, renderiza la tabla de compras si corresponde
+ * y adapta el login si ya existe sesión activa.
  * @method inicializarApp
  * @return {void} No retorna ningún valor
  */
 const inicializarApp = () => {
   actualizarBadgeCarrito();
   verificarSesionEnNav();
+  verificarEstadoLoginCard();
 
   const tablaCarrito = document.getElementById("tabla-carrito") || document.getElementById("cuerpo-tabla-carrito");
   if (tablaCarrito) {
     renderizarTablaCarrito();
   }
 };
+
+// Escucha preventiva global para registrar cualquier anomalía no controlada en la consola sin detener la ejecución
+window.addEventListener("error", (event) => {
+  console.warn("Anomalía interceptada de forma preventiva en tiempo de ejecución:", event.message);
+});
 
 // Registro del evento de inicialización del DOM
 document.addEventListener("DOMContentLoaded", inicializarApp);
