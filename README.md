@@ -57,11 +57,11 @@ Formulario de acceso para clientes que valida correo y contraseña, guardando la
 
 ## Tecnologías Utilizadas
 
-* **HTML5:** Estructura semántica (`header`, `nav`, `main`, `section`, `article`, `table`, `footer`) y formularios accesibles vinculados con etiquetas `label`.
-* **CSS3:** Hoja de estilos centralizada (`css/styles.css`) en 5 secciones pedagógicas (etiquetas, IDs, clases, pseudoclases y media queries para 900px y 768px). Sin estilos en línea ni `!important`.
-* **JavaScript ES6+:** Funciones flecha, eventos inline y documentación de funciones mediante bloques **JSDoc** (`@method`, `@param`, `@return`).
-* **Web Storage API:** Persistencia de datos en el cliente mediante `localStorage` (`laure_carrito` y `laure_usuario`).
-* **Google Fonts:** Tipografías 'Cinzel' y 'Montserrat'.
+* **HTML5:** Estructura y maquetado de las páginas, con formularios y tablas para organizar la información del sitio.
+* **CSS3:** Diseño visual y adaptación para pantallas de celulares y computadoras (diseño responsivo), centralizado en una única hoja de estilos.
+* **JavaScript:** Lógica interactiva para la búsqueda y filtrado de joyas, el cotizador en tiempo real y el control de los formularios.
+* **LocalStorage:** Almacenamiento en el navegador para mantener guardados los productos del carrito y la sesión del usuario entre páginas.
+* **Google Fonts:** Tipografías para la estética de los textos y títulos.
 
 ---
 
