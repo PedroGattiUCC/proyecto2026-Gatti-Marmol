@@ -355,7 +355,7 @@ const vaciarCarrito = () => {
 };
 
 /**
- * Valida el código de cupón promocional ingresado por el usuario. Si coincide con 'LAURE10', aplica un 10% de descuento y recalcula los totales;
+ * Valida el código de cupón promocional ingresado por el usuario y recalcula los totales con su descuento;
  * si es incorrecto, notifica mediante alert, blanquea el campo y devuelve el foco.
  * @method validarCupon
  * @param {HTMLInputElement} [inputElement] - Elemento de entrada de texto que contiene el código de cupón
@@ -382,13 +382,16 @@ const validarCupon = (inputElement) => {
     return;
   }
 
-  if (codigo === "LAURE10") {
-    if (porcentajeDescuentoCupon > 0) {
-      alert("El cupón 'LAURE10' ya se encuentra aplicado sobre su pedido.");
+  const descuento = codigo === "LAURE10" ? 0.10 : codigo === "PEDROYJOAQUIN" ? 0.80 : 0;
+  const nombreCupon = codigo === "PEDROYJOAQUIN" ? "pedroyjoaquin" : codigo;
+
+  if (descuento > 0) {
+    if (porcentajeDescuentoCupon === descuento) {
+      alert(`El cupón '${nombreCupon}' ya se encuentra aplicado sobre su pedido.`);
       return;
     }
-    porcentajeDescuentoCupon = 0.10;
-    alert("¡Cupón 'LAURE10' aplicado con éxito! Se aplicó un 10% de descuento sobre el total.");
+    porcentajeDescuentoCupon = descuento;
+    alert(`¡Cupón '${nombreCupon}' aplicado con éxito! Se aplicó un ${descuento * 100}% de descuento sobre el total.`);
     renderizarTablaCarrito();
   } else {
     porcentajeDescuentoCupon = 0;
@@ -417,7 +420,10 @@ const confirmarCompra = () => {
     return;
   }
 
-  alert("¡Muchas gracias por su compra en Laure Joyas! Su pedido ha sido registrado con éxito. Uno de nuestros asesores se comunicará a la brevedad para coordinar la entrega y detalles de facturación.");
+  const mensajeCupon = porcentajeDescuentoCupon === 0.80
+    ? " Cupón 'pedroyjoaquin' aplicado: 80% de descuento sobre el total."
+    : "";
+  alert("¡Muchas gracias por su compra en Laure Joyas! Su pedido ha sido registrado con éxito. Uno de nuestros asesores se comunicará a la brevedad para coordinar la entrega y detalles de facturación." + mensajeCupon);
   localStorage.removeItem("laure_carrito");
   porcentajeDescuentoCupon = 0;
   actualizarBadgeCarrito();
