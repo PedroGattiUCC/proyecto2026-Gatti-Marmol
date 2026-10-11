@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Pedro Gatti, Joaquin Mármol" />
-  <meta name="description" content="Revise y confirme su selección de piezas exclusivas en Laure Joyas. Gestione cantidades, aplique cupones de descuento y complete su pedido de alta joyería de forma segura." />
+  <meta name="description" content="Revisá y confirmá tu selección de piezas exclusivas en Laure Joyas. Gestioná cantidades, aplicá cupones de descuento y completá tu pedido de alta joyería de forma segura." />
   <meta name="keywords" content="carrito de compras, joyería fina, pedido de joyas, alta joyería, cupones, descuento, Laure Joyas" />
   <title>Carrito de Compras y Pedidos | Laure Joyas</title>
   <link rel="icon" type="image/svg+xml" href="imagenes/favicon.svg" />
@@ -36,12 +36,12 @@
 
   <main>
     <section id="seccion-carrito">
-      <h2>Su Carrito de Joyas</h2>
-      <p class="subtitulo-seccion">Revise el detalle de las piezas seleccionadas, gestione las cantidades deseadas o aplique un cupón promocional antes de confirmar su pedido.</p>
+      <h2>Tu Carrito de Joyas</h2>
+      <p class="subtitulo-seccion">Revisá las piezas que elegiste, ajustá las cantidades o aplicá un cupón antes de confirmar tu pedido.</p>
 
       <div class="tabla-contenedor">
         <table id="tabla-carrito">
-          <caption>Detalle de Piezas Seleccionadas en su Pedido</caption>
+          <caption>Detalle de Piezas Seleccionadas en tu Pedido</caption>
           <thead>
             <tr>
               <th scope="col">Producto</th>
@@ -61,9 +61,9 @@
         <h3>Resumen del Pedido</h3>
         <div class="campo-grupo">
           <label for="input-cupon">¿Tenés un cupón?</label>
-          <input type="text" id="input-cupon" placeholder="Pruebe: LAURE10" size="15" maxlength="30" onkeydown="if(event.key==='Enter'){event.preventDefault(); validarCupon(this);}" />
-          <button type="button" class="btn-secundario" onclick="validarCupon(document.getElementById('input-cupon'))">Aplicar</button>
-          <p class="campo-ayuda">Ingrese el cupón LAURE10 para obtener un 10% de bonificación en su pedido.</p>
+          <input type="text" id="input-cupon" placeholder="Probá: LAURE10" size="15" maxlength="30" onkeydown="if(event.key==='Enter'){event.preventDefault(); validarCupon(this);}" />
+          <button type="button" class="btn-secundario" onclick="validarCupon(document.getElementById('input-cupon'))">Aplicá</button>
+          <p class="campo-ayuda">Ingresá el cupón LAURE10 para obtener un 10% de bonificación en tu pedido.</p>
         </div>
 
         <div class="resumen-linea">
@@ -83,9 +83,9 @@
       </div>
 
       <div id="acciones-carrito">
-        <button type="button" id="btn-vaciar-carrito" class="btn-peligro" onclick="vaciarCarrito()">Vaciar Carrito</button>
-        <button type="button" id="btn-confirmar-compra" class="btn-primario" onclick="confirmarCompra()">Confirmar Compra</button>
-        <a href="catalogo.html" class="btn-secundario">Seguir Comprando</a>
+        <button type="button" id="btn-vaciar-carrito" class="btn-peligro" onclick="vaciarCarrito()">Vaciá el Carrito</button>
+        <button type="button" id="btn-confirmar-compra" class="btn-primario" onclick="confirmarCompra()">Confirmá tu Compra</button>
+        <a href="catalogo.html" class="btn-secundario">Seguí Comprando</a>
       </div>
     </section>
   </main>

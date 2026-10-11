@@ -203,7 +203,7 @@ const agregarAlCarrito = (idProducto) => {
   if (itemExistente) {
     const cantidadActual = parseInt(itemExistente.cantidad, 10) || 1;
     if (cantidadActual >= 30) {
-      alert("Ha alcanzado el límite máximo de 30 unidades para este producto exclusivo.");
+      alert("Alcanzaste el límite máximo de 30 unidades para este producto exclusivo.");
       return;
     }
     itemExistente.cantidad = cantidadActual + 1;
@@ -230,7 +230,7 @@ const agregarAlCarrito = (idProducto) => {
  */
 const agregarCotizacionAlCarrito = () => {
   if (!ultimaCotizacion) {
-    alert("Por favor, calcule primero un presupuesto en el cotizador antes de agregarlo al carrito.");
+    alert("Por favor, calculá primero un presupuesto en el cotizador antes de agregarlo al carrito.");
     return;
   }
 
@@ -246,7 +246,7 @@ const agregarCotizacionAlCarrito = () => {
   });
 
   guardarCarrito(carrito);
-  alert(`¡Su joya personalizada ("${ultimaCotizacion.nombre}") fue añadida al carrito de compras con éxito!`);
+  alert(`¡Tu joya personalizada ("${ultimaCotizacion.nombre}") fue añadida al carrito de compras con éxito!`);
 };
 
 /**
@@ -271,14 +271,14 @@ const modificarCantidadCarrito = (indice, nuevaCantidad) => {
 
   // Si el usuario dejó el campo vacío o escribió algo no numérico
   if (isNaN(cantidadEntera)) {
-    alert("Por favor, ingrese un número entero válido de unidades.");
+    alert("Por favor, ingresá un número entero válido de unidades.");
     renderizarTablaCarrito();
     return;
   }
 
   // Si ingresa 0 o negativo, confirmación preventiva para evitar borrado accidental
   if (cantidadEntera <= 0) {
-    const confirmar = confirm(`¿Desea eliminar "${carrito[indiceNumerico].nombre}" del carrito de compras?`);
+    const confirmar = confirm(`¿Querés eliminar "${carrito[indiceNumerico].nombre}" del carrito de compras?`);
     if (confirmar) {
       eliminarDelCarrito(indiceNumerico, true);
     } else {
@@ -318,7 +318,7 @@ const eliminarDelCarrito = (indice, omitirConfirmacion = false) => {
   const nombreProducto = carrito[indiceNumerico].nombre;
 
   if (!omitirConfirmacion) {
-    const seguro = confirm(`¿Está seguro de que desea eliminar "${nombreProducto}" de su carrito?`);
+    const seguro = confirm(`¿Querés eliminar "${nombreProducto}" de tu carrito?`);
     if (!seguro) {
       return;
     }
@@ -342,7 +342,7 @@ const vaciarCarrito = () => {
     return;
   }
 
-  const seguro = confirm("¿Está seguro de que desea vaciar la totalidad de los artículos de su carrito de compras?");
+  const seguro = confirm("¿Querés vaciar todos los artículos de tu carrito?");
   if (!seguro) {
     return;
   }
@@ -370,14 +370,14 @@ const validarCupon = (inputElement) => {
   const codigo = input.value.trim().toUpperCase();
 
   if (codigo === "") {
-    alert("Por favor, ingrese un código de cupón antes de aplicar.");
+    alert("Por favor, ingresá un código de cupón antes de aplicar.");
     input.focus();
     return;
   }
 
   const carrito = obtenerCarrito();
   if (carrito.length === 0) {
-    alert("Su carrito está vacío. Agregue productos desde el catálogo antes de aplicar un cupón de descuento.");
+    alert("Tu carrito está vacío. Agregá productos desde el catálogo antes de aplicar un cupón de descuento.");
     input.value = "";
     return;
   }
@@ -387,7 +387,7 @@ const validarCupon = (inputElement) => {
 
   if (descuento > 0) {
     if (porcentajeDescuentoCupon === descuento) {
-      alert(`El cupón '${nombreCupon}' ya se encuentra aplicado sobre su pedido.`);
+      alert(`El cupón '${nombreCupon}' ya se encuentra aplicado sobre tu pedido.`);
       return;
     }
     porcentajeDescuentoCupon = descuento;
@@ -395,7 +395,7 @@ const validarCupon = (inputElement) => {
     renderizarTablaCarrito();
   } else {
     porcentajeDescuentoCupon = 0;
-    alert("El cupón ingresado no es válido o ha expirado. Puede probar ingresando el código 'LAURE10'.");
+    alert("El cupón ingresado no es válido o ha expirado. Podés probar ingresando el código 'LAURE10'.");
     input.value = "";
     input.focus();
     renderizarTablaCarrito();
@@ -411,11 +411,11 @@ const confirmarCompra = () => {
   const carrito = obtenerCarrito();
 
   if (carrito.length === 0) {
-    alert("Su carrito está vacío. Agregue productos desde el catálogo antes de confirmar la compra.");
+    alert("Tu carrito está vacío. Agregá productos desde el catálogo antes de confirmar la compra.");
     return;
   }
 
-  const confirmar = confirm("¿Desea confirmar su pedido en Laure Joyas y enviar los detalles a nuestro taller de orfebrería?");
+  const confirmar = confirm("¿Querés confirmar tu pedido en Laure Joyas y enviar los detalles a nuestro taller de orfebrería?");
   if (!confirmar) {
     return;
   }
@@ -423,7 +423,7 @@ const confirmarCompra = () => {
   const mensajeCupon = porcentajeDescuentoCupon === 0.80
     ? " Cupón 'pedroyjoaquin' aplicado: 80% de descuento sobre el total."
     : "";
-  alert("¡Muchas gracias por su compra en Laure Joyas! Su pedido ha sido registrado con éxito. Uno de nuestros asesores se comunicará a la brevedad para coordinar la entrega y detalles de facturación." + mensajeCupon);
+  alert("¡Muchas gracias por tu compra en Laure Joyas! Tu pedido ha sido registrado con éxito. Uno de nuestros asesores se comunicará con vos a la brevedad para coordinar la entrega y detalles de facturación." + mensajeCupon);
   localStorage.removeItem("laure_carrito");
   porcentajeDescuentoCupon = 0;
   actualizarBadgeCarrito();
@@ -450,7 +450,7 @@ const renderizarTablaCarrito = () => {
   if (carrito.length === 0) {
     cuerpoTabla.innerHTML = `
       <tr class="carrito-vacio-mensaje">
-        <td colspan="6">Su carrito se encuentra actualmente vacío. Lo invitamos a explorar nuestro catálogo de piezas exclusivas.</td>
+        <td colspan="6">Tu carrito se encuentra actualmente vacío. Te invitamos a explorar nuestro catálogo de piezas exclusivas.</td>
       </tr>
     `;
     if (elementoSubtotal) elementoSubtotal.textContent = formateador.format(0) + " ARS";
@@ -489,7 +489,7 @@ const renderizarTablaCarrito = () => {
         <td>${formateador.format(subtotalItem)}</td>
         <td>
           <button type="button" class="btn-peligro" onclick="eliminarDelCarrito(${indice})">
-            Eliminar
+            Eliminá
           </button>
         </td>
       </tr>
@@ -599,7 +599,7 @@ const filtrarYOrdenar = () => {
     }
     mensajeSinResultados.innerHTML = `
       <p>No se encontraron piezas exclusivas que coincidan con los criterios seleccionados.</p>
-      <button type="button" class="btn-secundario" onclick="restablecerFiltrosCatalogo()">Restablecer Filtros</button>
+      <button type="button" class="btn-secundario" onclick="restablecerFiltrosCatalogo()">Restablecé los Filtros</button>
     `;
     mensajeSinResultados.style.display = "block";
   } else if (mensajeSinResultados) {
@@ -652,7 +652,7 @@ const validarPeso = (inputElement) => {
   const valorTexto = (inputElement.value || "").trim();
 
   if (valorTexto === "") {
-    alert("Por favor, ingrese un peso válido en gramos (entre 1 y 500 gramos).");
+    alert("Por favor, ingresá un peso válido en gramos (entre 1 y 500 gramos).");
     inputElement.value = "";
     inputElement.focus();
     return false;
@@ -661,7 +661,7 @@ const validarPeso = (inputElement) => {
   const valor = parseFloat(valorTexto);
 
   if (isNaN(valor) || valor < 1 || valor > 500) {
-    alert("Por favor, ingrese un peso válido en gramos (entre 1 y 500 gramos).");
+    alert("Por favor, ingresá un peso válido en gramos (entre 1 y 500 gramos).");
     inputElement.value = "";
     inputElement.focus();
     return false;
@@ -829,7 +829,7 @@ const validarLogin = (event) => {
   // Validación estricta de correo electrónico
   const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!email || !regexEmail.test(email)) {
-    alert("Por favor, ingrese un correo electrónico válido (ejemplo: usuario@dominio.com).");
+    alert("Por favor, ingresá un correo electrónico válido (ejemplo: usuario@dominio.com).");
     emailInput.value = "";
     emailInput.focus();
     return false;
@@ -863,7 +863,7 @@ const validarLogin = (event) => {
     console.error("Error al persistir usuario en localStorage:", err);
   }
 
-  alert(`¡Bienvenido/a a Laure Joyas, ${usuario.nombre}! Ha iniciado sesión correctamente.`);
+  alert(`¡Bienvenido/a a Laure Joyas, ${usuario.nombre}! Iniciaste sesión correctamente.`);
   window.location.href = "index.html";
   return true;
 };
@@ -875,7 +875,7 @@ const validarLogin = (event) => {
  */
 const cerrarSesion = () => {
   localStorage.removeItem("laure_usuario");
-  alert("Ha cerrado sesión exitosamente.");
+  alert("Cerraste sesión correctamente.");
   verificarSesionEnNav();
   window.location.href = "index.html";
 };
@@ -901,7 +901,7 @@ const verificarSesionEnNav = () => {
         <span class="usuario-activo">
           Hola, <strong>${nombreSeguro}</strong>
         </span>
-        <button type="button" class="btn-secundario" onclick="cerrarSesion()">Salir</button>
+        <button type="button" class="btn-secundario" onclick="cerrarSesion()">Salí</button>
       `;
     } else {
       contenedorNavUsuario.innerHTML = `<a href="login.html">Acceso</a>`;
@@ -933,10 +933,10 @@ const verificarEstadoLoginCard = () => {
 
       cardLogin.innerHTML = `
         <h2>Sesión Activa</h2>
-        <p class="subtitulo-seccion">Actualmente ha iniciado sesión con la cuenta de <strong>${nombreSeguro}</strong> (${emailSeguro}).</p>
+        <p class="subtitulo-seccion">Iniciaste sesión con la cuenta de <strong>${nombreSeguro}</strong> (${emailSeguro}).</p>
         <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
-          <a href="index.html" class="btn-primario" style="flex: 1; text-align: center;">Continuar al Inicio</a>
-          <button type="button" class="btn-secundario" onclick="cerrarSesion()" style="flex: 1;">Cerrar Sesión</button>
+          <a href="index.html" class="btn-primario" style="flex: 1; text-align: center;">Volvé al Inicio</a>
+          <button type="button" class="btn-secundario" onclick="cerrarSesion()" style="flex: 1;">Cerrá Sesión</button>
         </div>
       `;
     }
