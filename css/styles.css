@@ -629,6 +629,10 @@ a {
   margin: 0 auto 2.5rem auto;
 }
 
+#destacados .catalogo-grid + .subtitulo-seccion {
+  margin-top: 2rem;
+}
+
 .carrito-vacio-mensaje {
   text-align: center;
   padding: 2.5rem 1rem;
