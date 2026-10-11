@@ -63,6 +63,7 @@
           <label for="input-cupon">¿Tenés un cupón?</label>
           <input type="text" id="input-cupon" placeholder="Probá: LAURE10" size="15" maxlength="30" onkeydown="if(event.key==='Enter'){event.preventDefault(); validarCupon(this);}" />
           <button type="button" class="btn-secundario" onclick="validarCupon(document.getElementById('input-cupon'))">Aplicá</button>
+          <p id="mensaje-cupon" role="status" aria-live="polite" aria-atomic="true"></p>
           <p class="campo-ayuda">Ingresá el cupón LAURE10 para obtener un 10% de bonificación en tu pedido.</p>
         </div>
 

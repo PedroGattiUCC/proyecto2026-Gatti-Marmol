@@ -356,7 +356,7 @@ const vaciarCarrito = () => {
 
 /**
  * Valida el código de cupón promocional ingresado por el usuario y recalcula los totales con su descuento;
- * si es incorrecto, notifica mediante alert, blanquea el campo y devuelve el foco.
+ * muestra el resultado debajo del campo; si es incorrecto, blanquea el campo y devuelve el foco.
  * @method validarCupon
  * @param {HTMLInputElement} [inputElement] - Elemento de entrada de texto que contiene el código de cupón
  * @return {void} No retorna ningún valor
@@ -368,16 +368,23 @@ const validarCupon = (inputElement) => {
   }
 
   const codigo = input.value.trim().toUpperCase();
+  const mostrarMensaje = (texto, esError = false) => {
+    const mensaje = document.getElementById("mensaje-cupon");
+    if (mensaje) {
+      mensaje.textContent = texto;
+      mensaje.classList.toggle("error", esError);
+    }
+  };
 
   if (codigo === "") {
-    alert("Por favor, ingresá un código de cupón antes de aplicar.");
+    mostrarMensaje("Por favor, ingresá un código de cupón antes de aplicar.", true);
     input.focus();
     return;
   }
 
   const carrito = obtenerCarrito();
   if (carrito.length === 0) {
-    alert("Tu carrito está vacío. Agregá productos desde el catálogo antes de aplicar un cupón de descuento.");
+    mostrarMensaje("Tu carrito está vacío. Agregá productos desde el catálogo antes de aplicar un cupón de descuento.", true);
     input.value = "";
     return;
   }
@@ -387,15 +394,15 @@ const validarCupon = (inputElement) => {
 
   if (descuento > 0) {
     if (porcentajeDescuentoCupon === descuento) {
-      alert(`El cupón '${nombreCupon}' ya se encuentra aplicado sobre tu pedido.`);
+      mostrarMensaje(`El cupón '${nombreCupon}' ya está aplicado: ${descuento * 100}% de descuento sobre tu pedido.`);
       return;
     }
     porcentajeDescuentoCupon = descuento;
-    alert(`¡Cupón '${nombreCupon}' aplicado con éxito! Se aplicó un ${descuento * 100}% de descuento sobre el total.`);
+    mostrarMensaje(`¡Cupón '${nombreCupon}' aplicado con éxito! Se aplicó un ${descuento * 100}% de descuento sobre el total.`);
     renderizarTablaCarrito();
   } else {
     porcentajeDescuentoCupon = 0;
-    alert("El cupón ingresado no es válido o ha expirado. Podés probar ingresando el código 'LAURE10'.");
+    mostrarMensaje("El cupón ingresado no es válido o ha expirado. Podés probar ingresando el código 'LAURE10'.", true);
     input.value = "";
     input.focus();
     renderizarTablaCarrito();
@@ -456,6 +463,8 @@ const renderizarTablaCarrito = () => {
     if (elementoSubtotal) elementoSubtotal.textContent = formateador.format(0) + " ARS";
     if (elementoDescuento) elementoDescuento.textContent = formateador.format(0) + " ARS";
     if (elementoTotal) elementoTotal.textContent = formateador.format(0) + " ARS";
+    const mensajeCupon = document.getElementById("mensaje-cupon");
+    if (mensajeCupon) mensajeCupon.textContent = "";
     return;
   }
 
