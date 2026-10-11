@@ -264,6 +264,7 @@ a {
 #hero-imagen-wrapper {
   flex: 1 1 400px;
   max-width: 540px;
+  margin-inline: auto;
 }
 
 #hero-img {
