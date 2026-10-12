@@ -254,9 +254,17 @@ a {
   flex: 1 1 450px;
 }
 
+.hero-acciones {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
 #hero-imagen-wrapper {
   flex: 1 1 400px;
   max-width: 540px;
+  margin-inline: auto;
 }
 
 #hero-img {
@@ -330,6 +338,7 @@ a {
 #acciones-formulario {
   grid-column: 1 / -1;
   display: flex;
+  justify-content: center;
   gap: 1rem;
   margin-top: 0.5rem;
   flex-wrap: wrap;
@@ -359,10 +368,27 @@ a {
   background-color: #0d141b;
   border: 1px solid #253749;
   border-radius: 10px;
-  padding: 1.75rem;
-  margin-top: 2rem;
-  max-width: 450px;
-  margin-left: auto;
+  padding: 2rem;
+  margin: 2rem auto 0;
+  max-width: 560px;
+}
+
+#input-cupon + button {
+  margin-top: 0.75rem;
+}
+
+#mensaje-cupon {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4ade80;
+}
+
+#mensaje-cupon:not(:empty) {
+  margin-top: 0.75rem;
+}
+
+#mensaje-cupon.error {
+  color: #f87171;
 }
 
 #total-carrito-texto {
@@ -453,14 +479,15 @@ a {
 }
 
 #btn-limpiar {
-  background-color: transparent;
-  color: #9ca3af;
-  border: 1px solid #374151;
+  background-color: #b91c1c;
+  color: #ffffff;
+  border: 1px solid #b91c1c;
+  font-weight: 700;
   cursor: pointer;
   padding: 0.85rem 1.75rem;
   border-radius: 8px;
   font-size: 0.95rem;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* --------------------------------------------------------------------------
@@ -622,6 +649,10 @@ a {
   margin: 0 auto 2.5rem auto;
 }
 
+#destacados .catalogo-grid + .subtitulo-seccion {
+  margin-top: 2rem;
+}
+
 .carrito-vacio-mensaje {
   text-align: center;
   padding: 2.5rem 1rem;
@@ -695,11 +726,18 @@ a:focus {
   box-shadow: 0 4px 14px rgba(212, 175, 55, 0.35);
 }
 
-.btn-secundario:hover,
-#btn-limpiar:hover {
+.btn-secundario:hover {
   background-color: #1f2937;
   color: #f3f4f6;
   border-color: #4b5563;
+}
+
+#btn-limpiar:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
 }
 
 .btn-peligro:hover {
@@ -807,7 +845,7 @@ tbody tr:nth-child(even) {
 
   #resumen-carrito {
     max-width: 100%;
-    margin-left: 0;
+    padding: 1.5rem;
   }
 
   #acciones-carrito {

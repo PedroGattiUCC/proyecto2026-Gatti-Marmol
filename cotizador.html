@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Pedro Gatti, Joaquin Mármol" />
-  <meta name="description" content="Cotizador interactivo de joyas personalizadas en Laure Joyas. Calcule en tiempo real el valor estimado de piezas exclusivas según metal precioso, peso en gramos, gemas engarzadas y grabado artesanal." />
+  <meta name="description" content="Cotizador interactivo de joyas personalizadas en Laure Joyas. Calculá en tiempo real el valor estimado de piezas exclusivas según metal precioso, peso en gramos, gemas engarzadas y grabado artesanal." />
   <meta name="keywords" content="cotizador de joyas, joyas personalizadas, oro 18k, plata 925, platino 950, presupuesto de joyas, orfebrería a medida" />
   <title>Cotizador Interactivo de Joyas a Medida | Laure Joyas</title>
   <link rel="icon" type="image/svg+xml" href="imagenes/favicon.svg" />
@@ -38,23 +38,23 @@
     <section id="cotizador">
       <div id="cotizador-seccion">
         <h2>Cotizador Interactivo de Joyas</h2>
-        <p class="subtitulo-seccion">Configure los parámetros de su joya personalizada para obtener un cálculo estimativo inmediato según las tarifas vigentes de nuestro taller de orfebrería.</p>
+        <p class="subtitulo-seccion">Configurá los parámetros de tu joya personalizada para obtener un cálculo estimativo inmediato según las tarifas vigentes de nuestro taller de orfebrería.</p>
 
         <form id="cotizador-form" action="javascript:void(0);" onsubmit="calcularPresupuesto(); return false;">
           <div class="campo-grupo">
-            <label for="tipo-metal">Seleccione el metal precioso:</label>
+            <label for="tipo-metal">Elegí el metal precioso:</label>
             <select id="tipo-metal" name="metal">
               <option value="oro18k">Oro 18k ($95.000/g)</option>
               <option value="plata925">Plata 925 ($12.000/g)</option>
               <option value="platino">Platino 950 ($110.000/g)</option>
             </select>
-            <p class="campo-ayuda">Seleccione la aleación noble que constituirá la base de su joya.</p>
+            <p class="campo-ayuda">Elegí la aleación noble que constituirá la base de tu joya.</p>
           </div>
 
           <div class="campo-grupo">
             <label for="peso-joya">Peso aproximado en gramos (1 - 500 g):</label>
             <input type="number" id="peso-joya" name="peso" placeholder="Ej: 10" size="10" maxlength="4" min="1" max="500" required onchange="validarPeso(this)" />
-            <p class="campo-ayuda">Indique el peso estimado de la pieza entre 1 y 500 gramos.</p>
+            <p class="campo-ayuda">Indicá el peso estimado de la pieza entre 1 y 500 gramos.</p>
           </div>
 
           <div class="campo-grupo">
@@ -70,8 +70,8 @@
           </div>
 
           <div id="acciones-formulario">
-            <button type="button" id="btn-calcular" class="btn-primario" onclick="calcularPresupuesto()">Calcular Presupuesto</button>
-            <button type="button" id="btn-limpiar" class="btn-secundario" onclick="limpiarCotizador()">Restablecer</button>
+            <button type="button" id="btn-calcular" class="btn-primario" onclick="calcularPresupuesto()">Calculá tu Presupuesto</button>
+            <button type="button" id="btn-limpiar" class="btn-secundario" onclick="limpiarCotizador()">Restablecé</button>
           </div>
 
           <div id="contenedor-resultado">
@@ -82,7 +82,7 @@
             <p>Total Estimado de Inversión:</p>
             <p id="monto-final" class="monto-destacado">$ 0</p>
             <p class="campo-ayuda">Nota aclaratoria: Este cálculo constituye un presupuesto preliminar orientativo. El valor definitivo se confirmará en el taller según la cotización vigente y los detalles de diseño.</p>
-            <button type="button" id="btn-agregar-cotizacion" class="btn-primario" onclick="agregarCotizacionAlCarrito()">Añadir Joya Personalizada al Carrito</button>
+            <button type="button" id="btn-agregar-cotizacion" class="btn-primario" onclick="agregarCotizacionAlCarrito()">Agregá tu Joya Personalizada al Carrito</button>
           </div>
         </form>
       </div>
