@@ -634,8 +634,8 @@ const validarPeso = (inputElement) => {
 };
 
 /**
- * Valida que la cantidad de gemas ingresada sea un entero positivo no mayor a 30 piedras.
- * En caso de error, emite una advertencia con alert, restablece el campo a '0' y devuelve el foco.
+ * Valida que la cantidad de gemas ingresada sea un entero entre 0 y 30 piedras.
+ * En caso de error, emite una advertencia con alert, blanquea el campo y devuelve el foco.
  * @method validarGemas
  * @param {HTMLInputElement} inputElement - Elemento input del DOM con la cantidad de gemas
  * @return {boolean} Retorna true si la cantidad es admisible; false en caso contrario
@@ -651,11 +651,11 @@ const validarGemas = (inputElement) => {
     return true;
   }
 
-  const cantidad = parseInt(valorTexto, 10);
+  const cantidad = Number(valorTexto);
 
-  if (isNaN(cantidad) || cantidad < 0 || cantidad > 30) {
+  if (!Number.isInteger(cantidad) || cantidad < 0 || cantidad > 30) {
     alert("La cantidad de gemas debe ser un número entero entre 0 y 30.");
-    inputElement.value = "0";
+    inputElement.value = "";
     inputElement.focus();
     return false;
   }
@@ -698,7 +698,7 @@ const calcularPresupuesto = () => {
   const peso = parseFloat(inputPeso.value);
   const metalClave = selectMetal.value;
   const precioPorGramo = PRECIOS_METALES[metalClave] || 0;
-  const cantidadGemas = parseInt(inputGemas.value, 10) || 0;
+  const cantidadGemas = Number(inputGemas.value) || 0;
   const textoGrabado = inputGrabado.value.trim();
 
   // Cálculos desglosados
