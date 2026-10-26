@@ -316,7 +316,6 @@ a {
   border-radius: 10px;
   padding: 1.5rem;
   margin-top: 1rem;
-  display: none;
 }
 
 #btn-agregar-cotizacion {
@@ -377,17 +376,13 @@ a {
   margin-top: 0.75rem;
 }
 
-#mensaje-cupon {
-  margin: 0;
+.mensaje-cupon {
+  margin: 0.75rem 0 0;
   font-size: 0.9rem;
   color: #4ade80;
 }
 
-#mensaje-cupon:not(:empty) {
-  margin-top: 0.75rem;
-}
-
-#mensaje-cupon.error {
+#mensaje-cupon-error {
   color: #f87171;
 }
 
@@ -868,12 +863,6 @@ tbody tr:nth-child(even) {
 }
 
 /* Estados y paneles compartidos: toda presentación se define en esta hoja. */
-[hidden],
-.card-producto[hidden],
-#contenedor-resultado[hidden] {
-  display: none;
-}
-
 .solo-lectores {
   position: absolute;
   width: 1px;
@@ -884,10 +873,6 @@ tbody tr:nth-child(even) {
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
-}
-
-#contenedor-resultado:not([hidden]) {
-  display: block;
 }
 
 #error-404 {
@@ -921,7 +906,8 @@ tbody tr:nth-child(even) {
 }
 
 .acciones-panel > a,
-.acciones-panel > button {
+.acciones-panel > button,
+.acciones-panel > form {
   flex: 1;
   text-align: center;
 }
@@ -937,7 +923,7 @@ tbody tr:nth-child(even) {
   background-color: #141b24;
   border: 1px solid #283a4c;
   border-radius: 16px;
-  padding: clamp(1.25rem, 4vw, 2.5rem);
+  padding: 2rem;
   width: 100%;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
 }
@@ -959,7 +945,7 @@ tbody tr:nth-child(even) {
   overflow-wrap: anywhere;
 }
 
-.mensaje-formulario.error {
+.error {
   color: #fca5a5;
 }
 
@@ -968,18 +954,9 @@ tbody tr:nth-child(even) {
   margin-top: 1.5rem;
 }
 
-input[aria-invalid="true"] {
-  border-color: #fca5a5;
-}
-
-button:disabled {
-  opacity: 0.65;
-  cursor: wait;
-}
-
 .contacto-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
@@ -991,4 +968,14 @@ button:disabled {
 
 .contactos-equipo li {
   margin-top: 0.75rem;
+}
+
+.nav-sesion-contenido {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.acciones-panel form button {
+  width: 100%;
 }

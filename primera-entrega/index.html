@@ -30,7 +30,15 @@
         </li>
       </ul>
       <div id="nav-usuario">
-        <a href="login.html">Acceso</a>
+        <a id="nav-acceso" href="login.html">Acceso</a>
+        <div id="nav-sesion" hidden>
+          <div class="nav-sesion-contenido">
+            <span class="usuario-activo">Hola, <strong id="nav-nombre"></strong></span>
+            <form action="index.html" onsubmit="cerrarSesion()">
+              <button type="submit" class="btn-secundario">Salí</button>
+            </form>
+          </div>
+        </div>
       </div>
     </nav>
   </header>
@@ -185,11 +193,6 @@
     </div>
   </footer>
 
-  <template id="plantilla-nav-sesion">
-    <span class="usuario-activo">Hola, <strong data-nombre-usuario></strong></span>
-    <button type="button" class="btn-secundario" onclick="cerrarSesion()">Salí</button>
-  </template>
-  <template id="plantilla-nav-acceso"><a href="login.html">Acceso</a></template>
   <script src="js/main.js"></script>
 </body>
 </html>

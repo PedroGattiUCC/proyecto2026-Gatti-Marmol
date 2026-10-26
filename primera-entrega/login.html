@@ -30,7 +30,15 @@
         </li>
       </ul>
       <div id="nav-usuario">
-        <a href="login.html" class="activo">Acceso</a>
+        <a id="nav-acceso" href="login.html">Acceso</a>
+        <div id="nav-sesion" hidden>
+          <div class="nav-sesion-contenido">
+            <span class="usuario-activo">Hola, <strong id="nav-nombre"></strong></span>
+            <form action="index.html" onsubmit="cerrarSesion()">
+              <button type="submit" class="btn-secundario">Salí</button>
+            </form>
+          </div>
+        </div>
       </div>
     </nav>
   </header>
@@ -41,16 +49,19 @@
         <div id="acceso-contenido">
           <h2>Acceso de Clientes</h2>
           <p class="subtitulo-seccion">Ingresá con la cuenta de demostración que creaste en este navegador.</p>
-          <form id="form-login" onsubmit="validarLogin(event); return false;" novalidate>
+          <form id="form-login" action="index.html" onsubmit="return validarLogin();" novalidate>
             <div class="campo-grupo">
               <label for="login-email">Correo electrónico:</label>
-              <input type="email" id="login-email" name="email" placeholder="ejemplo@correo.com" size="30" maxlength="80" autocomplete="username" required />
+              <input type="email" id="login-email" placeholder="ejemplo@correo.com" size="30" maxlength="80" autocomplete="username" required />
             </div>
             <div class="campo-grupo">
               <label for="login-password">Contraseña:</label>
-              <input type="password" id="login-password" name="password" placeholder="Tu contraseña de demostración" size="30" maxlength="128" autocomplete="current-password" required />
+              <input type="password" id="login-password" placeholder="Tu contraseña de demostración" size="30" maxlength="128" autocomplete="current-password" required />
             </div>
-            <p id="mensaje-login" class="mensaje-formulario" role="alert" aria-live="assertive"></p>
+            <div class="mensaje-formulario" role="alert" aria-live="assertive">
+              <span id="mensaje-login"></span>
+              <span id="mensaje-login-error" class="error" hidden></span>
+            </div>
             <button type="submit" id="btn-login-submit" class="btn-primario">Iniciá sesión</button>
           </form>
           <p class="enlace-cuenta">¿Primera vez? <a href="registro.html">Creá una cuenta de demostración</a>.</p>
@@ -60,7 +71,9 @@
           <p>Ingresaste como <strong id="sesion-nombre"></strong> (<span id="sesion-email"></span>).</p>
           <div class="acciones-panel">
             <a href="index.html" class="btn-primario">Volvé al inicio</a>
-            <button type="button" class="btn-secundario" onclick="cerrarSesion()">Cerrá sesión</button>
+            <form action="index.html" onsubmit="cerrarSesion()">
+              <button type="submit" class="btn-secundario">Cerrá sesión</button>
+            </form>
           </div>
         </div>
         <p class="campo-ayuda aviso-demo">Demostración académica local: no uses datos ni contraseñas reales. Las cuentas y la sesión se guardan solo en este navegador; no hay autenticación en un servidor.</p>
@@ -97,11 +110,6 @@
     </div>
   </footer>
 
-  <template id="plantilla-nav-sesion">
-    <span class="usuario-activo">Hola, <strong data-nombre-usuario></strong></span>
-    <button type="button" class="btn-secundario" onclick="cerrarSesion()">Salí</button>
-  </template>
-  <template id="plantilla-nav-acceso"><a href="login.html">Acceso</a></template>
   <script src="js/main.js"></script>
 </body>
 </html>

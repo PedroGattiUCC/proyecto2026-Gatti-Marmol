@@ -30,7 +30,15 @@
         </li>
       </ul>
       <div id="nav-usuario">
-        <a href="login.html" class="activo">Acceso</a>
+        <a id="nav-acceso" href="login.html">Acceso</a>
+        <div id="nav-sesion" hidden>
+          <div class="nav-sesion-contenido">
+            <span class="usuario-activo">Hola, <strong id="nav-nombre"></strong></span>
+            <form action="index.html" onsubmit="cerrarSesion()">
+              <button type="submit" class="btn-secundario">Salí</button>
+            </form>
+          </div>
+        </div>
       </div>
     </nav>
   </header>
@@ -40,11 +48,11 @@
       <div class="card-acceso">
         <h2>Creá tu cuenta de demostración</h2>
         <p class="subtitulo-seccion">Completá tus datos de prueba para acceder desde este navegador.</p>
-        <form id="form-registro" class="form-acceso" onsubmit="registrarCuenta(event); return false;" novalidate>
+        <form id="form-registro" class="form-acceso" onsubmit="registrarCuenta(); return false;" novalidate>
           <div class="campo-grupo">
             <label for="registro-nombre">Nombre:</label>
             <input type="text" id="registro-nombre" name="nombre" placeholder="Ej: Ana Pérez" size="30" minlength="2" maxlength="60" autocomplete="name" required />
-            <p class="campo-ayuda">Entre 2 y 60 caracteres; letras, espacios, guion o apóstrofo.</p>
+            <p class="campo-ayuda">Entre 2 y 60 caracteres.</p>
           </div>
           <div class="campo-grupo">
             <label for="registro-email">Correo electrónico:</label>
@@ -58,7 +66,10 @@
             <label for="registro-confirmacion">Repetí la contraseña:</label>
             <input type="password" id="registro-confirmacion" name="confirmacion" placeholder="Repetí tu contraseña de prueba" size="30" minlength="8" maxlength="128" autocomplete="new-password" required />
           </div>
-          <p id="mensaje-registro" class="mensaje-formulario" role="alert" aria-live="assertive"></p>
+          <div class="mensaje-formulario" role="alert" aria-live="assertive">
+            <span id="mensaje-registro"></span>
+            <span id="mensaje-registro-error" class="error" hidden></span>
+          </div>
           <button type="submit" id="btn-registro-submit" class="btn-primario">Creá tu cuenta</button>
           <button type="button" class="btn-secundario" onclick="restablecerCuentasDemo()">Restablecé las cuentas de demostración</button>
         </form>
@@ -97,11 +108,6 @@
     </div>
   </footer>
 
-  <template id="plantilla-nav-sesion">
-    <span class="usuario-activo">Hola, <strong data-nombre-usuario></strong></span>
-    <button type="button" class="btn-secundario" onclick="cerrarSesion()">Salí</button>
-  </template>
-  <template id="plantilla-nav-acceso"><a href="login.html">Acceso</a></template>
   <script src="js/main.js"></script>
 </body>
 </html>

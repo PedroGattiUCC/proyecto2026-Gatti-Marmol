@@ -30,7 +30,15 @@
         </li>
       </ul>
       <div id="nav-usuario">
-        <a href="login.html">Acceso</a>
+        <a id="nav-acceso" href="login.html">Acceso</a>
+        <div id="nav-sesion" hidden>
+          <div class="nav-sesion-contenido">
+            <span class="usuario-activo">Hola, <strong id="nav-nombre"></strong></span>
+            <form action="index.html" onsubmit="cerrarSesion()">
+              <button type="submit" class="btn-secundario">Salí</button>
+            </form>
+          </div>
+        </div>
       </div>
     </nav>
   </header>
@@ -60,13 +68,16 @@
 
       <div id="resumen-carrito">
         <h3>Resumen del Pedido</h3>
-        <div class="campo-grupo">
+        <form class="campo-grupo" onsubmit="validarCupon(); return false;">
           <label for="input-cupon">¿Tenés un cupón?</label>
-          <input type="text" id="input-cupon" placeholder="Probá: LAURE10" size="15" maxlength="30" onkeydown="if(event.key==='Enter'){event.preventDefault(); validarCupon(this);}" />
-          <button type="button" class="btn-secundario" onclick="validarCupon(document.getElementById('input-cupon'))">Aplicá</button>
-          <p id="mensaje-cupon" role="status" aria-live="polite" aria-atomic="true"></p>
+          <input type="text" id="input-cupon" placeholder="Probá: LAURE10" size="15" maxlength="30" />
+          <button type="submit" class="btn-secundario">Aplicá</button>
+          <p class="mensaje-cupon" role="status" aria-live="polite" aria-atomic="true">
+            <span id="mensaje-cupon"></span>
+            <span id="mensaje-cupon-error" class="error" hidden></span>
+          </p>
           <p class="campo-ayuda">Ingresá el cupón LAURE10 para obtener un 10% de bonificación en tu pedido.</p>
-        </div>
+        </form>
 
         <div class="resumen-linea">
           <span>Subtotal:</span>
@@ -86,7 +97,9 @@
 
       <div id="acciones-carrito">
         <button type="button" id="btn-vaciar-carrito" class="btn-peligro" onclick="vaciarCarrito()">Vaciá el Carrito</button>
-        <button type="button" id="btn-confirmar-compra" class="btn-primario" onclick="confirmarCompra()">Confirmá tu Compra</button>
+        <form action="index.html" onsubmit="return confirmarCompra();">
+          <button type="submit" id="btn-confirmar-compra" class="btn-primario">Confirmá tu Compra</button>
+        </form>
         <a href="catalogo.html" class="btn-secundario">Seguí Comprando</a>
       </div>
     </section>
@@ -121,24 +134,6 @@
     </div>
   </footer>
 
-  <template id="plantilla-fila-carrito">
-    <tr>
-      <td><strong data-campo="nombre"></strong></td>
-      <td><span class="badge-metal" data-campo="metal"></span></td>
-      <td data-campo="precio"></td>
-      <td>
-        <label class="solo-lectores" for="cantidad-carrito-item">Cantidad</label>
-        <input id="cantidad-carrito-item" type="number" min="1" max="30" onchange="modificarCantidadCarrito(this.dataset.indice, this.value)" />
-      </td>
-      <td data-campo="subtotal"></td>
-      <td><button type="button" class="btn-peligro" onclick="eliminarDelCarrito(this.dataset.indice)">Eliminá</button></td>
-    </tr>
-  </template>
-  <template id="plantilla-nav-sesion">
-    <span class="usuario-activo">Hola, <strong data-nombre-usuario></strong></span>
-    <button type="button" class="btn-secundario" onclick="cerrarSesion()">Salí</button>
-  </template>
-  <template id="plantilla-nav-acceso"><a href="login.html">Acceso</a></template>
   <script src="js/main.js"></script>
 </body>
 </html>
