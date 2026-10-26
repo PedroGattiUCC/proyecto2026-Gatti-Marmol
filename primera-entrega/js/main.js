@@ -565,10 +565,10 @@ const filtrarYOrdenar = () => {
     const coincideTexto = (textoBusqueda === "" || nombre.includes(textoBusqueda) || catTarjeta.includes(textoBusqueda) || metal.includes(textoBusqueda));
 
     if (coincideCategoria && coincideTexto) {
-      tarjeta.style.display = "flex";
+      tarjeta.hidden = false;
       elementosVisibles++;
     } else {
-      tarjeta.style.display = "none";
+      tarjeta.hidden = true;
     }
   });
 
@@ -610,9 +610,9 @@ const filtrarYOrdenar = () => {
       <p>No se encontraron piezas exclusivas que coincidan con los criterios seleccionados.</p>
       <button type="button" class="btn-secundario" onclick="restablecerFiltrosCatalogo()">Restablecé los Filtros</button>
     `;
-    mensajeSinResultados.style.display = "block";
+    mensajeSinResultados.hidden = false;
   } else if (mensajeSinResultados) {
-    mensajeSinResultados.style.display = "none";
+    mensajeSinResultados.hidden = true;
   }
 };
 
@@ -786,7 +786,7 @@ const calcularPresupuesto = () => {
     imagen: "imagenes/joyas_hero.jpg"
   };
 
-  contenedorResultado.style.display = "block";
+  contenedorResultado.hidden = false;
 };
 
 /**
@@ -805,7 +805,7 @@ const limpiarCotizador = () => {
   if (selectMetal) selectMetal.selectedIndex = 0;
   if (inputGemas) inputGemas.value = "0";
   if (inputGrabado) inputGrabado.value = "";
-  if (contenedorResultado) contenedorResultado.style.display = "none";
+  if (contenedorResultado) contenedorResultado.hidden = true;
   ultimaCotizacion = null;
 };
 
@@ -943,9 +943,9 @@ const verificarEstadoLoginCard = () => {
       cardLogin.innerHTML = `
         <h2>Sesión Activa</h2>
         <p class="subtitulo-seccion">Iniciaste sesión con la cuenta de <strong>${nombreSeguro}</strong> (${emailSeguro}).</p>
-        <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
-          <a href="index.html" class="btn-primario" style="flex: 1; text-align: center;">Volvé al Inicio</a>
-          <button type="button" class="btn-secundario" onclick="cerrarSesion()" style="flex: 1;">Cerrá Sesión</button>
+        <div class="acciones-panel">
+          <a href="index.html" class="btn-primario">Volvé al Inicio</a>
+          <button type="button" class="btn-secundario" onclick="cerrarSesion()">Cerrá Sesión</button>
         </div>
       `;
     }
