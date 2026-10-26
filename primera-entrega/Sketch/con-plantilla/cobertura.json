@@ -1,0 +1,500 @@
+{
+  "consulted": "2026-10-26",
+  "templates_sha256": {
+    "GTP_sketchDesktop.jpg": "4cee4aadebe04965b1030785af6668ff7001bed6deb2de06f10120c78f7881d8",
+    "GTP_sketchMovil.jpg": "afc996aa1c25d802ee04fdedf98d8a9aad0fe5807683e44a05aac2a11e7459fa"
+  },
+  "screens": {
+    "inicio": {
+      "desktop": {
+        "width": 1440,
+        "height": 1913,
+        "span": "832.293577982",
+        "files": [
+          "inicio-desktop-01",
+          "inicio-desktop-02",
+          "inicio-desktop-03"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "832.293577982"
+          },
+          {
+            "sheet": 2,
+            "slot": 1,
+            "start": "832.293577982",
+            "end": "1664.587155963"
+          },
+          {
+            "sheet": 3,
+            "slot": 1,
+            "start": "1664.587155963",
+            "end": "1913"
+          }
+        ]
+      },
+      "mobile": {
+        "width": 390,
+        "height": 3030,
+        "span": "702",
+        "files": [
+          "inicio-mobile-01",
+          "inicio-mobile-02"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "702"
+          },
+          {
+            "sheet": 1,
+            "slot": 2,
+            "start": "702",
+            "end": "1404"
+          },
+          {
+            "sheet": 1,
+            "slot": 3,
+            "start": "1404",
+            "end": "2106"
+          },
+          {
+            "sheet": 2,
+            "slot": 1,
+            "start": "2106",
+            "end": "2808"
+          },
+          {
+            "sheet": 2,
+            "slot": 2,
+            "start": "2808",
+            "end": "3030"
+          }
+        ]
+      }
+    },
+    "catalogo": {
+      "desktop": {
+        "width": 1440,
+        "height": 1389,
+        "span": "832.293577982",
+        "files": [
+          "catalogo-desktop-01",
+          "catalogo-desktop-02"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "832.293577982"
+          },
+          {
+            "sheet": 2,
+            "slot": 1,
+            "start": "832.293577982",
+            "end": "1389"
+          }
+        ]
+      },
+      "mobile": {
+        "width": 390,
+        "height": 3157,
+        "span": "702",
+        "files": [
+          "catalogo-mobile-01",
+          "catalogo-mobile-02"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "702"
+          },
+          {
+            "sheet": 1,
+            "slot": 2,
+            "start": "702",
+            "end": "1404"
+          },
+          {
+            "sheet": 1,
+            "slot": 3,
+            "start": "1404",
+            "end": "2106"
+          },
+          {
+            "sheet": 2,
+            "slot": 1,
+            "start": "2106",
+            "end": "2808"
+          },
+          {
+            "sheet": 2,
+            "slot": 2,
+            "start": "2808",
+            "end": "3157"
+          }
+        ]
+      }
+    },
+    "cotizador": {
+      "desktop": {
+        "width": 1440,
+        "height": 1573,
+        "span": "832.293577982",
+        "files": [
+          "cotizador-desktop-01",
+          "cotizador-desktop-02"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "832.293577982"
+          },
+          {
+            "sheet": 2,
+            "slot": 1,
+            "start": "832.293577982",
+            "end": "1573"
+          }
+        ]
+      },
+      "mobile": {
+        "width": 390,
+        "height": 2342,
+        "span": "702",
+        "files": [
+          "cotizador-mobile-01",
+          "cotizador-mobile-02"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "702"
+          },
+          {
+            "sheet": 1,
+            "slot": 2,
+            "start": "702",
+            "end": "1404"
+          },
+          {
+            "sheet": 1,
+            "slot": 3,
+            "start": "1404",
+            "end": "2106"
+          },
+          {
+            "sheet": 2,
+            "slot": 1,
+            "start": "2106",
+            "end": "2342"
+          }
+        ]
+      }
+    },
+    "contacto": {
+      "desktop": {
+        "width": 1440,
+        "height": 1032,
+        "span": "832.293577982",
+        "files": [
+          "contacto-desktop-01",
+          "contacto-desktop-02"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "832.293577982"
+          },
+          {
+            "sheet": 2,
+            "slot": 1,
+            "start": "832.293577982",
+            "end": "1032"
+          }
+        ]
+      },
+      "mobile": {
+        "width": 390,
+        "height": 1479,
+        "span": "702",
+        "files": [
+          "contacto-mobile-01"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "702"
+          },
+          {
+            "sheet": 1,
+            "slot": 2,
+            "start": "702",
+            "end": "1404"
+          },
+          {
+            "sheet": 1,
+            "slot": 3,
+            "start": "1404",
+            "end": "1479"
+          }
+        ]
+      }
+    },
+    "carrito": {
+      "desktop": {
+        "width": 1440,
+        "height": 1342,
+        "span": "832.293577982",
+        "files": [
+          "carrito-desktop-01",
+          "carrito-desktop-02"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "832.293577982"
+          },
+          {
+            "sheet": 2,
+            "slot": 1,
+            "start": "832.293577982",
+            "end": "1342"
+          }
+        ]
+      },
+      "mobile": {
+        "width": 390,
+        "height": 1779,
+        "span": "702",
+        "files": [
+          "carrito-mobile-01"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "702"
+          },
+          {
+            "sheet": 1,
+            "slot": 2,
+            "start": "702",
+            "end": "1404"
+          },
+          {
+            "sheet": 1,
+            "slot": 3,
+            "start": "1404",
+            "end": "1779"
+          }
+        ]
+      }
+    },
+    "acceso": {
+      "desktop": {
+        "width": 1440,
+        "height": 1004,
+        "span": "832.293577982",
+        "files": [
+          "acceso-desktop-01",
+          "acceso-desktop-02"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "832.293577982"
+          },
+          {
+            "sheet": 2,
+            "slot": 1,
+            "start": "832.293577982",
+            "end": "1004"
+          }
+        ]
+      },
+      "mobile": {
+        "width": 390,
+        "height": 1129,
+        "span": "702",
+        "files": [
+          "acceso-mobile-01"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "702"
+          },
+          {
+            "sheet": 1,
+            "slot": 2,
+            "start": "702",
+            "end": "1129"
+          }
+        ]
+      }
+    },
+    "crear-cuenta": {
+      "desktop": {
+        "width": 1440,
+        "height": 1294,
+        "span": "832.293577982",
+        "files": [
+          "crear-cuenta-desktop-01",
+          "crear-cuenta-desktop-02"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "832.293577982"
+          },
+          {
+            "sheet": 2,
+            "slot": 1,
+            "start": "832.293577982",
+            "end": "1294"
+          }
+        ]
+      },
+      "mobile": {
+        "width": 390,
+        "height": 1438,
+        "span": "702",
+        "files": [
+          "crear-cuenta-mobile-01"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "702"
+          },
+          {
+            "sheet": 1,
+            "slot": 2,
+            "start": "702",
+            "end": "1404"
+          },
+          {
+            "sheet": 1,
+            "slot": 3,
+            "start": "1404",
+            "end": "1438"
+          }
+        ]
+      }
+    },
+    "validaciones": {
+      "desktop": {
+        "width": 1440,
+        "height": 1912,
+        "span": "832.293577982",
+        "files": [
+          "validaciones-desktop-01",
+          "validaciones-desktop-02",
+          "validaciones-desktop-03"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "832.293577982"
+          },
+          {
+            "sheet": 2,
+            "slot": 1,
+            "start": "832.293577982",
+            "end": "1664.587155963"
+          },
+          {
+            "sheet": 3,
+            "slot": 1,
+            "start": "1664.587155963",
+            "end": "1912"
+          }
+        ]
+      },
+      "mobile": {
+        "width": 390,
+        "height": 4405,
+        "span": "702",
+        "files": [
+          "validaciones-mobile-01",
+          "validaciones-mobile-02",
+          "validaciones-mobile-03"
+        ],
+        "segments": [
+          {
+            "sheet": 1,
+            "slot": 1,
+            "start": "0",
+            "end": "702"
+          },
+          {
+            "sheet": 1,
+            "slot": 2,
+            "start": "702",
+            "end": "1404"
+          },
+          {
+            "sheet": 1,
+            "slot": 3,
+            "start": "1404",
+            "end": "2106"
+          },
+          {
+            "sheet": 2,
+            "slot": 1,
+            "start": "2106",
+            "end": "2808"
+          },
+          {
+            "sheet": 2,
+            "slot": 2,
+            "start": "2808",
+            "end": "3510"
+          },
+          {
+            "sheet": 2,
+            "slot": 3,
+            "start": "3510",
+            "end": "4212"
+          },
+          {
+            "sheet": 3,
+            "slot": 1,
+            "start": "4212",
+            "end": "4405"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -4,7 +4,9 @@ Bocetos digitales de baja fidelidad, monocromos y con marcadores para las fotogr
 
 Son prototipos de interfaz, no capturas de la implementación. Las ilustraciones vectoriales del mockup representan el lugar de las fotografías de producto. El diseño móvil adapta los bloques a una columna; la navegación se distribuye en dos filas visibles.
 
-**Alcance académico:** bocetos digitales; no se presentan como dibujos hechos a mano ni en papel.
+**Template oficial:** se encontró la referencia de la cátedra en la [consigna UCC](https://ucc-tallerdesarrolloweb.github.io/filminas/Proyecto.html#/7) y se aplicó digitalmente a los sketches. Consultá las [láminas con template](../Sketch/con-plantilla/README.md) y las [referencias originales](../Sketch/plantillas/README.md).
+
+**Alcance académico:** estos bocetos son digitales; no son dibujos hechos a mano ni en papel. El template oficial está aplicado en las láminas enlazadas, pero eso no acredita por sí solo el requisito de prototipo en papel. Esa evidencia debe incorporarse aparte si la cátedra la exige.
 
 ## Cobertura y fuentes editables
 
@@ -125,4 +127,4 @@ python3 primera-entrega/Wireframe/generar_prototipos.py
 
 Requiere Python 3, Pillow e ImageMagick con librsvg. Las fuentes se resuelven con `fc-match` (fontconfig): preferidas Montserrat/Lato/Liberation Serif; usa las alternativas del sistema si no están disponibles. Sin fontconfig, intenta DejaVu Sans/Serif mediante Pillow. No requiere rutas de fuentes de una distribución específica. No instala dependencias ni accede a la red. Estas herramientas son requisitos de regeneración de los artefactos, no dependencias del sitio web.
 
-El comando regenera únicamente `Sketch/pantallas/`, `Wireframe/pantallas/` y sus README. Los SVG y PNG entregados se consultan sin ejecutar el script.
+El comando regenera únicamente `Sketch/pantallas/`, `Wireframe/pantallas/` y sus README. Los SVG y PNG entregados se consultan sin ejecutar el script. Para regenerar las láminas con el template oficial después de cambiar los bocetos, ejecutar también [generar_con_plantilla.py](../Sketch/generar_con_plantilla.py).
