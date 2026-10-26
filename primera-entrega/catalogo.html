@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body onload="inicializarApp()">
   <header>
     <nav>
       <a href="index.html" id="logo-brand">
@@ -147,6 +147,10 @@
           </div>
         </article>
       </div>
+      <div id="sin-resultados-catalogo" class="sin-resultados" hidden aria-live="polite">
+        <p>No se encontraron piezas exclusivas que coincidan con los criterios seleccionados.</p>
+        <button type="button" class="btn-secundario" onclick="restablecerFiltrosCatalogo()">Restablecé los Filtros</button>
+      </div>
     </section>
   </main>
 
@@ -177,6 +181,11 @@
     </div>
   </footer>
 
+  <template id="plantilla-nav-sesion">
+    <span class="usuario-activo">Hola, <strong data-nombre-usuario></strong></span>
+    <button type="button" class="btn-secundario" onclick="cerrarSesion()">Salí</button>
+  </template>
+  <template id="plantilla-nav-acceso"><a href="login.html">Acceso</a></template>
   <script src="js/main.js"></script>
 </body>
 </html>

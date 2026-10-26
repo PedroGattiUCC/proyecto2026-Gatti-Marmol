@@ -87,29 +87,6 @@ let porcentajeDescuentoCupon = 0;
 let ultimaCotizacion = null;
 
 /* ==========================================================================
-   UTILIDADES DE SEGURIDAD Y PREVENCIÓN DE VULNERABILIDADES
-   ========================================================================== */
-
-/**
- * Sanitiza una cadena de texto para evitar ataques de inyección de código (DOM XSS)
- * antes de insertarla dinámicamente en el DOM.
- * @method escaparHTML
- * @param {string} cadena - Texto a sanitizar
- * @return {string} Cadena segura con caracteres especiales codificados en entidades HTML
- */
-const escaparHTML = (cadena) => {
-  if (typeof cadena !== "string") {
-    return "";
-  }
-  return cadena
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-};
-
-/* ==========================================================================
    MÓDULO DE CARRITO DE COMPRAS Y PERSISTENCIA (localStorage)
    ========================================================================== */
 
@@ -439,7 +416,7 @@ const confirmarCompra = () => {
 
 /**
  * Renderiza dinámicamente las filas de la tabla del carrito de compras en el DOM, calculando subtotales por ítem, descuentos de cupones y el total general.
- * Incluye sanitización HTML completa para prevenir cualquier vulnerabilidad XSS.
+ * Completa los datos variables mediante textContent para evitar interpretarlos como HTML.
  * @method renderizarTablaCarrito
  * @return {void} No retorna ningún valor
  */
@@ -469,7 +446,9 @@ const renderizarTablaCarrito = () => {
   }
 
   let subtotalAcumulado = 0;
-  let htmlFilas = "";
+  const filas = document.createDocumentFragment();
+  const plantilla = document.getElementById("plantilla-fila-carrito");
+  cuerpoTabla.replaceChildren();
 
   carrito.forEach((item, indice) => {
     const cantidad = Math.max(1, Math.min(30, parseInt(item.cantidad, 10) || 1));
@@ -477,35 +456,23 @@ const renderizarTablaCarrito = () => {
     const subtotalItem = cantidad * precioUnitario;
     subtotalAcumulado += subtotalItem;
 
-    const nombreSeguro = escaparHTML(item.nombre || "Joya Exclusiva");
-    const metalSeguro = escaparHTML(item.metal || "Aleación Noble");
-
-    htmlFilas += `
-      <tr>
-        <td><strong>${nombreSeguro}</strong></td>
-        <td><span class="badge-metal">${metalSeguro}</span></td>
-        <td>${formateador.format(precioUnitario)}</td>
-        <td>
-          <input
-            type="number"
-            min="1"
-            max="30"
-            value="${cantidad}"
-            onchange="modificarCantidadCarrito(${indice}, this.value)"
-            aria-label="Cantidad para ${nombreSeguro}"
-          />
-        </td>
-        <td>${formateador.format(subtotalItem)}</td>
-        <td>
-          <button type="button" class="btn-peligro" onclick="eliminarDelCarrito(${indice})">
-            Eliminá
-          </button>
-        </td>
-      </tr>
-    `;
+    const fila = plantilla.content.cloneNode(true);
+    fila.querySelector('[data-campo="nombre"]').textContent = item.nombre || "Joya Exclusiva";
+    fila.querySelector('[data-campo="metal"]').textContent = item.metal || "Aleación Noble";
+    fila.querySelector('[data-campo="precio"]').textContent = formateador.format(precioUnitario);
+    fila.querySelector('[data-campo="subtotal"]').textContent = formateador.format(subtotalItem);
+    const input = fila.querySelector("input");
+    input.id = `cantidad-carrito-${indice}`;
+    input.value = cantidad;
+    input.dataset.indice = indice;
+    const label = fila.querySelector("label");
+    label.htmlFor = input.id;
+    label.textContent = `Cantidad para ${item.nombre || "Joya Exclusiva"}`;
+    fila.querySelector("button").dataset.indice = indice;
+    filas.appendChild(fila);
   });
 
-  cuerpoTabla.innerHTML = htmlFilas;
+  cuerpoTabla.appendChild(filas);
 
   const montoDescuento = subtotalAcumulado * porcentajeDescuentoCupon;
   const montoTotal = Math.max(0, subtotalAcumulado - montoDescuento);
@@ -597,22 +564,9 @@ const filtrarYOrdenar = () => {
     contenedorGrid.appendChild(tarjeta);
   });
 
-  // Gestión de estado vacío (Empty State) para una experiencia de usuario amigable
-  let mensajeSinResultados = document.getElementById("sin-resultados-catalogo");
-  if (elementosVisibles === 0) {
-    if (!mensajeSinResultados) {
-      mensajeSinResultados = document.createElement("div");
-      mensajeSinResultados.id = "sin-resultados-catalogo";
-      mensajeSinResultados.className = "sin-resultados";
-      contenedorGrid.appendChild(mensajeSinResultados);
-    }
-    mensajeSinResultados.innerHTML = `
-      <p>No se encontraron piezas exclusivas que coincidan con los criterios seleccionados.</p>
-      <button type="button" class="btn-secundario" onclick="restablecerFiltrosCatalogo()">Restablecé los Filtros</button>
-    `;
-    mensajeSinResultados.hidden = false;
-  } else if (mensajeSinResultados) {
-    mensajeSinResultados.hidden = true;
+  const mensajeSinResultados = document.getElementById("sin-resultados-catalogo");
+  if (mensajeSinResultados) {
+    mensajeSinResultados.hidden = elementosVisibles !== 0;
   }
 };
 
@@ -810,6 +764,29 @@ const limpiarCotizador = () => {
 };
 
 /* ==========================================================================
+   UTILIDADES DE SEGURIDAD Y PREVENCIÓN DE VULNERABILIDADES
+   ========================================================================== */
+
+/**
+ * Sanitiza una cadena de texto para evitar ataques de inyección de código (DOM XSS)
+ * antes de insertarla dinámicamente en el DOM.
+ * @method escaparHTML
+ * @param {string} cadena - Texto a sanitizar
+ * @return {string} Cadena segura con caracteres especiales codificados en entidades HTML
+ */
+const escaparHTML = (cadena) => {
+  if (typeof cadena !== "string") {
+    return "";
+  }
+  return cadena
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
+/* ==========================================================================
    MÓDULO DE AUTENTICACIÓN SIMPLE (LOGIN Y SESIÓN)
    ========================================================================== */
 
@@ -975,11 +952,3 @@ const inicializarApp = () => {
     renderizarTablaCarrito();
   }
 };
-
-// Escucha preventiva global para registrar cualquier anomalía no controlada en la consola sin detener la ejecución
-window.addEventListener("error", (event) => {
-  console.warn("Anomalía interceptada de forma preventiva en tiempo de ejecución:", event.message);
-});
-
-// Registro del evento de inicialización del DOM
-document.addEventListener("DOMContentLoaded", inicializarApp);
