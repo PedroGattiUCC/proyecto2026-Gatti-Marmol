@@ -387,7 +387,7 @@ const validarCupon = (inputElement) => {
 };
 
 /**
- * Procesa la orden de compra si existen artículos en el carrito, solicita confirmación, emite mensaje de confirmación, limpia el almacenamiento y redirige a la página principal.
+ * Finaliza una compra de demostración local tras confirmar, limpia el carrito y vuelve al inicio sin enviar pedidos ni procesar pagos.
  * @method confirmarCompra
  * @return {void} No retorna ningún valor
  */
@@ -399,7 +399,7 @@ const confirmarCompra = () => {
     return;
   }
 
-  const confirmar = confirm("¿Querés confirmar tu pedido en Laure Joyas y enviar los detalles a nuestro taller de orfebrería?");
+  const confirmar = confirm("¿Querés finalizar esta compra de demostración? Se vaciará el carrito; no se enviará ningún pedido ni se procesará un pago.");
   if (!confirmar) {
     return;
   }
@@ -407,7 +407,7 @@ const confirmarCompra = () => {
   const mensajeCupon = porcentajeDescuentoCupon === 0.80
     ? " Cupón 'pedroyjoaquin' aplicado: 80% de descuento sobre el total."
     : "";
-  alert("¡Muchas gracias por tu compra en Laure Joyas! Tu pedido ha sido registrado con éxito. Uno de nuestros asesores se comunicará con vos a la brevedad para coordinar la entrega y detalles de facturación." + mensajeCupon);
+  alert("Compra de demostración finalizada. Se vació el carrito. No se envió ningún pedido ni se procesó un pago." + mensajeCupon);
   localStorage.removeItem("laure_carrito");
   porcentajeDescuentoCupon = 0;
   actualizarBadgeCarrito();
