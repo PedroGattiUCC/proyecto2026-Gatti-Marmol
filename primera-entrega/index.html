@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Pedro Gatti, Joaquin Mármol" />
+  <meta name="description" content="Laure Joyas - Piezas exclusivas de alta joyería, obras maestras de orfebrería y cotizador personalizado en tiempo real." />
+  <meta name="keywords" content="joyería fina, oro 18k, platino 950, diamantes, orfebrería, cotizador de joyas, plata 925" />
+  <title>Laure Joyas | Alta Joyería y Cotizador Personalizado</title>
+  <link rel="icon" type="image/svg+xml" href="imagenes/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" id="logo-brand">
+        <img id="logo-icon" src="imagenes/favicon.svg" alt="Logotipo emblemático de Laure Joyas" />
+        <h1>Laure Joyas</h1>
+      </a>
+      <ul id="nav-enlaces">
+        <li><a href="index.html" class="activo">Inicio</a></li>
+        <li><a href="catalogo.html">Catálogo</a></li>
+        <li><a href="cotizador.html">Cotizador</a></li>
+        <li>
+          <a href="carrito.html">Carrito <span id="badge-carrito">0</span></a>
+        </li>
+      </ul>
+      <div id="nav-usuario">
+        <a href="login.html">Acceso</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="inicio">
+      <div id="hero-banner">
+        <div id="hero-texto">
+          <h2>Piezas Eternas Forjadas a Mano</h2>
+          <p>
+            En Laure Joyas fusionamos el arte orfebre tradicional con gemas de pureza inigualable. Cada joya cuenta una historia única, diseñada para trascender generaciones con la máxima distinción.
+          </p>
+          <p class="hero-acciones">
+            <a href="catalogo.html" class="btn-primario">Explorá el Catálogo</a>
+            <a href="cotizador.html" class="btn-primario">Cotizá a Medida</a>
+          </p>
+        </div>
+        <div id="hero-imagen-wrapper">
+          <img id="hero-img" src="imagenes/joyas_hero.jpg" alt="Colección de anillos y colgantes con diamantes engarzados sobre terciopelo" />
+        </div>
+      </div>
+    </section>
+
+    <section id="destacados">
+      <h2>Obras Maestras Destacadas</h2>
+      <p class="subtitulo-seccion">Selección curada de nuestras piezas más representativas en oro blanco, platino puro y piedras preciosas.</p>
+
+      <div class="catalogo-grid">
+        <article class="card-producto">
+          <div class="card-imagen-wrapper">
+            <img class="card-img" src="imagenes/joyas_hero.jpg" alt="Anillo Solitario Imperial en oro amarillo 18k con diamante central" />
+          </div>
+          <div class="card-cuerpo">
+            <span class="badge-metal">Oro Amarillo 18k</span>
+            <h3>Solitario Imperial</h3>
+            <p>Anillo solitario clásico con diamante engarzado en oro amarillo de 18 quilates.</p>
+            <p class="precio-texto">$ 850.000 ARS</p>
+            <button type="button" class="btn-primario" onclick="agregarAlCarrito(1)">Agregá al Carrito</button>
+          </div>
+        </article>
+
+        <article class="card-producto">
+          <div class="card-imagen-wrapper">
+            <img class="card-img" src="imagenes/joyas_collar.jpg" alt="Colgante Luminance en platino noble con diamante talla esmeralda" />
+          </div>
+          <div class="card-cuerpo">
+            <span class="badge-metal">Platino Noble</span>
+            <h3>Colgante Luminance</h3>
+            <p>Cadena veneciana con diamante talla esmeralda de excepcional claridad y engarce biselado en platino puro.</p>
+            <p class="precio-texto">$ 1.250.000 ARS</p>
+            <button type="button" class="btn-primario" onclick="agregarAlCarrito(2)">Agregá al Carrito</button>
+          </div>
+        </article>
+
+        <article class="card-producto">
+          <div class="card-imagen-wrapper">
+            <img class="card-img" src="imagenes/joyas_aros.jpg" alt="Par de aros Royal Brilliance en oro blanco 18k con corte baguette" />
+          </div>
+          <div class="card-cuerpo">
+            <span class="badge-metal">Oro Blanco 18k</span>
+            <h3>Aros Royal Brilliance</h3>
+            <p>Par de aros colgantes en oro blanco 18k con corte baguette deslumbrante.</p>
+            <p class="precio-texto">$ 620.000 ARS</p>
+            <button type="button" class="btn-primario" onclick="agregarAlCarrito(3)">Agregá al Carrito</button>
+          </div>
+        </article>
+      </div>
+
+      <p class="subtitulo-seccion">
+        <a href="catalogo.html" class="btn-primario">Explorá el Catálogo Completo</a>
+      </p>
+    </section>
+
+    <section id="valores">
+      <h2>Tarifas de Referencia de Materiales</h2>
+      <p class="subtitulo-seccion">Costos estándar por gramo de metal y mano de obra especializada utilizados en nuestro taller.</p>
+
+      <div class="tabla-contenedor">
+        <table>
+          <caption>Tabla de Valores de Referencia por Gramo de Metal Precioso</caption>
+          <thead>
+            <tr>
+              <th scope="col">Metal Precioso</th>
+              <th scope="col">Pureza / Ley</th>
+              <th scope="col">Valor Estimado por Gramo</th>
+              <th scope="col">Acabado Disponible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Oro 18k (Amarillo / Blanco / Rosa)</td>
+              <td>18 Quilates (750)</td>
+              <td>$ 95.000 ARS</td>
+              <td>Pulido espejo o satinado</td>
+            </tr>
+            <tr>
+              <td>Plata 925 de Ley</td>
+              <td>925 Milésimas</td>
+              <td>$ 12.000 ARS</td>
+              <td>Envejecido o rodinado</td>
+            </tr>
+            <tr>
+              <td>Platino 950 Noble</td>
+              <td>950 Milésimas</td>
+              <td>$ 110.000 ARS</td>
+              <td>Brillo de alta durabilidad</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="cta-cotizador">
+      <div id="cotizador-seccion">
+        <h2>¿Querés una Pieza a Medida?</h2>
+        <p class="subtitulo-seccion">
+          Diseñá tu joya personalizada calculando en tiempo real el valor según el tipo de metal precioso, peso en gramos, cantidad de gemas y servicio de grabado artesanal.
+        </p>
+        <p class="subtitulo-seccion">
+          <a href="cotizador.html" class="btn-primario">Probá el Cotizador Interactivo</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div id="footer-contenedor">
+      <div id="footer-identidad">
+        <img id="footer-logo" src="imagenes/favicon.svg" alt="Logotipo emblemático de Laure Joyas" />
+        <span id="footer-brand">Laure Joyas</span>
+      </div>
+      <div id="footer-info">
+        <p>Obispo Trejo 323, Córdoba, Argentina &bull; Alta Joyería y Orfebrería Fina</p>
+        <p>Cátedra: Taller de Desarrollo Web &bull; Universidad Católica de Córdoba (UCC 2026)</p>
+        <p>Autores: Pedro Gatti (Legajo: 2519717) y Joaquin Mármol (Legajo: 2514908)</p>
+      </div>
+      <nav aria-label="Navegación secundaria">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li>&bull;</li>
+          <li><a href="catalogo.html">Catálogo</a></li>
+          <li>&bull;</li>
+          <li><a href="cotizador.html">Cotizador</a></li>
+          <li>&bull;</li>
+          <li><a href="carrito.html">Carrito</a></li>
+          <li>&bull;</li>
+          <li><a href="login.html">Acceso</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
