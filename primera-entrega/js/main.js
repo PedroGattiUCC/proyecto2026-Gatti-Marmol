@@ -764,181 +764,307 @@ const limpiarCotizador = () => {
 };
 
 /* ==========================================================================
-   UTILIDADES DE SEGURIDAD Y PREVENCIÓN DE VULNERABILIDADES
+   CUENTAS DE DEMOSTRACIÓN LOCAL Y SESIÓN
    ========================================================================== */
 
-/**
- * Sanitiza una cadena de texto para evitar ataques de inyección de código (DOM XSS)
- * antes de insertarla dinámicamente en el DOM.
- * @method escaparHTML
- * @param {string} cadena - Texto a sanitizar
- * @return {string} Cadena segura con caracteres especiales codificados en entidades HTML
- */
-const escaparHTML = (cadena) => {
-  if (typeof cadena !== "string") {
-    return "";
-  }
-  return cadena
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-};
-
-/* ==========================================================================
-   MÓDULO DE AUTENTICACIÓN SIMPLE (LOGIN Y SESIÓN)
-   ========================================================================== */
+const CLAVE_CUENTAS = "laure_cuentas_demo";
+const ITERACIONES_HASH = 100000;
 
 /**
- * Valida las credenciales ingresadas en el formulario de inicio de sesión con chequeo de formato estricto de correo electrónico y longitud de contraseña.
- * Almacena los datos de sesión en localStorage y redirige al inicio. Si hay errores, muestra un alert, blanquea el campo respectivo y devuelve el foco.
- * @method validarLogin
- * @param {Event} event - Objeto de evento del formulario al ejecutarse submit
- * @return {boolean} Retorna true si las credenciales son válidas; de lo contrario false
+ * Recupera cuentas de demostración y rechaza datos dañados sin sobrescribirlos.
+ * @method obtenerCuentasDemo
+ * @return {Array<Object>} Cuentas con nombre, correo, sal y hash
  */
-const validarLogin = (event) => {
-  if (event && typeof event.preventDefault === "function") {
-    event.preventDefault();
-  }
-
-  const emailInput = document.getElementById("login-email");
-  const passwordInput = document.getElementById("login-password");
-
-  if (!emailInput || !passwordInput) {
-    return false;
-  }
-
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
-
-  // Validación estricta de correo electrónico
-  const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  if (!email || !regexEmail.test(email)) {
-    alert("Por favor, ingresá un correo electrónico válido (ejemplo: usuario@dominio.com).");
-    emailInput.value = "";
-    emailInput.focus();
-    return false;
-  }
-
-  // Validación de longitud de contraseña
-  if (!password || password.trim().length < 6) {
-    alert("La contraseña debe contener al menos 6 caracteres por razones de seguridad.");
-    passwordInput.value = "";
-    passwordInput.focus();
-    return false;
-  }
-
-  // Creación del objeto de usuario para la sesión
-  const aliasUsuario = email.split("@")[0];
-  const nombreLimpio = aliasUsuario.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, " ").trim();
-  const nombreFormateado = nombreLimpio.length > 0
-    ? (nombreLimpio.charAt(0).toUpperCase() + nombreLimpio.slice(1))
-    : "Cliente";
-
-  const usuario = {
-    email: email,
-    nombre: nombreFormateado,
-    autenticado: true,
-    fecha: new Date().toISOString()
-  };
-
+const obtenerCuentasDemo = () => {
+  const datos = localStorage.getItem(CLAVE_CUENTAS);
+  if (datos === null) return [];
+  let cuentas;
   try {
-    localStorage.setItem("laure_usuario", JSON.stringify(usuario));
-  } catch (err) {
-    console.error("Error al persistir usuario en localStorage:", err);
+    cuentas = JSON.parse(datos);
+  } catch (error) {
+    throw new Error("Las cuentas guardadas están dañadas. Podés restablecer las cuentas de demostración desde Crear cuenta.");
   }
-
-  alert(`¡Bienvenido/a a Laure Joyas, ${usuario.nombre}! Iniciaste sesión correctamente.`);
-  window.location.href = "index.html";
-  return true;
+  /**
+   * Comprueba el esquema de una cuenta persistida antes de usarla.
+   * @method valida
+   * @param {Object} cuenta - Registro leído del almacenamiento
+   * @return {boolean} Indica si posee los campos esperados
+   */
+  const valida = (cuenta) => cuenta && typeof cuenta.nombre === "string"
+    && cuenta.nombre.length >= 2 && cuenta.nombre.length <= 60
+    && typeof cuenta.email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cuenta.email)
+    && cuenta.email.length <= 80 && /^[a-f0-9]{32}$/.test(cuenta.sal)
+    && /^[a-f0-9]{64}$/.test(cuenta.hash);
+  if (!Array.isArray(cuentas) || !cuentas.every(valida)
+      || new Set(cuentas.map((cuenta) => cuenta.email.toLowerCase())).size !== cuentas.length) {
+    throw new Error("Las cuentas guardadas no son válidas. Podés restablecer las cuentas de demostración desde Crear cuenta.");
+  }
+  return cuentas;
 };
 
 /**
- * Cierra la sesión activa del usuario eliminando los datos de autenticación de localStorage, actualiza la barra de navegación y notifica al usuario.
+ * Convierte bytes en una cadena hexadecimal para persistencia local.
+ * @method bytesAHex
+ * @param {Uint8Array} bytes - Bytes a representar
+ * @return {string} Representación hexadecimal
+ */
+const bytesAHex = (bytes) => Array.from(bytes, (valor) => valor.toString(16).padStart(2, "0")).join("");
+
+/**
+ * Deriva un hash PBKDF2 con SHA-256 y sal aleatoria; requiere HTTPS o localhost.
+ * @method derivarContrasena
+ * @param {string} contrasena - Contraseña de prueba ingresada
+ * @param {string} sal - Sal de 16 bytes en hexadecimal
+ * @return {Promise<string>} Hash de 256 bits en hexadecimal
+ */
+const derivarContrasena = async (contrasena, sal) => {
+  if (!window.crypto || !window.crypto.subtle) {
+    throw new Error("Para crear cuentas o ingresar, abrí esta demostración mediante HTTPS o localhost.");
+  }
+  const clave = await window.crypto.subtle.importKey("raw", new TextEncoder().encode(contrasena), "PBKDF2", false, ["deriveBits"]);
+  const salBytes = Uint8Array.from(sal.match(/.{2}/g), (par) => parseInt(par, 16));
+  const bits = await window.crypto.subtle.deriveBits({ name: "PBKDF2", salt: salBytes, iterations: ITERACIONES_HASH, hash: "SHA-256" }, clave, 256);
+  return bytesAHex(new Uint8Array(bits));
+};
+
+/**
+ * Comunica el error, marca el campo y borra su valor para permitir corregirlo.
+ * @method informarErrorCuenta
+ * @param {string} destino - ID del panel de mensajes accesible
+ * @param {string} mensaje - Explicación del error
+ * @param {HTMLInputElement|null} campo - Campo inválido, cuando corresponde
+ * @return {void} No retorna ningún valor
+ */
+const informarErrorCuenta = (destino, mensaje, campo = null) => {
+  const panel = document.getElementById(destino);
+  panel.textContent = mensaje;
+  panel.classList.add("error");
+  if (campo) {
+    campo.setAttribute("aria-invalid", "true");
+    campo.setAttribute("aria-describedby", destino);
+    campo.value = "";
+  }
+  alert(mensaje);
+  if (campo) campo.focus();
+};
+
+/**
+ * Limpia marcas de errores antes de reintentar un formulario de cuenta.
+ * @method limpiarErroresCuenta
+ * @param {HTMLFormElement} formulario - Formulario a restablecer visualmente
+ * @param {string} destino - ID del mensaje accesible
+ * @return {void} No retorna ningún valor
+ */
+const limpiarErroresCuenta = (formulario, destino) => {
+  formulario.querySelectorAll("input").forEach((campo) => {
+    campo.removeAttribute("aria-invalid");
+    campo.removeAttribute("aria-describedby");
+  });
+  const panel = document.getElementById(destino);
+  panel.textContent = "";
+  panel.classList.remove("error");
+};
+
+/**
+ * Valida nombre, correo, claves y duplicados, y persiste una cuenta local con sal y hash.
+ * @method registrarCuenta
+ * @param {Event} event - Evento submit declarado en el HTML
+ * @return {Promise<void>} Finalización del registro de demostración
+ */
+const registrarCuenta = async (event) => {
+  event.preventDefault();
+  const formulario = document.getElementById("form-registro");
+  const boton = document.getElementById("btn-registro-submit");
+  if (boton.disabled) return;
+  limpiarErroresCuenta(formulario, "mensaje-registro");
+  const nombre = document.getElementById("registro-nombre");
+  const email = document.getElementById("registro-email");
+  const password = document.getElementById("registro-password");
+  const confirmacion = document.getElementById("registro-confirmacion");
+  const nombreLimpio = nombre.value.trim();
+  const correo = email.value.trim().toLowerCase();
+  if (nombreLimpio.length < 2 || nombreLimpio.length > 60 || !/^[\p{L}\p{M}][\p{L}\p{M} '\u2019-]*$/u.test(nombreLimpio)) {
+    informarErrorCuenta("mensaje-registro", "Ingresá un nombre de 2 a 60 caracteres con letras, espacios, guion o apóstrofo.", nombre);
+    return;
+  }
+  if (correo.length > 80 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo)) {
+    informarErrorCuenta("mensaje-registro", "Ingresá un correo electrónico válido de hasta 80 caracteres.", email);
+    return;
+  }
+  if (password.value.trim().length < 8 || password.value.length > 128) {
+    informarErrorCuenta("mensaje-registro", "Usá una contraseña de prueba de 8 a 128 caracteres.", password);
+    confirmacion.value = "";
+    return;
+  }
+  if (password.value !== confirmacion.value) {
+    informarErrorCuenta("mensaje-registro", "Las contraseñas no coinciden. Repetí la contraseña de prueba.", confirmacion);
+    return;
+  }
+  boton.disabled = true;
+  try {
+    const cuentas = obtenerCuentasDemo();
+    if (cuentas.some((cuenta) => cuenta.email.toLowerCase() === correo)) {
+      informarErrorCuenta("mensaje-registro", "Ya existe una cuenta de demostración con ese correo en este navegador. Iniciá sesión o usá otro correo de prueba.", email);
+      return;
+    }
+    if (!window.crypto || !window.crypto.subtle) {
+      throw new Error("Para crear cuentas, abrí esta demostración mediante HTTPS o localhost.");
+    }
+    const sal = bytesAHex(window.crypto.getRandomValues(new Uint8Array(16)));
+    const hash = await derivarContrasena(password.value, sal);
+    // Se vuelve a leer para conservar altas de otras pestañas durante la derivación.
+    const cuentasActuales = obtenerCuentasDemo();
+    if (cuentasActuales.some((cuenta) => cuenta.email.toLowerCase() === correo)) {
+      informarErrorCuenta("mensaje-registro", "Ese correo ya se registró en este navegador. Iniciá sesión.", email);
+      return;
+    }
+    cuentasActuales.push({ nombre: nombreLimpio, email: correo, sal, hash });
+    localStorage.setItem(CLAVE_CUENTAS, JSON.stringify(cuentasActuales));
+    formulario.reset();
+    document.getElementById("mensaje-registro").textContent = "Cuenta de demostración creada. Ya podés iniciar sesión desde el enlace Acceso.";
+    alert("Cuenta de demostración creada. Iniciá sesión con tu correo y contraseña de prueba.");
+  } catch (error) {
+    informarErrorCuenta("mensaje-registro", error.name === "QuotaExceededError" || error.name === "SecurityError"
+      ? "El navegador no permite guardar la cuenta. Habilitá el almacenamiento local e intentá nuevamente."
+      : error.message);
+  } finally {
+    password.value = "";
+    confirmacion.value = "";
+    boton.disabled = false;
+  }
+};
+
+/**
+ * Verifica correo y contraseña contra una cuenta creada antes de guardar la sesión.
+ * @method validarLogin
+ * @param {Event} event - Evento submit declarado en HTML
+ * @return {Promise<void>} Finalización de la validación local
+ */
+const validarLogin = async (event) => {
+  event.preventDefault();
+  const formulario = document.getElementById("form-login");
+  const boton = document.getElementById("btn-login-submit");
+  if (boton.disabled) return;
+  limpiarErroresCuenta(formulario, "mensaje-login");
+  const email = document.getElementById("login-email");
+  const password = document.getElementById("login-password");
+  const correo = email.value.trim().toLowerCase();
+  if (correo.length > 80 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo)) {
+    informarErrorCuenta("mensaje-login", "Ingresá un correo electrónico válido.", email);
+    return;
+  }
+  if (password.value.trim().length < 8 || password.value.length > 128) {
+    informarErrorCuenta("mensaje-login", "Ingresá tu contraseña de demostración de 8 a 128 caracteres.", password);
+    return;
+  }
+  boton.disabled = true;
+  try {
+    const cuenta = obtenerCuentasDemo().find((usuario) => usuario.email.toLowerCase() === correo);
+    if (!cuenta || await derivarContrasena(password.value, cuenta.sal) !== cuenta.hash) {
+      informarErrorCuenta("mensaje-login", "El correo o la contraseña no coinciden con una cuenta de este navegador. Si aún no tenés cuenta, creala desde el enlace Crear cuenta.", password);
+      return;
+    }
+    localStorage.setItem("laure_usuario", JSON.stringify({ email: cuenta.email, nombre: cuenta.nombre, autenticado: true }));
+    alert(`¡Bienvenido/a, ${cuenta.nombre}! Iniciaste la sesión de demostración.`);
+    window.location.href = "index.html";
+  } catch (error) {
+    informarErrorCuenta("mensaje-login", error.name === "QuotaExceededError" || error.name === "SecurityError"
+      ? "El navegador no permite guardar la sesión. Habilitá el almacenamiento local e intentá nuevamente."
+      : error.message);
+  } finally {
+    password.value = "";
+    boton.disabled = false;
+  }
+};
+
+/**
+ * Recupera una sesión coherente con una cuenta local y descarta sesiones antiguas o dañadas.
+ * @method obtenerSesionDemo
+ * @return {Object|null} Cuenta activa de demostración o null
+ */
+const obtenerSesionDemo = () => {
+  try {
+    const datos = localStorage.getItem("laure_usuario");
+    if (!datos) return null;
+    const sesion = JSON.parse(datos);
+    const cuenta = sesion && sesion.autenticado === true
+      ? obtenerCuentasDemo().find((usuario) => usuario.email === sesion.email) : null;
+    if (cuenta) return { nombre: cuenta.nombre, email: cuenta.email };
+    localStorage.removeItem("laure_usuario");
+  } catch (error) {
+    // Una sesión inválida o un navegador sin almacenamiento se muestran como sin acceso.
+  }
+  return null;
+};
+
+/**
+ * Cierra la sesión de demostración y vuelve a la portada.
  * @method cerrarSesion
  * @return {void} No retorna ningún valor
  */
 const cerrarSesion = () => {
-  localStorage.removeItem("laure_usuario");
-  alert("Cerraste sesión correctamente.");
-  verificarSesionEnNav();
-  window.location.href = "index.html";
+  try {
+    localStorage.removeItem("laure_usuario");
+    alert("Cerraste la sesión de demostración.");
+    window.location.href = "index.html";
+  } catch (error) {
+    alert("El navegador no permite acceder al almacenamiento. Revisá sus permisos para cerrar la sesión guardada.");
+  }
 };
 
 /**
- * Comprueba si existe una sesión de usuario almacenada en localStorage y actualiza el contenedor de usuario en la barra de navegación
- * para mostrar su nombre y botón de salida, o el enlace de acceso. Aplica sanitización para prevenir XSS.
+ * Restablece únicamente cuentas y sesión de demostración tras confirmación explícita.
+ * @method restablecerCuentasDemo
+ * @return {void} No retorna ningún valor
+ */
+const restablecerCuentasDemo = () => {
+  if (!confirm("¿Querés eliminar todas las cuentas de demostración y su sesión en este navegador? El carrito se conserva.")) return;
+  try {
+    localStorage.removeItem(CLAVE_CUENTAS);
+    localStorage.removeItem("laure_usuario");
+    verificarSesionEnNav();
+    document.getElementById("mensaje-registro").textContent = "Las cuentas de demostración se restablecieron. Podés crear una nueva.";
+    document.getElementById("mensaje-registro").classList.remove("error");
+  } catch (error) {
+    informarErrorCuenta("mensaje-registro", "El navegador no permite restablecer los datos locales. Revisá sus permisos de almacenamiento.");
+  }
+};
+
+/**
+ * Clona la navegación declarada en HTML y completa el nombre mediante textContent.
  * @method verificarSesionEnNav
  * @return {void} No retorna ningún valor
  */
 const verificarSesionEnNav = () => {
-  const contenedorNavUsuario = document.getElementById("nav-usuario");
-  if (!contenedorNavUsuario) {
-    return;
-  }
-
-  try {
-    const sesion = localStorage.getItem("laure_usuario");
-    if (sesion) {
-      const usuario = JSON.parse(sesion);
-      const nombreSeguro = escaparHTML(usuario.nombre || "Cliente");
-      contenedorNavUsuario.innerHTML = `
-        <span class="usuario-activo">
-          Hola, <strong>${nombreSeguro}</strong>
-        </span>
-        <button type="button" class="btn-secundario" onclick="cerrarSesion()">Salí</button>
-      `;
-    } else {
-      contenedorNavUsuario.innerHTML = `<a href="login.html">Acceso</a>`;
-    }
-  } catch (error) {
-    console.error("Error al verificar la sesión en el nav:", error);
-    contenedorNavUsuario.innerHTML = `<a href="login.html">Acceso</a>`;
-  }
+  const contenedor = document.getElementById("nav-usuario");
+  if (!contenedor) return;
+  const usuario = obtenerSesionDemo();
+  const plantilla = document.getElementById(usuario ? "plantilla-nav-sesion" : "plantilla-nav-acceso");
+  if (!plantilla) return;
+  const contenido = plantilla.content.cloneNode(true);
+  if (usuario) contenido.querySelector("[data-nombre-usuario]").textContent = usuario.nombre;
+  contenedor.replaceChildren(contenido);
 };
 
 /**
- * En caso de hallarse en la vista de login y contar con una sesión activa preexistente,
- * adapta la tarjeta para mostrar el estado actual y evitar confusión en el usuario.
+ * Alterna el formulario de acceso y el panel de sesión ya definidos en HTML.
  * @method verificarEstadoLoginCard
  * @return {void} No retorna ningún valor
  */
 const verificarEstadoLoginCard = () => {
-  const cardLogin = document.getElementById("card-login");
-  if (!cardLogin) {
-    return;
-  }
-
-  try {
-    const sesion = localStorage.getItem("laure_usuario");
-    if (sesion) {
-      const usuario = JSON.parse(sesion);
-      const nombreSeguro = escaparHTML(usuario.nombre || "Cliente");
-      const emailSeguro = escaparHTML(usuario.email || "");
-
-      cardLogin.innerHTML = `
-        <h2>Sesión Activa</h2>
-        <p class="subtitulo-seccion">Iniciaste sesión con la cuenta de <strong>${nombreSeguro}</strong> (${emailSeguro}).</p>
-        <div class="acciones-panel">
-          <a href="index.html" class="btn-primario">Volvé al Inicio</a>
-          <button type="button" class="btn-secundario" onclick="cerrarSesion()">Cerrá Sesión</button>
-        </div>
-      `;
-    }
-  } catch (error) {
-    console.error("Error al verificar estado de la tarjeta de login:", error);
+  const panel = document.getElementById("sesion-activa");
+  if (!panel) return;
+  const usuario = obtenerSesionDemo();
+  panel.hidden = !usuario;
+  document.getElementById("acceso-contenido").hidden = Boolean(usuario);
+  if (usuario) {
+    document.getElementById("sesion-nombre").textContent = usuario.nombre;
+    document.getElementById("sesion-email").textContent = usuario.email;
   }
 };
 
-/* ==========================================================================
-   AUTO-INICIALIZACIÓN DE LA APLICACIÓN Y BLINDAJE GLOBAL
-   ========================================================================== */
-
 /**
- * Inicializa los módulos de la aplicación al cargarse completamente el documento DOM:
- * actualiza el distintivo del carrito, valida la sesión activa, renderiza la tabla de compras si corresponde
- * y adapta el login si ya existe sesión activa.
+ * Inicializa módulos desde el evento onload declarado en el body de cada HTML.
  * @method inicializarApp
  * @return {void} No retorna ningún valor
  */
@@ -946,9 +1072,5 @@ const inicializarApp = () => {
   actualizarBadgeCarrito();
   verificarSesionEnNav();
   verificarEstadoLoginCard();
-
-  const tablaCarrito = document.getElementById("tabla-carrito") || document.getElementById("cuerpo-tabla-carrito");
-  if (tablaCarrito) {
-    renderizarTablaCarrito();
-  }
+  if (document.getElementById("cuerpo-tabla-carrito")) renderizarTablaCarrito();
 };

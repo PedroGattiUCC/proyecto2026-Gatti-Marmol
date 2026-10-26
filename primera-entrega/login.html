@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Pedro Gatti, Joaquin Mármol" />
-  <meta name="description" content="Accedé a tu cuenta exclusiva en Laure Joyas. Iniciá sesión para gestionar pedidos de alta joyería, consultar cotizaciones personalizadas y sincronizar tu carrito." />
+  <meta name="description" content="Accedé a tu cuenta exclusiva en Laure Joyas. Iniciá sesión para gestionar pedidos de alta joyería, consultar cotizaciones personalizadas y usar una cuenta de demostración local." />
   <meta name="keywords" content="login, iniciar sesión, cuenta cliente, alta joyería, Laure Joyas, pedidos, orfebrería" />
   <title>Acceso de Clientes | Laure Joyas</title>
   <link rel="icon" type="image/svg+xml" href="imagenes/favicon.svg" />
@@ -37,26 +37,32 @@
   <main>
     <section id="seccion-login">
       <div id="card-login">
-        <h2>Acceso de Clientes</h2>
-        <p class="subtitulo-seccion">Ingresá tus datos para gestionar tus pedidos de alta joyería y cotizaciones personalizadas.</p>
-
-        <form id="form-login" action="javascript:void(0);" onsubmit="return validarLogin(event)">
-          <div class="campo-grupo">
-            <label for="login-email">Correo Electrónico:</label>
-            <input type="email" id="login-email" name="email" placeholder="ejemplo@correo.com" size="30" maxlength="50" required />
-            <p class="campo-ayuda">Ingresá tu casilla de correo (ejemplo: usuario@dominio.com).</p>
+        <div id="acceso-contenido">
+          <h2>Acceso de Clientes</h2>
+          <p class="subtitulo-seccion">Ingresá con la cuenta de demostración que creaste en este navegador.</p>
+          <form id="form-login" onsubmit="validarLogin(event); return false;" novalidate>
+            <div class="campo-grupo">
+              <label for="login-email">Correo electrónico:</label>
+              <input type="email" id="login-email" name="email" placeholder="ejemplo@correo.com" size="30" maxlength="80" autocomplete="username" required />
+            </div>
+            <div class="campo-grupo">
+              <label for="login-password">Contraseña:</label>
+              <input type="password" id="login-password" name="password" placeholder="Tu contraseña de demostración" size="30" maxlength="128" autocomplete="current-password" required />
+            </div>
+            <p id="mensaje-login" class="mensaje-formulario" role="alert" aria-live="assertive"></p>
+            <button type="submit" id="btn-login-submit" class="btn-primario">Iniciá sesión</button>
+          </form>
+          <p class="enlace-cuenta">¿Primera vez? <a href="registro.html">Creá una cuenta de demostración</a>.</p>
+        </div>
+        <div id="sesion-activa" hidden>
+          <h2>Sesión activa</h2>
+          <p>Ingresaste como <strong id="sesion-nombre"></strong> (<span id="sesion-email"></span>).</p>
+          <div class="acciones-panel">
+            <a href="index.html" class="btn-primario">Volvé al inicio</a>
+            <button type="button" class="btn-secundario" onclick="cerrarSesion()">Cerrá sesión</button>
           </div>
-
-          <div class="campo-grupo">
-            <label for="login-password">Contraseña:</label>
-            <input type="password" id="login-password" name="password" placeholder="Mínimo 6 caracteres" size="30" maxlength="30" required />
-            <p class="campo-ayuda">Mínimo de 6 caracteres alfanuméricos.</p>
-          </div>
-
-          <button type="submit" id="btn-login-submit" class="btn-primario">Iniciá Sesión</button>
-
-          <p class="campo-ayuda">Demostración académica: La sesión activa se almacena en localStorage del navegador para personalizar el encabezado y sincronizar compras.</p>
-        </form>
+        </div>
+        <p class="campo-ayuda aviso-demo">Demostración académica local: no uses datos ni contraseñas reales. Las cuentas y la sesión se guardan solo en este navegador; no hay autenticación en un servidor.</p>
       </div>
     </section>
   </main>
@@ -88,6 +94,11 @@
     </div>
   </footer>
 
+  <template id="plantilla-nav-sesion">
+    <span class="usuario-activo">Hola, <strong data-nombre-usuario></strong></span>
+    <button type="button" class="btn-secundario" onclick="cerrarSesion()">Salí</button>
+  </template>
+  <template id="plantilla-nav-acceso"><a href="login.html">Acceso</a></template>
   <script src="js/main.js"></script>
 </body>
 </html>
