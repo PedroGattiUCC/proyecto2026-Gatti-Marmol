@@ -1,0 +1,30 @@
+@use "variables" as *;
+
+.catalogo-titulo {
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.catalogo-subtitulo {
+  color: $color-texto-suave;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.catalogo-grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.catalogo-mensaje {
+  color: $color-texto-suave;
+  padding: 2rem;
+  text-align: center;
+}
+
+.catalogo-error {
+  color: $color-error;
+  padding: 2rem;
+  text-align: center;
+}
