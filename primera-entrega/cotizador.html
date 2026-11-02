@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body onload="inicializarApp()">
   <header>
     <nav>
       <a href="index.html" id="logo-brand">
@@ -24,12 +24,21 @@
         <li><a href="index.html">Inicio</a></li>
         <li><a href="catalogo.html">Catálogo</a></li>
         <li><a href="cotizador.html" class="activo">Cotizador</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
         <li>
           <a href="carrito.html">Carrito <span id="badge-carrito">0</span></a>
         </li>
       </ul>
       <div id="nav-usuario">
-        <a href="login.html">Acceso</a>
+        <a id="nav-acceso" href="login.html">Acceso</a>
+        <div id="nav-sesion" hidden>
+          <div class="nav-sesion-contenido">
+            <span class="usuario-activo">Hola, <strong id="nav-nombre"></strong></span>
+            <form action="index.html" onsubmit="cerrarSesion()">
+              <button type="submit" class="btn-secundario">Salí</button>
+            </form>
+          </div>
+        </div>
       </div>
     </nav>
   </header>
@@ -40,7 +49,7 @@
         <h2>Cotizador Interactivo de Joyas</h2>
         <p class="subtitulo-seccion">Configurá los parámetros de tu joya personalizada para obtener un cálculo estimativo inmediato según las tarifas vigentes de nuestro taller de orfebrería.</p>
 
-        <form id="cotizador-form" action="javascript:void(0);" onsubmit="calcularPresupuesto(); return false;">
+        <form id="cotizador-form" onsubmit="calcularPresupuesto(); return false;" novalidate>
           <div class="campo-grupo">
             <label for="tipo-metal">Elegí el metal precioso:</label>
             <select id="tipo-metal" name="metal">
@@ -53,7 +62,7 @@
 
           <div class="campo-grupo">
             <label for="peso-joya">Peso aproximado en gramos (1 - 500 g):</label>
-            <input type="number" id="peso-joya" name="peso" placeholder="Ej: 10" size="10" maxlength="4" min="1" max="500" required onchange="validarPeso(this)" />
+            <input type="number" id="peso-joya" name="peso" placeholder="Ej: 10" size="10" maxlength="4" step="any" min="1" max="500" required onchange="validarPeso(this)" />
             <p class="campo-ayuda">Indicá el peso estimado de la pieza entre 1 y 500 gramos.</p>
           </div>
 
@@ -70,11 +79,11 @@
           </div>
 
           <div id="acciones-formulario">
-            <button type="button" id="btn-calcular" class="btn-primario" onclick="calcularPresupuesto()">Calculá tu Presupuesto</button>
+            <button type="submit" id="btn-calcular" class="btn-primario">Calculá tu Presupuesto</button>
             <button type="button" id="btn-limpiar" class="btn-secundario" onclick="limpiarCotizador()">Restablecé</button>
           </div>
 
-          <div id="contenedor-resultado">
+          <div id="contenedor-resultado" hidden aria-live="polite">
             <h3>Presupuesto Estimativo</h3>
             <p id="detalle-metal">-</p>
             <p id="detalle-gemas">-</p>
@@ -146,6 +155,8 @@
           <li><a href="catalogo.html">Catálogo</a></li>
           <li>&bull;</li>
           <li><a href="cotizador.html">Cotizador</a></li>
+          <li>&bull;</li>
+          <li><a href="contacto.html">Contacto</a></li>
           <li>&bull;</li>
           <li><a href="carrito.html">Carrito</a></li>
           <li>&bull;</li>

@@ -12,6 +12,7 @@ const PRODUCTOS = [
     categoria: "anillos",
     precio: 850000,
     imagen: "imagenes/joyas_hero.jpg",
+    alt: "Anillo Solitario Imperial en oro amarillo 18k con diamante central",
     metal: "Oro Amarillo 18k",
     descripcion: "Anillo solitario clásico con diamante engarzado en oro amarillo de 18 quilates."
   },
@@ -21,6 +22,7 @@ const PRODUCTOS = [
     categoria: "collares",
     precio: 1250000,
     imagen: "imagenes/joyas_collar.jpg",
+    alt: "Colgante Luminance en platino noble con diamante talla esmeralda",
     metal: "Platino Noble",
     descripcion: "Gargantilla con colgante de platino pulido y pavé de gemas brillantes."
   },
@@ -30,6 +32,7 @@ const PRODUCTOS = [
     categoria: "aros",
     precio: 620000,
     imagen: "imagenes/joyas_aros.jpg",
+    alt: "Par de aros Royal Brilliance en oro blanco 18k con corte baguette",
     metal: "Oro Blanco 18k",
     descripcion: "Par de aros colgantes en oro blanco 18k con corte baguette deslumbrante."
   },
@@ -39,6 +42,7 @@ const PRODUCTOS = [
     categoria: "pulseras",
     precio: 980000,
     imagen: "imagenes/joyas_pulsera.jpg",
+    alt: "Brazalete Étoile de oro amarillo 18k con engarce artesanal",
     metal: "Oro Amarillo 18k",
     descripcion: "Pulsera rígida de oro amarillo de 18 quilates con engarce artesanal."
   },
@@ -48,6 +52,7 @@ const PRODUCTOS = [
     categoria: "anillos",
     precio: 1450000,
     imagen: "imagenes/joyas_anillo_esmeralda.jpg",
+    alt: "Anillo Sublime Emerald con esmeralda colombiana y platino noble",
     metal: "Platino Noble",
     descripcion: "Majestuoso anillo con esmeralda central colombiana y engarce en platino."
   },
@@ -57,296 +62,164 @@ const PRODUCTOS = [
     categoria: "relojes",
     precio: 2100000,
     imagen: "imagenes/joyas_reloj.jpg",
+    alt: "Reloj Cronógrafo Prestige en oro rosa 18k con mecanismo suizo",
     metal: "Oro Rosa 18k",
     descripcion: "Reloj suizo de alta precisión con caja maciza en oro rosa de 18 quilates."
   }
 ];
 
-// Tarifas de referencia por gramo expresadas en pesos argentinos (ARS)
-const PRECIOS_METALES = {
-  oro18k: 95000,
-  plata925: 12000,
-  platino: 110000
+const METALES = {
+  oro18k: { nombre: "Oro 18k", precio: 95000, etiqueta: "Oro 18k ($95.000/g)" },
+  plata925: { nombre: "Plata 925", precio: 12000, etiqueta: "Plata 925 ($12.000/g)" },
+  platino: { nombre: "Platino 950", precio: 110000, etiqueta: "Platino 950 ($110.000/g)" }
 };
-
-// Costo fijo por engarce de gema y costo por grabado base
 const COSTO_POR_GEMA = 25000;
 const COSTO_GRABADO_BASE = 5000;
-
-// Instancia de formateador monetario en pesos argentinos (ARS)
+const CLAVE_CUENTAS = "laure_cuentas_demo";
 const formateador = new Intl.NumberFormat("es-AR", {
   style: "currency",
   currency: "ARS",
   maximumFractionDigits: 0
 });
-
-// Porcentaje de descuento global aplicado por cupón promocional
 let porcentajeDescuentoCupon = 0;
-
-// Almacena en memoria la última cotización calculada para permitir su adición al carrito
 let ultimaCotizacion = null;
 
-/* ==========================================================================
-   UTILIDADES DE SEGURIDAD Y PREVENCIÓN DE VULNERABILIDADES
-   ========================================================================== */
-
 /**
- * Sanitiza una cadena de texto para evitar ataques de inyección de código (DOM XSS)
- * antes de insertarla dinámicamente en el DOM.
- * @method escaparHTML
- * @param {string} cadena - Texto a sanitizar
- * @return {string} Cadena segura con caracteres especiales codificados en entidades HTML
- */
-const escaparHTML = (cadena) => {
-  if (typeof cadena !== "string") {
-    return "";
-  }
-  return cadena
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-};
-
-/* ==========================================================================
-   MÓDULO DE CARRITO DE COMPRAS Y PERSISTENCIA (localStorage)
-   ========================================================================== */
-
-/**
- * Recupera el listado de productos almacenados en el carrito de compras desde el almacenamiento local del navegador.
- * Realiza una validación estricta del esquema para garantizar que sea un Array y filtrar cualquier dato corrupto.
+ * Lee el carrito guardado en el navegador.
  * @method obtenerCarrito
- * @return {Array<Object>} Arreglo con los objetos de productos presentes en el carrito, o un arreglo vacío si no existen registros
+ * @return {Array} Productos del carrito
  */
 const obtenerCarrito = () => {
-  try {
-    const datos = localStorage.getItem("laure_carrito");
-    if (!datos) {
-      return [];
-    }
-    const parseado = JSON.parse(datos);
-    if (!Array.isArray(parseado)) {
-      console.warn("Estructura de carrito no válida en localStorage. Restableciendo carrito.");
-      localStorage.removeItem("laure_carrito");
-      return [];
-    }
-    // Filtrar elementos corruptos o incompletos por robustez
-    return parseado.filter((item) => 
-      item &&
-      typeof item === "object" &&
-      item.id !== undefined &&
-      item.nombre &&
-      !isNaN(Number(item.precio))
-    );
-  } catch (error) {
-    console.error("Error al leer el carrito de localStorage:", error);
-    return [];
-  }
+  const datos = localStorage.getItem("laure_carrito");
+  return datos === null ? [] : JSON.parse(datos);
 };
 
 /**
- * Persiste el arreglo actualizado del carrito en localStorage y actualiza la cantidad visualizada en el contador de la barra de navegación.
+ * Guarda el carrito y actualiza su contador.
  * @method guardarCarrito
- * @param {Array<Object>} carrito - Arreglo con los elementos actuales del carrito
- * @return {void} No retorna ningún valor
+ * @param {Array} carrito - Productos seleccionados
+ * @return {void}
  */
 const guardarCarrito = (carrito) => {
-  try {
-    const arregloValido = Array.isArray(carrito) ? carrito : [];
-    localStorage.setItem("laure_carrito", JSON.stringify(arregloValido));
-  } catch (error) {
-    console.error("Error al guardar el carrito en localStorage:", error);
-  }
+  localStorage.setItem("laure_carrito", JSON.stringify(carrito));
   actualizarBadgeCarrito();
 };
 
 /**
- * Suma la cantidad total de artículos en el carrito y actualiza el contador numérico del distintivo en la barra de navegación.
+ * Muestra la cantidad total de unidades seleccionadas.
  * @method actualizarBadgeCarrito
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const actualizarBadgeCarrito = () => {
-  const badge = document.getElementById("badge-carrito");
-  if (!badge) {
-    return;
-  }
-
-  const carrito = obtenerCarrito();
-  const totalItems = carrito.reduce((acumulado, item) => {
-    const cant = parseInt(item.cantidad, 10);
-    return acumulado + (isNaN(cant) || cant < 0 ? 0 : cant);
-  }, 0);
-
-  badge.textContent = totalItems.toString();
+  document.getElementById("badge-carrito").innerText = obtenerCarrito().reduce((total, item) => total + item.cantidad, 0);
 };
 
 /**
- * Añade una pieza de joyería al carrito de compras utilizando su identificador único.
- * Si ya existe, incrementa su cantidad hasta un tope seguro de 30 unidades; de lo contrario, agrega un nuevo ítem con cantidad unitaria.
+ * Agrega una pieza del catálogo o aumenta su cantidad.
  * @method agregarAlCarrito
- * @param {number|string} idProducto - Identificador numérico o clave del producto a incorporar
- * @return {void} No retorna ningún valor
+ * @param {number} idProducto - Identificador de la pieza
+ * @return {void}
  */
 const agregarAlCarrito = (idProducto) => {
-  const idNumerico = parseInt(idProducto, 10);
-  const productoEncontrado = PRODUCTOS.find((p) => p.id === idNumerico);
-
-  if (!productoEncontrado) {
-    alert("El producto seleccionado no pudo ser encontrado en el catálogo.");
-    return;
-  }
-
+  const producto = PRODUCTOS.find((item) => item.id === idProducto);
   const carrito = obtenerCarrito();
-  const itemExistente = carrito.find((item) => item.id === idNumerico);
-
-  if (itemExistente) {
-    const cantidadActual = parseInt(itemExistente.cantidad, 10) || 1;
-    if (cantidadActual >= 30) {
+  const existente = carrito.find((item) => item.id === idProducto);
+  if (existente) {
+    if (existente.cantidad >= 30) {
       alert("Alcanzaste el límite máximo de 30 unidades para este producto exclusivo.");
       return;
     }
-    itemExistente.cantidad = cantidadActual + 1;
+    existente.cantidad += 1;
   } else {
-    carrito.push({
-      id: productoEncontrado.id,
-      nombre: productoEncontrado.nombre,
-      categoria: productoEncontrado.categoria,
-      precio: productoEncontrado.precio,
-      metal: productoEncontrado.metal,
-      imagen: productoEncontrado.imagen,
+    carrito[carrito.length] = {
+      id: producto.id,
+      nombre: producto.nombre,
+      metal: producto.metal,
+      precio: producto.precio,
       cantidad: 1
-    });
+    };
   }
-
   guardarCarrito(carrito);
-  alert(`¡"${productoEncontrado.nombre}" fue añadido al carrito de compras con éxito!`);
+  alert(`¡"${producto.nombre}" fue añadido al carrito de compras con éxito!`);
 };
 
 /**
- * Añade la joya personalizada recién calculada en el cotizador directamente al carrito de compras.
+ * Agrega al carrito la última cotización calculada.
  * @method agregarCotizacionAlCarrito
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const agregarCotizacionAlCarrito = () => {
   if (!ultimaCotizacion) {
     alert("Por favor, calculá primero un presupuesto en el cotizador antes de agregarlo al carrito.");
     return;
   }
-
   const carrito = obtenerCarrito();
-  carrito.push({
-    id: ultimaCotizacion.id,
+  carrito[carrito.length] = {
+    id: "personalizada",
     nombre: ultimaCotizacion.nombre,
-    categoria: ultimaCotizacion.categoria,
-    precio: ultimaCotizacion.precio,
     metal: ultimaCotizacion.metal,
-    imagen: ultimaCotizacion.imagen,
+    precio: ultimaCotizacion.precio,
     cantidad: 1
-  });
-
+  };
   guardarCarrito(carrito);
   alert(`¡Tu joya personalizada ("${ultimaCotizacion.nombre}") fue añadida al carrito de compras con éxito!`);
 };
 
 /**
- * Modifica la cantidad de unidades de un producto específico en el carrito y actualiza la vista de la tabla.
- * Protege contra errores humanos de entrada (valores negativos, cadenas no numéricas, exceso de unidades).
- * Si el usuario introduce 0 o un valor negativo, solicita confirmación previa antes de eliminar.
+ * Cambia la cantidad de una fila del carrito.
  * @method modificarCantidadCarrito
- * @param {number|string} indice - Posición índice del elemento en el arreglo del carrito
- * @param {number|string} nuevaCantidad - Nueva cantidad numérica deseada
- * @return {void} No retorna ningún valor
+ * @param {number} indice - Posición del producto
+ * @param {string} nuevaCantidad - Cantidad ingresada
+ * @return {void}
  */
 const modificarCantidadCarrito = (indice, nuevaCantidad) => {
-  const carrito = obtenerCarrito();
-  const indiceNumerico = parseInt(indice, 10);
-
-  if (isNaN(indiceNumerico) || indiceNumerico < 0 || indiceNumerico >= carrito.length) {
-    console.error("Índice de producto inválido en el carrito.");
-    return;
-  }
-
-  const cantidadEntera = parseInt(nuevaCantidad, 10);
-
-  // Si el usuario dejó el campo vacío o escribió algo no numérico
-  if (isNaN(cantidadEntera)) {
+  const cantidad = parseFloat(nuevaCantidad);
+  if (isNaN(cantidad) || cantidad !== parseInt(cantidad, 10)) {
     alert("Por favor, ingresá un número entero válido de unidades.");
     renderizarTablaCarrito();
     return;
   }
-
-  // Si ingresa 0 o negativo, confirmación preventiva para evitar borrado accidental
-  if (cantidadEntera <= 0) {
-    const confirmar = confirm(`¿Querés eliminar "${carrito[indiceNumerico].nombre}" del carrito de compras?`);
-    if (confirmar) {
-      eliminarDelCarrito(indiceNumerico, true);
-    } else {
-      renderizarTablaCarrito(); // Restablece la cantidad visual previa
-    }
+  if (cantidad <= 0) {
+    eliminarDelCarrito(indice);
     return;
   }
-
-  // Tope máximo por pedido
-  if (cantidadEntera > 30) {
-    alert("Por motivos de stock artesanal, el límite máximo por pieza es de 30 unidades.");
-    carrito[indiceNumerico].cantidad = 30;
-  } else {
-    carrito[indiceNumerico].cantidad = cantidadEntera;
-  }
-
-  guardarCarrito(carrito);
-  renderizarTablaCarrito();
-};
-
-/**
- * Elimina una joya del carrito de compras según su índice en la lista, solicita confirmación preventiva,
- * guarda el cambio y actualiza la tabla de compras.
- * @method eliminarDelCarrito
- * @param {number|string} indice - Posición del producto a remover dentro del arreglo
- * @param {boolean} [omitirConfirmacion=false] - Indica si se omite la confirmación interactiva
- * @return {void} No retorna ningún valor
- */
-const eliminarDelCarrito = (indice, omitirConfirmacion = false) => {
   const carrito = obtenerCarrito();
-  const indiceNumerico = parseInt(indice, 10);
-
-  if (isNaN(indiceNumerico) || indiceNumerico < 0 || indiceNumerico >= carrito.length) {
-    return;
+  if (cantidad > 30) {
+    alert("Por motivos de stock artesanal, el límite máximo por pieza es de 30 unidades.");
   }
-
-  const nombreProducto = carrito[indiceNumerico].nombre;
-
-  if (!omitirConfirmacion) {
-    const seguro = confirm(`¿Querés eliminar "${nombreProducto}" de tu carrito?`);
-    if (!seguro) {
-      return;
-    }
-  }
-
-  carrito.splice(indiceNumerico, 1);
+  carrito[indice].cantidad = cantidad > 30 ? 30 : cantidad;
   guardarCarrito(carrito);
   renderizarTablaCarrito();
-  alert(`"${nombreProducto}" ha sido removido del carrito.`);
 };
 
 /**
- * Remueve la totalidad de los artículos del carrito de compras tras comprobar su existencia y solicitar confirmación interactiva.
+ * Elimina una fila después de confirmar la acción.
+ * @method eliminarDelCarrito
+ * @param {number} indice - Posición del producto
+ * @return {void}
+ */
+const eliminarDelCarrito = (indice) => {
+  const carrito = obtenerCarrito();
+  const nombre = carrito[indice].nombre;
+  if (confirm(`¿Querés eliminar "${nombre}" de tu carrito?`)) {
+    carrito.splice(indice, 1);
+    guardarCarrito(carrito);
+    alert(`"${nombre}" ha sido removido del carrito.`);
+  }
+  renderizarTablaCarrito();
+};
+
+/**
+ * Vacía el carrito después de confirmar la acción.
  * @method vaciarCarrito
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const vaciarCarrito = () => {
-  const carrito = obtenerCarrito();
-  if (carrito.length === 0) {
+  if (obtenerCarrito().length === 0) {
     alert("El carrito ya se encuentra vacío.");
     return;
   }
-
-  const seguro = confirm("¿Querés vaciar todos los artículos de tu carrito?");
-  if (!seguro) {
-    return;
-  }
-
+  if (!confirm("¿Querés vaciar todos los artículos de tu carrito?")) return;
   localStorage.removeItem("laure_carrito");
   porcentajeDescuentoCupon = 0;
   actualizarBadgeCarrito();
@@ -355,631 +228,408 @@ const vaciarCarrito = () => {
 };
 
 /**
- * Valida el código de cupón promocional ingresado por el usuario y recalcula los totales con su descuento;
- * muestra el resultado debajo del campo; si es incorrecto, blanquea el campo y devuelve el foco.
- * @method validarCupon
- * @param {HTMLInputElement} [inputElement] - Elemento de entrada de texto que contiene el código de cupón
- * @return {void} No retorna ningún valor
+ * Alterna los mensajes de éxito y error definidos en el HTML.
+ * @method mostrarMensaje
+ * @param {string} destino - ID del mensaje de éxito
+ * @param {string} texto - Mensaje para el usuario
+ * @param {boolean} esError - Indica si corresponde mostrar un error
+ * @return {void}
  */
-const validarCupon = (inputElement) => {
-  const input = inputElement || document.getElementById("input-cupon");
-  if (!input) {
-    return;
-  }
-
-  const codigo = input.value.trim().toUpperCase();
-  const mostrarMensaje = (texto, esError = false) => {
-    const mensaje = document.getElementById("mensaje-cupon");
-    if (mensaje) {
-      mensaje.textContent = texto;
-      mensaje.classList.toggle("error", esError);
-    }
-  };
-
-  if (codigo === "") {
-    mostrarMensaje("Por favor, ingresá un código de cupón antes de aplicar.", true);
-    input.focus();
-    return;
-  }
-
-  const carrito = obtenerCarrito();
-  if (carrito.length === 0) {
-    mostrarMensaje("Tu carrito está vacío. Agregá productos desde el catálogo antes de aplicar un cupón de descuento.", true);
-    input.value = "";
-    return;
-  }
-
-  const descuento = codigo === "LAURE10" ? 0.10 : codigo === "PEDROYJOAQUIN" ? 0.80 : 0;
-  const nombreCupon = codigo === "PEDROYJOAQUIN" ? "pedroyjoaquin" : codigo;
-
-  if (descuento > 0) {
-    if (porcentajeDescuentoCupon === descuento) {
-      mostrarMensaje(`El cupón '${nombreCupon}' ya está aplicado: ${descuento * 100}% de descuento sobre tu pedido.`);
-      return;
-    }
-    porcentajeDescuentoCupon = descuento;
-    mostrarMensaje(`¡Cupón '${nombreCupon}' aplicado con éxito! Se aplicó un ${descuento * 100}% de descuento sobre el total.`);
-    renderizarTablaCarrito();
-  } else {
-    porcentajeDescuentoCupon = 0;
-    mostrarMensaje("El cupón ingresado no es válido o ha expirado. Podés probar ingresando el código 'LAURE10'.", true);
-    input.value = "";
-    input.focus();
-    renderizarTablaCarrito();
-  }
+const mostrarMensaje = (destino, texto, esError = false) => {
+  document.getElementById(destino).innerText = esError ? "" : texto;
+  document.getElementById(destino).hidden = esError;
+  document.getElementById(`${destino}-error`).innerText = esError ? texto : "";
+  document.getElementById(`${destino}-error`).hidden = !esError;
 };
 
 /**
- * Procesa la orden de compra si existen artículos en el carrito, solicita confirmación, emite mensaje de confirmación, limpia el almacenamiento y redirige a la página principal.
+ * Aplica el descuento del cupón ingresado.
+ * @method validarCupon
+ * @return {void}
+ */
+const validarCupon = () => {
+  const input = document.getElementById("input-cupon");
+  const codigo = input.value.trim().toLowerCase();
+  if (codigo === "") {
+    mostrarMensaje("mensaje-cupon", "Por favor, ingresá un código de cupón antes de aplicar.", true);
+    return;
+  }
+  if (obtenerCarrito().length === 0) {
+    mostrarMensaje("mensaje-cupon", "Tu carrito está vacío. Agregá productos desde el catálogo antes de aplicar un cupón de descuento.", true);
+    input.value = "";
+    return;
+  }
+  const descuento = codigo === "laure10" ? 0.10 : codigo === "pedroyjoaquin" ? 0.80 : 0;
+  const nombre = codigo === "laure10" ? "LAURE10" : codigo;
+  if (descuento === 0) {
+    porcentajeDescuentoCupon = 0;
+    mostrarMensaje("mensaje-cupon", "El cupón ingresado no es válido o ha expirado. Podés probar ingresando el código 'LAURE10'.", true);
+    input.value = "";
+  } else if (porcentajeDescuentoCupon === descuento) {
+    mostrarMensaje("mensaje-cupon", `El cupón '${nombre}' ya está aplicado: ${descuento * 100}% de descuento sobre tu pedido.`);
+  } else {
+    porcentajeDescuentoCupon = descuento;
+    mostrarMensaje("mensaje-cupon", `¡Cupón '${nombre}' aplicado con éxito! Se aplicó un ${descuento * 100}% de descuento sobre el total.`);
+  }
+  renderizarTablaCarrito();
+};
+
+/**
+ * Confirma la compra de demostración y permite volver al inicio.
  * @method confirmarCompra
- * @return {void} No retorna ningún valor
+ * @return {boolean} Indica si el formulario puede continuar al inicio
  */
 const confirmarCompra = () => {
-  const carrito = obtenerCarrito();
-
-  if (carrito.length === 0) {
+  if (obtenerCarrito().length === 0) {
     alert("Tu carrito está vacío. Agregá productos desde el catálogo antes de confirmar la compra.");
-    return;
+    return false;
   }
-
-  const confirmar = confirm("¿Querés confirmar tu pedido en Laure Joyas y enviar los detalles a nuestro taller de orfebrería?");
-  if (!confirmar) {
-    return;
-  }
-
+  if (!confirm("¿Querés finalizar esta compra de demostración? Se vaciará el carrito; no se enviará ningún pedido ni se procesará un pago.")) return false;
   const mensajeCupon = porcentajeDescuentoCupon === 0.80
-    ? " Cupón 'pedroyjoaquin' aplicado: 80% de descuento sobre el total."
-    : "";
-  alert("¡Muchas gracias por tu compra en Laure Joyas! Tu pedido ha sido registrado con éxito. Uno de nuestros asesores se comunicará con vos a la brevedad para coordinar la entrega y detalles de facturación." + mensajeCupon);
+    ? " Cupón 'pedroyjoaquin' aplicado: 80% de descuento sobre el total." : "";
+  alert("Compra de demostración finalizada. Se vació el carrito. No se envió ningún pedido ni se procesó un pago." + mensajeCupon);
   localStorage.removeItem("laure_carrito");
   porcentajeDescuentoCupon = 0;
   actualizarBadgeCarrito();
-  window.location.href = "index.html";
+  return true;
 };
 
 /**
- * Renderiza dinámicamente las filas de la tabla del carrito de compras en el DOM, calculando subtotales por ítem, descuentos de cupones y el total general.
- * Incluye sanitización HTML completa para prevenir cualquier vulnerabilidad XSS.
+ * Genera las filas del carrito y calcula sus totales.
  * @method renderizarTablaCarrito
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const renderizarTablaCarrito = () => {
-  const cuerpoTabla = document.getElementById("cuerpo-tabla-carrito");
-  if (!cuerpoTabla) {
-    return;
-  }
-
   const carrito = obtenerCarrito();
-  const elementoSubtotal = document.getElementById("subtotal-carrito-texto");
-  const elementoDescuento = document.getElementById("descuento-carrito-texto");
-  const elementoTotal = document.getElementById("total-carrito-texto");
-
-  if (carrito.length === 0) {
-    cuerpoTabla.innerHTML = `
-      <tr class="carrito-vacio-mensaje">
-        <td colspan="6">Tu carrito se encuentra actualmente vacío. Te invitamos a explorar nuestro catálogo de piezas exclusivas.</td>
-      </tr>
-    `;
-    if (elementoSubtotal) elementoSubtotal.textContent = formateador.format(0) + " ARS";
-    if (elementoDescuento) elementoDescuento.textContent = formateador.format(0) + " ARS";
-    if (elementoTotal) elementoTotal.textContent = formateador.format(0) + " ARS";
-    const mensajeCupon = document.getElementById("mensaje-cupon");
-    if (mensajeCupon) mensajeCupon.textContent = "";
-    return;
-  }
-
-  let subtotalAcumulado = 0;
-  let htmlFilas = "";
-
-  carrito.forEach((item, indice) => {
-    const cantidad = Math.max(1, Math.min(30, parseInt(item.cantidad, 10) || 1));
-    const precioUnitario = Math.max(0, parseFloat(item.precio) || 0);
-    const subtotalItem = cantidad * precioUnitario;
-    subtotalAcumulado += subtotalItem;
-
-    const nombreSeguro = escaparHTML(item.nombre || "Joya Exclusiva");
-    const metalSeguro = escaparHTML(item.metal || "Aleación Noble");
-
-    htmlFilas += `
+  let filas = "";
+  let subtotal = 0;
+  carrito.forEach((item, i) => {
+    const importe = item.precio * item.cantidad;
+    subtotal += importe;
+    filas += `
       <tr>
-        <td><strong>${nombreSeguro}</strong></td>
-        <td><span class="badge-metal">${metalSeguro}</span></td>
-        <td>${formateador.format(precioUnitario)}</td>
+        <td><strong>${item.nombre}</strong></td>
+        <td><span class="badge-metal">${item.metal}</span></td>
+        <td>${formateador.format(item.precio)}</td>
         <td>
-          <input
-            type="number"
-            min="1"
-            max="30"
-            value="${cantidad}"
-            onchange="modificarCantidadCarrito(${indice}, this.value)"
-            aria-label="Cantidad para ${nombreSeguro}"
-          />
+          <label class="solo-lectores" for="cantidad-carrito-${i}">Cantidad para ${item.nombre}</label>
+          <input id="cantidad-carrito-${i}" type="number" min="1" max="30" value="${item.cantidad}" onchange="modificarCantidadCarrito(${i}, this.value)" />
         </td>
-        <td>${formateador.format(subtotalItem)}</td>
-        <td>
-          <button type="button" class="btn-peligro" onclick="eliminarDelCarrito(${indice})">
-            Eliminá
-          </button>
-        </td>
-      </tr>
-    `;
+        <td>${formateador.format(importe)}</td>
+        <td><button type="button" class="btn-peligro" onclick="eliminarDelCarrito(${i})">Eliminá</button></td>
+      </tr>`;
   });
-
-  cuerpoTabla.innerHTML = htmlFilas;
-
-  const montoDescuento = subtotalAcumulado * porcentajeDescuentoCupon;
-  const montoTotal = Math.max(0, subtotalAcumulado - montoDescuento);
-
-  if (elementoSubtotal) {
-    elementoSubtotal.textContent = `${formateador.format(subtotalAcumulado)} ARS`;
+  if (carrito.length === 0) {
+    filas = '<tr class="carrito-vacio-mensaje"><td colspan="6">Tu carrito se encuentra actualmente vacío. Te invitamos a explorar nuestro catálogo de piezas exclusivas.</td></tr>';
+    porcentajeDescuentoCupon = 0;
+    mostrarMensaje("mensaje-cupon", "");
   }
-  if (elementoDescuento) {
-    elementoDescuento.textContent = porcentajeDescuentoCupon > 0
-      ? `- ${formateador.format(montoDescuento)} (10%) ARS`
-      : `${formateador.format(0)} ARS`;
-  }
-  if (elementoTotal) {
-    elementoTotal.textContent = `${formateador.format(montoTotal)} ARS`;
-  }
+  const descuento = subtotal * porcentajeDescuentoCupon;
+  document.getElementById("cuerpo-tabla-carrito").innerHTML = filas;
+  document.getElementById("subtotal-carrito-texto").innerText = `${formateador.format(subtotal)} ARS`;
+  document.getElementById("descuento-carrito-texto").innerText = descuento > 0
+    ? `- ${formateador.format(descuento)} (${porcentajeDescuentoCupon * 100}%) ARS` : `${formateador.format(0)} ARS`;
+  document.getElementById("total-carrito-texto").innerText = `${formateador.format(subtotal - descuento)} ARS`;
 };
 
-/* ==========================================================================
-   MÓDULO DE CATÁLOGO (FILTROS Y BÚSQUEDA INTEGRADA EN TIEMPO REAL)
-   ========================================================================== */
-
 /**
- * Filtra las tarjetas de productos combinando armónicamente la categoría seleccionada y el texto de búsqueda en tiempo real,
- * ordenándolas en el DOM según el criterio seleccionado. Si no hay coincidencias, muestra un mensaje descriptivo de estado vacío.
+ * Filtra los productos, los ordena y genera sus tarjetas.
  * @method filtrarYOrdenar
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const filtrarYOrdenar = () => {
-  const selectCategoria = document.getElementById("select-categoria");
-  const selectOrden = document.getElementById("select-orden");
-  const inputBusqueda = document.getElementById("input-busqueda");
-  const contenedorGrid = document.getElementById("catalogo-grid");
-
-  if (!contenedorGrid) {
-    return;
+  const categoria = document.getElementById("select-categoria").value;
+  const orden = document.getElementById("select-orden").value;
+  const texto = document.getElementById("input-busqueda").value.trim().toLowerCase();
+  const lista = PRODUCTOS.filter((producto) =>
+    (categoria === "todas" || producto.categoria === categoria) &&
+    (producto.nombre.toLowerCase().includes(texto) || producto.categoria.includes(texto) || producto.metal.toLowerCase().includes(texto))
+  );
+  if (orden === "precio-menor") {
+    lista.sort((a, b) => a.precio - b.precio);
+  } else if (orden === "precio-mayor") {
+    lista.sort((a, b) => b.precio - a.precio);
+  } else if (orden === "nombre-az") {
+    lista.sort((a, b) => a.nombre.toLowerCase() < b.nombre.toLowerCase() ? -1 : a.nombre.toLowerCase() > b.nombre.toLowerCase() ? 1 : 0);
   }
-
-  const categoriaSeleccionada = selectCategoria ? selectCategoria.value.toLowerCase().trim() : "todas";
-  const ordenSeleccionado = selectOrden ? selectOrden.value : "defecto";
-  const textoBusqueda = inputBusqueda ? inputBusqueda.value.toLowerCase().trim() : "";
-
-  const tarjetas = Array.from(contenedorGrid.querySelectorAll(".card-producto"));
-  if (tarjetas.length === 0) {
-    return;
-  }
-
-  let elementosVisibles = 0;
-
-  // Filtrado simultáneo por categoría Y texto de búsqueda
-  tarjetas.forEach((tarjeta) => {
-    const catTarjeta = (tarjeta.getAttribute("data-categoria") || "").toLowerCase();
-    const nombre = (tarjeta.getAttribute("data-nombre") || "").toLowerCase();
-    const badgeMetal = tarjeta.querySelector(".badge-metal");
-    const metal = badgeMetal ? badgeMetal.textContent.toLowerCase() : "";
-
-    const coincideCategoria = (categoriaSeleccionada === "todas" || categoriaSeleccionada === "" || catTarjeta === categoriaSeleccionada);
-    const coincideTexto = (textoBusqueda === "" || nombre.includes(textoBusqueda) || catTarjeta.includes(textoBusqueda) || metal.includes(textoBusqueda));
-
-    if (coincideCategoria && coincideTexto) {
-      tarjeta.style.display = "flex";
-      elementosVisibles++;
-    } else {
-      tarjeta.style.display = "none";
-    }
+  let tarjetas = "";
+  lista.forEach((producto) => {
+    tarjetas += `
+      <article class="card-producto">
+        <div class="card-imagen-wrapper">
+          <img class="card-img" src="${producto.imagen}" alt="${producto.alt}" />
+        </div>
+        <div class="card-cuerpo">
+          <span class="badge-metal">${producto.metal}</span>
+          <h3>${producto.nombre}</h3>
+          <p>${producto.descripcion}</p>
+          <p class="precio-texto">${formateador.format(producto.precio)} ARS</p>
+          <button type="button" class="btn-primario" onclick="agregarAlCarrito(${producto.id})">Agregá al Carrito</button>
+        </div>
+      </article>`;
   });
-
-  // Ordenamiento en el DOM
-  tarjetas.sort((a, b) => {
-    const precioA = parseFloat(a.getAttribute("data-precio") || "0");
-    const precioB = parseFloat(b.getAttribute("data-precio") || "0");
-    const nombreA = (a.getAttribute("data-nombre") || "").toLowerCase();
-    const nombreB = (b.getAttribute("data-nombre") || "").toLowerCase();
-    const idA = parseInt(a.getAttribute("data-id") || "0", 10);
-    const idB = parseInt(b.getAttribute("data-id") || "0", 10);
-
-    if (ordenSeleccionado === "precio-menor") {
-      return precioA - precioB;
-    } else if (ordenSeleccionado === "precio-mayor") {
-      return precioB - precioA;
-    } else if (ordenSeleccionado === "nombre-az") {
-      return nombreA.localeCompare(nombreB);
-    } else {
-      return idA - idB;
-    }
-  });
-
-  // Re-anexar tarjetas respetando el orden
-  tarjetas.forEach((tarjeta) => {
-    contenedorGrid.appendChild(tarjeta);
-  });
-
-  // Gestión de estado vacío (Empty State) para una experiencia de usuario amigable
-  let mensajeSinResultados = document.getElementById("sin-resultados-catalogo");
-  if (elementosVisibles === 0) {
-    if (!mensajeSinResultados) {
-      mensajeSinResultados = document.createElement("div");
-      mensajeSinResultados.id = "sin-resultados-catalogo";
-      mensajeSinResultados.className = "sin-resultados";
-      contenedorGrid.appendChild(mensajeSinResultados);
-    }
-    mensajeSinResultados.innerHTML = `
-      <p>No se encontraron piezas exclusivas que coincidan con los criterios seleccionados.</p>
-      <button type="button" class="btn-secundario" onclick="restablecerFiltrosCatalogo()">Restablecé los Filtros</button>
-    `;
-    mensajeSinResultados.style.display = "block";
-  } else if (mensajeSinResultados) {
-    mensajeSinResultados.style.display = "none";
-  }
+  document.getElementById("catalogo-grid").innerHTML = tarjetas;
+  document.getElementById("sin-resultados-catalogo").hidden = lista.length !== 0;
 };
 
 /**
- * Ejecuta el filtrado en tiempo real al ingresar texto en el campo de búsqueda del catálogo.
+ * Actualiza el catálogo al escribir en la búsqueda.
  * @method buscarProductos
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const buscarProductos = () => {
   filtrarYOrdenar();
 };
 
 /**
- * Restablece los filtros del catálogo a sus valores por defecto (todas las categorías, sin texto y orden por defecto).
+ * Restablece la búsqueda, categoría y orden iniciales.
  * @method restablecerFiltrosCatalogo
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const restablecerFiltrosCatalogo = () => {
-  const selectCategoria = document.getElementById("select-categoria");
-  const selectOrden = document.getElementById("select-orden");
-  const inputBusqueda = document.getElementById("input-busqueda");
-
-  if (selectCategoria) selectCategoria.value = "todas";
-  if (selectOrden) selectOrden.value = "defecto";
-  if (inputBusqueda) inputBusqueda.value = "";
-
+  document.getElementById("select-categoria").value = "todas";
+  document.getElementById("select-orden").value = "defecto";
+  document.getElementById("input-busqueda").value = "";
   filtrarYOrdenar();
 };
 
-/* ==========================================================================
-   MÓDULO DE COTIZADOR PERSONALIZADO
-   ========================================================================== */
-
 /**
- * Valida que el peso numérico ingresado por el usuario se encuentre en el rango permitido (1 a 500 gramos).
- * Aplica el patrón pedagógico de la cátedra: notifica con alert, blanquea el campo y devuelve el foco.
+ * Comprueba que el peso esté entre 1 y 500 gramos.
  * @method validarPeso
- * @param {HTMLInputElement} inputElement - Elemento input del DOM que contiene el valor del peso
- * @return {boolean} Retorna true si el valor es válido; de lo contrario false
+ * @param {HTMLInputElement} input - Campo de peso
+ * @return {boolean} Indica si el peso es válido
  */
-const validarPeso = (inputElement) => {
-  if (!inputElement) {
-    return false;
-  }
-
-  const valorTexto = (inputElement.value || "").trim();
-
-  if (valorTexto === "") {
+const validarPeso = (input) => {
+  const peso = parseFloat(input.value);
+  if (isNaN(peso) || peso < 1 || peso > 500) {
     alert("Por favor, ingresá un peso válido en gramos (entre 1 y 500 gramos).");
-    inputElement.value = "";
-    inputElement.focus();
+    input.value = "";
     return false;
   }
-
-  const valor = parseFloat(valorTexto);
-
-  if (isNaN(valor) || valor < 1 || valor > 500) {
-    alert("Por favor, ingresá un peso válido en gramos (entre 1 y 500 gramos).");
-    inputElement.value = "";
-    inputElement.focus();
-    return false;
-  }
-
   return true;
 };
 
 /**
- * Valida que la cantidad de gemas ingresada sea un entero positivo no mayor a 30 piedras.
- * En caso de error, emite una advertencia con alert, restablece el campo a '0' y devuelve el foco.
+ * Comprueba que las gemas sean una cantidad entera entre 0 y 30.
  * @method validarGemas
- * @param {HTMLInputElement} inputElement - Elemento input del DOM con la cantidad de gemas
- * @return {boolean} Retorna true si la cantidad es admisible; false en caso contrario
+ * @param {HTMLInputElement} input - Campo de gemas
+ * @return {boolean} Indica si la cantidad es válida
  */
-const validarGemas = (inputElement) => {
-  if (!inputElement) {
-    return false;
-  }
-
-  const valorTexto = (inputElement.value || "").trim();
-  if (valorTexto === "") {
-    inputElement.value = "0";
-    return true;
-  }
-
-  const cantidad = parseInt(valorTexto, 10);
-
-  if (isNaN(cantidad) || cantidad < 0 || cantidad > 30) {
+const validarGemas = (input) => {
+  if (input.value === "") input.value = "0";
+  const cantidad = parseFloat(input.value);
+  if (isNaN(cantidad) || cantidad !== parseInt(cantidad, 10) || cantidad < 0 || cantidad > 30) {
     alert("La cantidad de gemas debe ser un número entero entre 0 y 30.");
-    inputElement.value = "0";
-    inputElement.focus();
+    input.value = "";
     return false;
   }
-
   return true;
 };
 
 /**
- * Calcula el presupuesto total estimativo de la joya seleccionada considerando tipo de metal, peso, cantidad de gemas y servicio de grabado.
- * Despliega el resumen desglosado y el monto final dentro del contenedor del resultado en la interfaz.
- * Evita la duplicación de alertas ante datos inválidos.
+ * Calcula y muestra el precio por metal, peso, gemas y grabado.
  * @method calcularPresupuesto
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const calcularPresupuesto = () => {
-  const inputPeso = document.getElementById("peso-joya");
-  const selectMetal = document.getElementById("tipo-metal");
-  const inputGemas = document.getElementById("cantidad-gemas");
-  const inputGrabado = document.getElementById("texto-grabado");
-  const contenedorResultado = document.getElementById("contenedor-resultado");
-  const textoMontoFinal = document.getElementById("monto-final");
-  const detalleMetal = document.getElementById("detalle-metal");
-  const detalleGemas = document.getElementById("detalle-gemas");
-  const detalleGrabado = document.getElementById("detalle-grabado");
-
-  if (!inputPeso || !selectMetal || !inputGemas || !inputGrabado || !contenedorResultado) {
-    return;
-  }
-
-  // Validación de peso (notificación única mediante validarPeso)
-  if (!validarPeso(inputPeso)) {
-    return;
-  }
-
-  // Validación de cantidad de gemas
-  if (!validarGemas(inputGemas)) {
-    return;
-  }
-
-  const peso = parseFloat(inputPeso.value);
-  const metalClave = selectMetal.value;
-  const precioPorGramo = PRECIOS_METALES[metalClave] || 0;
-  const cantidadGemas = parseInt(inputGemas.value, 10) || 0;
-  const textoGrabado = inputGrabado.value.trim();
-
-  // Cálculos desglosados
-  const subtotalMetal = peso * precioPorGramo;
-  const subtotalGemas = cantidadGemas * COSTO_POR_GEMA;
-  const subtotalGrabado = textoGrabado.length > 0 ? COSTO_GRABADO_BASE : 0;
-  const total = subtotalMetal + subtotalGemas + subtotalGrabado;
-
-  // Actualización de la interfaz
-  const nombreMetal = selectMetal.options[selectMetal.selectedIndex]
-    ? selectMetal.options[selectMetal.selectedIndex].text
-    : metalClave;
-
-  if (detalleMetal) {
-    detalleMetal.textContent = `${peso}g de ${nombreMetal}: ${formateador.format(subtotalMetal)}`;
-  }
-  if (detalleGemas) {
-    detalleGemas.textContent = `${cantidadGemas} gema(s) engarzada(s): ${formateador.format(subtotalGemas)}`;
-  }
-  if (detalleGrabado) {
-    detalleGrabado.textContent = textoGrabado.length > 0
-      ? `Grabado ("${textoGrabado}"): ${formateador.format(subtotalGrabado)}`
-      : "Sin grabado personalizado: $0";
-  }
-  if (textoMontoFinal) {
-    textoMontoFinal.textContent = formateador.format(total);
-  }
-
-  // Guardar en memoria para permitir incorporar al carrito
-  ultimaCotizacion = {
-    id: "cotizacion-" + Date.now(),
-    nombre: `Joya a Medida (${nombreMetal.split("(")[0].trim()})`,
-    categoria: "personalizada",
-    precio: total,
-    metal: nombreMetal.split("(")[0].trim(),
-    peso: peso,
-    gemas: cantidadGemas,
-    grabado: textoGrabado,
-    imagen: "imagenes/joyas_hero.jpg"
-  };
-
-  contenedorResultado.style.display = "block";
+  const peso = document.getElementById("peso-joya");
+  const gemas = document.getElementById("cantidad-gemas");
+  if (!validarPeso(peso) || !validarGemas(gemas)) return;
+  const metal = METALES[document.getElementById("tipo-metal").value];
+  const grabado = document.getElementById("texto-grabado").value.trim();
+  const importeMetal = parseFloat(peso.value) * metal.precio;
+  const importeGemas = parseFloat(gemas.value) * COSTO_POR_GEMA;
+  const importeGrabado = grabado === "" ? 0 : COSTO_GRABADO_BASE;
+  const total = importeMetal + importeGemas + importeGrabado;
+  document.getElementById("detalle-metal").innerText = `${peso.value}g de ${metal.etiqueta}: ${formateador.format(importeMetal)}`;
+  document.getElementById("detalle-gemas").innerText = `${gemas.value} gema(s) engarzada(s): ${formateador.format(importeGemas)}`;
+  document.getElementById("detalle-grabado").innerText = grabado === ""
+    ? "Sin grabado personalizado: $0" : `Grabado ("${grabado}"): ${formateador.format(importeGrabado)}`;
+  document.getElementById("monto-final").innerText = formateador.format(total);
+  document.getElementById("contenedor-resultado").hidden = false;
+  ultimaCotizacion = { nombre: `Joya a Medida (${metal.nombre})`, metal: metal.nombre, precio: total };
 };
 
 /**
- * Restablece los campos del formulario de cotización a sus valores por defecto y oculta el panel de resultado.
+ * Limpia el cotizador y oculta su resultado.
  * @method limpiarCotizador
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const limpiarCotizador = () => {
-  const inputPeso = document.getElementById("peso-joya");
-  const selectMetal = document.getElementById("tipo-metal");
-  const inputGemas = document.getElementById("cantidad-gemas");
-  const inputGrabado = document.getElementById("texto-grabado");
-  const contenedorResultado = document.getElementById("contenedor-resultado");
-
-  if (inputPeso) inputPeso.value = "";
-  if (selectMetal) selectMetal.selectedIndex = 0;
-  if (inputGemas) inputGemas.value = "0";
-  if (inputGrabado) inputGrabado.value = "";
-  if (contenedorResultado) contenedorResultado.style.display = "none";
+  document.getElementById("peso-joya").value = "";
+  document.getElementById("tipo-metal").value = "oro18k";
+  document.getElementById("cantidad-gemas").value = "0";
+  document.getElementById("texto-grabado").value = "";
+  document.getElementById("contenedor-resultado").hidden = true;
   ultimaCotizacion = null;
 };
 
-/* ==========================================================================
-   MÓDULO DE AUTENTICACIÓN SIMPLE (LOGIN Y SESIÓN)
-   ========================================================================== */
+/**
+ * Lee el array de cuentas guardadas en este navegador.
+ * @method obtenerCuentasDemo
+ * @return {Array} Cuentas locales
+ */
+const obtenerCuentasDemo = () => {
+  const datos = localStorage.getItem(CLAVE_CUENTAS);
+  return datos === null ? [] : JSON.parse(datos);
+};
 
 /**
- * Valida las credenciales ingresadas en el formulario de inicio de sesión con chequeo de formato estricto de correo electrónico y longitud de contraseña.
- * Almacena los datos de sesión en localStorage y redirige al inicio. Si hay errores, muestra un alert, blanquea el campo respectivo y devuelve el foco.
- * @method validarLogin
- * @param {Event} event - Objeto de evento del formulario al ejecutarse submit
- * @return {boolean} Retorna true si las credenciales son válidas; de lo contrario false
+ * Muestra un error de cuenta y limpia el campo indicado.
+ * @method informarErrorCuenta
+ * @param {string} destino - ID del mensaje
+ * @param {string} mensaje - Explicación del error
+ * @param {HTMLInputElement} campo - Campo que se debe corregir
+ * @return {void}
  */
-const validarLogin = (event) => {
-  if (event && typeof event.preventDefault === "function") {
-    event.preventDefault();
+const informarErrorCuenta = (destino, mensaje, campo) => {
+  mostrarMensaje(destino, mensaje, true);
+  campo.value = "";
+  alert(mensaje);
+};
+
+/**
+ * Valida y guarda una cuenta con nombre, email y password.
+ * @method registrarCuenta
+ * @return {void}
+ */
+const registrarCuenta = () => {
+  mostrarMensaje("mensaje-registro", "");
+  const nombre = document.getElementById("registro-nombre");
+  const email = document.getElementById("registro-email");
+  const password = document.getElementById("registro-password");
+  const confirmacion = document.getElementById("registro-confirmacion");
+  const correo = email.value.trim().toLowerCase();
+  if (nombre.value.trim().length < 2 || nombre.value.trim().length > 60) {
+    informarErrorCuenta("mensaje-registro", "Ingresá un nombre de 2 a 60 caracteres.", nombre);
+    return;
   }
+  if (!correo.includes("@") || !correo.includes(".") || correo.length > 80) {
+    informarErrorCuenta("mensaje-registro", "Ingresá un correo electrónico válido de hasta 80 caracteres.", email);
+    return;
+  }
+  if (password.value.trim().length < 8 || password.value.length > 128) {
+    informarErrorCuenta("mensaje-registro", "Usá una contraseña de prueba de 8 a 128 caracteres.", password);
+    confirmacion.value = "";
+    return;
+  }
+  if (password.value !== confirmacion.value) {
+    informarErrorCuenta("mensaje-registro", "Las contraseñas no coinciden. Repetí la contraseña de prueba.", confirmacion);
+    return;
+  }
+  const cuentas = obtenerCuentasDemo();
+  if (cuentas.find((cuenta) => cuenta.email === correo)) {
+    informarErrorCuenta("mensaje-registro", "Ya existe una cuenta de demostración con ese correo en este navegador. Iniciá sesión o usá otro correo de prueba.", email);
+    return;
+  }
+  cuentas[cuentas.length] = { nombre: nombre.value.trim(), email: correo, password: password.value };
+  localStorage.setItem(CLAVE_CUENTAS, JSON.stringify(cuentas));
+  nombre.value = "";
+  email.value = "";
+  password.value = "";
+  confirmacion.value = "";
+  mostrarMensaje("mensaje-registro", "Cuenta de demostración creada. Ya podés iniciar sesión desde el enlace Acceso.");
+  alert("Cuenta de demostración creada. Iniciá sesión con tu correo y contraseña de prueba.");
+};
 
-  const emailInput = document.getElementById("login-email");
-  const passwordInput = document.getElementById("login-password");
-
-  if (!emailInput || !passwordInput) {
+/**
+ * Compara las credenciales con una cuenta previamente registrada.
+ * @method validarLogin
+ * @return {boolean} Indica si el formulario puede continuar al inicio
+ */
+const validarLogin = () => {
+  mostrarMensaje("mensaje-login", "");
+  const email = document.getElementById("login-email");
+  const password = document.getElementById("login-password");
+  const correo = email.value.trim().toLowerCase();
+  if (!correo.includes("@") || !correo.includes(".") || correo.length > 80) {
+    informarErrorCuenta("mensaje-login", "Ingresá un correo electrónico válido.", email);
     return false;
   }
-
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
-
-  // Validación estricta de correo electrónico
-  const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  if (!email || !regexEmail.test(email)) {
-    alert("Por favor, ingresá un correo electrónico válido (ejemplo: usuario@dominio.com).");
-    emailInput.value = "";
-    emailInput.focus();
+  if (password.value.trim().length < 8 || password.value.length > 128) {
+    informarErrorCuenta("mensaje-login", "Ingresá tu contraseña de demostración de 8 a 128 caracteres.", password);
     return false;
   }
-
-  // Validación de longitud de contraseña
-  if (!password || password.trim().length < 6) {
-    alert("La contraseña debe contener al menos 6 caracteres por razones de seguridad.");
-    passwordInput.value = "";
-    passwordInput.focus();
+  const cuenta = obtenerCuentasDemo().find((usuario) => usuario.email === correo && usuario.password === password.value);
+  if (!cuenta) {
+    informarErrorCuenta("mensaje-login", "El correo o la contraseña no coinciden con una cuenta de este navegador. Si aún no tenés cuenta, creala desde el enlace Crear cuenta.", password);
     return false;
   }
-
-  // Creación del objeto de usuario para la sesión
-  const aliasUsuario = email.split("@")[0];
-  const nombreLimpio = aliasUsuario.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, " ").trim();
-  const nombreFormateado = nombreLimpio.length > 0
-    ? (nombreLimpio.charAt(0).toUpperCase() + nombreLimpio.slice(1))
-    : "Cliente";
-
-  const usuario = {
-    email: email,
-    nombre: nombreFormateado,
-    autenticado: true,
-    fecha: new Date().toISOString()
-  };
-
-  try {
-    localStorage.setItem("laure_usuario", JSON.stringify(usuario));
-  } catch (err) {
-    console.error("Error al persistir usuario en localStorage:", err);
-  }
-
-  alert(`¡Bienvenido/a a Laure Joyas, ${usuario.nombre}! Iniciaste sesión correctamente.`);
-  window.location.href = "index.html";
+  localStorage.setItem("laure_usuario", JSON.stringify({ nombre: cuenta.nombre, email: cuenta.email }));
+  password.value = "";
+  alert(`¡Bienvenido/a, ${cuenta.nombre}! Iniciaste la sesión de demostración.`);
   return true;
 };
 
 /**
- * Cierra la sesión activa del usuario eliminando los datos de autenticación de localStorage, actualiza la barra de navegación y notifica al usuario.
+ * Lee la sesión guardada en este navegador.
+ * @method obtenerSesionDemo
+ * @return {Object|null} Usuario activo o ausencia de sesión
+ */
+const obtenerSesionDemo = () => {
+  const datos = localStorage.getItem("laure_usuario");
+  return datos === null ? null : JSON.parse(datos);
+};
+
+/**
+ * Elimina la sesión local antes de volver al inicio.
  * @method cerrarSesion
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const cerrarSesion = () => {
   localStorage.removeItem("laure_usuario");
-  alert("Cerraste sesión correctamente.");
-  verificarSesionEnNav();
-  window.location.href = "index.html";
+  alert("Cerraste la sesión de demostración.");
 };
 
 /**
- * Comprueba si existe una sesión de usuario almacenada en localStorage y actualiza el contenedor de usuario en la barra de navegación
- * para mostrar su nombre y botón de salida, o el enlace de acceso. Aplica sanitización para prevenir XSS.
+ * Elimina cuentas y sesión sin borrar el carrito.
+ * @method restablecerCuentasDemo
+ * @return {void}
+ */
+const restablecerCuentasDemo = () => {
+  if (!confirm("¿Querés eliminar todas las cuentas de demostración y su sesión en este navegador? El carrito se conserva.")) return;
+  localStorage.removeItem(CLAVE_CUENTAS);
+  localStorage.removeItem("laure_usuario");
+  verificarSesionEnNav();
+  mostrarMensaje("mensaje-registro", "Las cuentas de demostración se restablecieron. Podés crear una nueva.");
+};
+
+/**
+ * Alterna el acceso y el nombre de usuario en la navegación.
  * @method verificarSesionEnNav
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const verificarSesionEnNav = () => {
-  const contenedorNavUsuario = document.getElementById("nav-usuario");
-  if (!contenedorNavUsuario) {
-    return;
-  }
-
-  try {
-    const sesion = localStorage.getItem("laure_usuario");
-    if (sesion) {
-      const usuario = JSON.parse(sesion);
-      const nombreSeguro = escaparHTML(usuario.nombre || "Cliente");
-      contenedorNavUsuario.innerHTML = `
-        <span class="usuario-activo">
-          Hola, <strong>${nombreSeguro}</strong>
-        </span>
-        <button type="button" class="btn-secundario" onclick="cerrarSesion()">Salí</button>
-      `;
-    } else {
-      contenedorNavUsuario.innerHTML = `<a href="login.html">Acceso</a>`;
-    }
-  } catch (error) {
-    console.error("Error al verificar la sesión en el nav:", error);
-    contenedorNavUsuario.innerHTML = `<a href="login.html">Acceso</a>`;
-  }
+  const usuario = obtenerSesionDemo();
+  document.getElementById("nav-acceso").hidden = usuario !== null;
+  document.getElementById("nav-sesion").hidden = usuario === null;
+  document.getElementById("nav-nombre").innerText = usuario ? usuario.nombre : "";
 };
 
 /**
- * En caso de hallarse en la vista de login y contar con una sesión activa preexistente,
- * adapta la tarjeta para mostrar el estado actual y evitar confusión en el usuario.
+ * Alterna el formulario de acceso y el panel de sesión activa.
  * @method verificarEstadoLoginCard
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const verificarEstadoLoginCard = () => {
-  const cardLogin = document.getElementById("card-login");
-  if (!cardLogin) {
-    return;
-  }
-
-  try {
-    const sesion = localStorage.getItem("laure_usuario");
-    if (sesion) {
-      const usuario = JSON.parse(sesion);
-      const nombreSeguro = escaparHTML(usuario.nombre || "Cliente");
-      const emailSeguro = escaparHTML(usuario.email || "");
-
-      cardLogin.innerHTML = `
-        <h2>Sesión Activa</h2>
-        <p class="subtitulo-seccion">Iniciaste sesión con la cuenta de <strong>${nombreSeguro}</strong> (${emailSeguro}).</p>
-        <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
-          <a href="index.html" class="btn-primario" style="flex: 1; text-align: center;">Volvé al Inicio</a>
-          <button type="button" class="btn-secundario" onclick="cerrarSesion()" style="flex: 1;">Cerrá Sesión</button>
-        </div>
-      `;
-    }
-  } catch (error) {
-    console.error("Error al verificar estado de la tarjeta de login:", error);
+  const usuario = obtenerSesionDemo();
+  document.getElementById("sesion-activa").hidden = usuario === null;
+  document.getElementById("acceso-contenido").hidden = usuario !== null;
+  if (usuario) {
+    document.getElementById("sesion-nombre").innerText = usuario.nombre;
+    document.getElementById("sesion-email").innerText = usuario.email;
   }
 };
 
-/* ==========================================================================
-   AUTO-INICIALIZACIÓN DE LA APLICACIÓN Y BLINDAJE GLOBAL
-   ========================================================================== */
-
 /**
- * Inicializa los módulos de la aplicación al cargarse completamente el documento DOM:
- * actualiza el distintivo del carrito, valida la sesión activa, renderiza la tabla de compras si corresponde
- * y adapta el login si ya existe sesión activa.
+ * Carga la navegación y el contenido de la página desde su onload.
  * @method inicializarApp
- * @return {void} No retorna ningún valor
+ * @return {void}
  */
 const inicializarApp = () => {
   actualizarBadgeCarrito();
   verificarSesionEnNav();
-  verificarEstadoLoginCard();
-
-  const tablaCarrito = document.getElementById("tabla-carrito") || document.getElementById("cuerpo-tabla-carrito");
-  if (tablaCarrito) {
-    renderizarTablaCarrito();
-  }
+  if (document.getElementById("sesion-activa")) verificarEstadoLoginCard();
+  if (document.getElementById("catalogo-grid")) filtrarYOrdenar();
+  if (document.getElementById("cuerpo-tabla-carrito")) renderizarTablaCarrito();
 };
-
-// Escucha preventiva global para registrar cualquier anomalía no controlada en la consola sin detener la ejecución
-window.addEventListener("error", (event) => {
-  console.warn("Anomalía interceptada de forma preventiva en tiempo de ejecución:", event.message);
-});
-
-// Registro del evento de inicialización del DOM
-document.addEventListener("DOMContentLoaded", inicializarApp);

@@ -1,0 +1,25 @@
+@use "variables" as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $fuente-texto;
+  background-color: $color-fondo;
+  color: $color-texto;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-family: $fuente-titulos;
+  color: $color-dorado-claro;
+}
+
+a {
+  color: $color-dorado;
+}

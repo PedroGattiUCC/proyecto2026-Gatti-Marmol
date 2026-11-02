@@ -1,34 +1,23 @@
-# Bocetos Iniciales (Sketch) - Laure Joyas
+# Bocetos (Sketch) - Laure Joyas
 
-Bocetos base de baja fidelidad en blanco y negro, estructurados a partir del esquema preliminar del equipo para definir la disposición elemental de los bloques antes del diseño digital:
+Bocetos de baja fidelidad en blanco y negro para definir la disposición de cada pantalla antes del diseño final.
 
----
+## Archivo fuente
+* [`sketch_desarrollo_web.drawio`](sketch_desarrollo_web.drawio): boceto general editable en [diagrams.net](https://app.diagrams.net).
+* Vistas generales: [escritorio](sketch_desktop.png), [celular](sketch_mobile.png) y [mensajes de error](sketch_mensajes_error.png).
 
-## Archivo Fuente
-* **Diagrama en blanco y negro:** [`sketch_desarrollo_web.drawio`](sketch_desarrollo_web.drawio) (archivo editable en [diagrams.net](https://app.diagrams.net)).
+## Bocetos por pantalla
 
----
+| Pantalla | Escritorio | Celular |
+| :--- | :--- | :--- |
+| Inicio | [ver](pantallas/inicio-desktop.png) | [ver](pantallas/inicio-mobile.png) |
+| Catálogo | [ver](pantallas/catalogo-desktop.png) | [ver](pantallas/catalogo-mobile.png) |
+| Cotizador | [ver](pantallas/cotizador-desktop.png) | [ver](pantallas/cotizador-mobile.png) |
+| Contacto | [ver](pantallas/contacto-desktop.png) | [ver](pantallas/contacto-mobile.png) |
+| Carrito | [ver](pantallas/carrito-desktop.png) | [ver](pantallas/carrito-mobile.png) |
+| Acceso | [ver](pantallas/acceso-desktop.png) | [ver](pantallas/acceso-mobile.png) |
+| Crear cuenta | [ver](pantallas/crear-cuenta-desktop.png) | [ver](pantallas/crear-cuenta-mobile.png) |
+| Mensajes de error y validación | [ver](pantallas/validaciones-desktop.png) | [ver](pantallas/validaciones-mobile.png) |
 
-## 1. Boceto Desktop
-* **Imagen:** [`sketch_desktop.png`](sketch_desktop.png)
-
-![Boceto Desktop](sketch_desktop.png)
-
----
-
-## 2. Boceto Mobile
-* **Imagen:** [`sketch_mobile.png`](sketch_mobile.png)
-
-![Boceto Mobile](sketch_mobile.png)
-
----
-
-## 3. Bocetos de Mensajes de Error y Validación
-* **Imagen:** [`sketch_mensajes_error.png`](sketch_mensajes_error.png)
-
-![Boceto de Errores](sketch_mensajes_error.png)
-
-### Elementos Contemplados:
-* Disposición de cabecera, grilla de productos 3x2 y pie de página en blanco y negro.
-* Adaptación en columna única para dispositivos móviles.
-* Esquemas de modales para validación pedagógica (alert) y confirmación interactiva.
+## Bocetos sobre el template de la cátedra
+En [`con-plantilla/`](con-plantilla/README.md) están los mismos bocetos dibujados sobre el [template oficial](plantillas/README.md) de escritorio y celular.

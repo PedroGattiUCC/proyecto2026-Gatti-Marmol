@@ -1,33 +1,20 @@
-# Wireframes y Mockups Digitales - Laure Joyas
+# Wireframes - Laure Joyas
 
-Prototipos digitales estructurados a color para la tienda **Laure Joyas**, diseñados en **Draw.io / diagrams.net** contemplando resoluciones Desktop, Mobile y estados de validación/error:
+Prototipos digitales de cada pantalla del sitio, en versión escritorio y celular.
 
----
+## Archivo fuente
+* [`wireframes_laure_joyas.drawio`](wireframes_laure_joyas.drawio): wireframe general editable en [diagrams.net](https://app.diagrams.net).
+* Vistas generales: [escritorio](wireframe_desktop.png), [celular](wireframe_mobile.png) y [mensajes de error](wireframe_mensajes_error.png).
 
-## Archivo Fuente
-* **Diagrama Digital:** [`wireframes_laure_joyas.drawio`](wireframes_laure_joyas.drawio) (archivo editable en [diagrams.net](https://app.diagrams.net)).
+## Wireframes por pantalla
 
----
-
-## 1. Wireframe Desktop
-* **Imagen:** [`wireframe_desktop.png`](wireframe_desktop.png)
-
-![Wireframe Desktop](wireframe_desktop.png)
-
----
-
-## 2. Wireframe Mobile
-* **Imagen:** [`wireframe_mobile.png`](wireframe_mobile.png)
-
-![Wireframe Mobile](wireframe_mobile.png)
-
----
-
-## 3. Mensajes de Error y Diálogos de Validación
-* **Imagen:** [`wireframe_mensajes_error.png`](wireframe_mensajes_error.png)
-
-![Wireframe Mensajes de Error](wireframe_mensajes_error.png)
-
-### Criterios Contemplados:
-1. **Validación Pedagógica de Campos:** Alertas ante valores fuera de rango en el cotizador, blanqueo automático y restitución del foco (`.focus()`).
-2. **Diálogos de Confirmación:** Advertencia preventiva antes de vaciar el carrito de compras.
+| Pantalla | Escritorio | Celular |
+| :--- | :--- | :--- |
+| Inicio | [ver](pantallas/inicio-desktop.png) | [ver](pantallas/inicio-mobile.png) |
+| Catálogo | [ver](pantallas/catalogo-desktop.png) | [ver](pantallas/catalogo-mobile.png) |
+| Cotizador | [ver](pantallas/cotizador-desktop.png) | [ver](pantallas/cotizador-mobile.png) |
+| Contacto | [ver](pantallas/contacto-desktop.png) | [ver](pantallas/contacto-mobile.png) |
+| Carrito | [ver](pantallas/carrito-desktop.png) | [ver](pantallas/carrito-mobile.png) |
+| Acceso | [ver](pantallas/acceso-desktop.png) | [ver](pantallas/acceso-mobile.png) |
+| Crear cuenta | [ver](pantallas/crear-cuenta-desktop.png) | [ver](pantallas/crear-cuenta-mobile.png) |
+| Mensajes de error y validación | [ver](pantallas/validaciones-desktop.png) | [ver](pantallas/validaciones-mobile.png) |

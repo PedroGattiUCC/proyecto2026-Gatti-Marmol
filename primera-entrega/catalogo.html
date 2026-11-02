@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body onload="inicializarApp()">
   <header>
     <nav>
       <a href="index.html" id="logo-brand">
@@ -24,12 +24,21 @@
         <li><a href="index.html">Inicio</a></li>
         <li><a href="catalogo.html" class="activo">Catálogo</a></li>
         <li><a href="cotizador.html">Cotizador</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
         <li>
           <a href="carrito.html">Carrito <span id="badge-carrito">0</span></a>
         </li>
       </ul>
       <div id="nav-usuario">
-        <a href="login.html">Acceso</a>
+        <a id="nav-acceso" href="login.html">Acceso</a>
+        <div id="nav-sesion" hidden>
+          <div class="nav-sesion-contenido">
+            <span class="usuario-activo">Hola, <strong id="nav-nombre"></strong></span>
+            <form action="index.html" onsubmit="cerrarSesion()">
+              <button type="submit" class="btn-secundario">Salí</button>
+            </form>
+          </div>
+        </div>
       </div>
     </nav>
   </header>
@@ -68,84 +77,10 @@
     </section>
 
     <section id="seccion-catalogo">
-      <div id="catalogo-grid">
-        <article class="card-producto" data-id="1" data-nombre="Solitario Imperial" data-categoria="anillos" data-precio="850000">
-          <div class="card-imagen-wrapper">
-            <img class="card-img" src="imagenes/joyas_hero.jpg" alt="Anillo Solitario Imperial en oro amarillo 18k con diamante central" />
-          </div>
-          <div class="card-cuerpo">
-            <span class="badge-metal">Oro Amarillo 18k</span>
-            <h3>Solitario Imperial</h3>
-            <p>Anillo solitario clásico con diamante engarzado en oro amarillo de 18 quilates.</p>
-            <p class="precio-texto">$ 850.000 ARS</p>
-            <button type="button" class="btn-primario" onclick="agregarAlCarrito(1)">Agregá al Carrito</button>
-          </div>
-        </article>
-
-        <article class="card-producto" data-id="2" data-nombre="Colgante Luminance" data-categoria="collares" data-precio="1250000">
-          <div class="card-imagen-wrapper">
-            <img class="card-img" src="imagenes/joyas_collar.jpg" alt="Colgante Luminance en platino noble con diamante talla esmeralda" />
-          </div>
-          <div class="card-cuerpo">
-            <span class="badge-metal">Platino Noble</span>
-            <h3>Colgante Luminance</h3>
-            <p>Gargantilla con colgante de platino pulido y pavé de gemas brillantes.</p>
-            <p class="precio-texto">$ 1.250.000 ARS</p>
-            <button type="button" class="btn-primario" onclick="agregarAlCarrito(2)">Agregá al Carrito</button>
-          </div>
-        </article>
-
-        <article class="card-producto" data-id="3" data-nombre="Aros Royal Brilliance" data-categoria="aros" data-precio="620000">
-          <div class="card-imagen-wrapper">
-            <img class="card-img" src="imagenes/joyas_aros.jpg" alt="Par de aros Royal Brilliance en oro blanco 18k con corte baguette" />
-          </div>
-          <div class="card-cuerpo">
-            <span class="badge-metal">Oro Blanco 18k</span>
-            <h3>Aros Royal Brilliance</h3>
-            <p>Par de aros colgantes en oro blanco 18k con corte baguette deslumbrante.</p>
-            <p class="precio-texto">$ 620.000 ARS</p>
-            <button type="button" class="btn-primario" onclick="agregarAlCarrito(3)">Agregá al Carrito</button>
-          </div>
-        </article>
-
-        <article class="card-producto" data-id="4" data-nombre="Brazalete Étoile" data-categoria="pulseras" data-precio="980000">
-          <div class="card-imagen-wrapper">
-            <img class="card-img" src="imagenes/joyas_pulsera.jpg" alt="Brazalete Étoile de oro amarillo 18k con engarce artesanal" />
-          </div>
-          <div class="card-cuerpo">
-            <span class="badge-metal">Oro Amarillo 18k</span>
-            <h3>Brazalete Étoile</h3>
-            <p>Pulsera rígida de oro amarillo de 18 quilates con engarce artesanal.</p>
-            <p class="precio-texto">$ 980.000 ARS</p>
-            <button type="button" class="btn-primario" onclick="agregarAlCarrito(4)">Agregá al Carrito</button>
-          </div>
-        </article>
-
-        <article class="card-producto" data-id="5" data-nombre="Anillo Sublime Emerald" data-categoria="anillos" data-precio="1450000">
-          <div class="card-imagen-wrapper">
-            <img class="card-img" src="imagenes/joyas_anillo_esmeralda.jpg" alt="Anillo Sublime Emerald con esmeralda colombiana y platino noble" />
-          </div>
-          <div class="card-cuerpo">
-            <span class="badge-metal">Platino Noble</span>
-            <h3>Anillo Sublime Emerald</h3>
-            <p>Majestuoso anillo con esmeralda central colombiana y engarce en platino.</p>
-            <p class="precio-texto">$ 1.450.000 ARS</p>
-            <button type="button" class="btn-primario" onclick="agregarAlCarrito(5)">Agregá al Carrito</button>
-          </div>
-        </article>
-
-        <article class="card-producto" data-id="6" data-nombre="Cronógrafo Prestige" data-categoria="relojes" data-precio="2100000">
-          <div class="card-imagen-wrapper">
-            <img class="card-img" src="imagenes/joyas_reloj.jpg" alt="Reloj Cronógrafo Prestige en oro rosa 18k con mecanismo suizo" />
-          </div>
-          <div class="card-cuerpo">
-            <span class="badge-metal">Oro Rosa 18k</span>
-            <h3>Cronógrafo Prestige</h3>
-            <p>Reloj suizo de alta precisión con caja maciza en oro rosa de 18 quilates.</p>
-            <p class="precio-texto">$ 2.100.000 ARS</p>
-            <button type="button" class="btn-primario" onclick="agregarAlCarrito(6)">Agregá al Carrito</button>
-          </div>
-        </article>
+      <div id="catalogo-grid"></div>
+      <div id="sin-resultados-catalogo" class="sin-resultados" hidden aria-live="polite">
+        <p>No se encontraron piezas exclusivas que coincidan con los criterios seleccionados.</p>
+        <button type="button" class="btn-secundario" onclick="restablecerFiltrosCatalogo()">Restablecé los Filtros</button>
       </div>
     </section>
   </main>
@@ -168,6 +103,8 @@
           <li><a href="catalogo.html">Catálogo</a></li>
           <li>&bull;</li>
           <li><a href="cotizador.html">Cotizador</a></li>
+          <li>&bull;</li>
+          <li><a href="contacto.html">Contacto</a></li>
           <li>&bull;</li>
           <li><a href="carrito.html">Carrito</a></li>
           <li>&bull;</li>

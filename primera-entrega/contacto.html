@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Pedro Gatti, Joaquin Mármol" />
+  <meta name="description" content="Datos de contacto del equipo académico de Laure Joyas, proyecto de Taller de Desarrollo Web de la UCC." />
+  <meta name="keywords" content="contacto, equipo académico, UCC, Laure Joyas, Taller de Desarrollo Web" />
+  <title>Contacto | Laure Joyas</title>
+  <link rel="icon" type="image/svg+xml" href="imagenes/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body onload="inicializarApp()">
+  <header>
+    <nav>
+      <a href="index.html" id="logo-brand">
+        <img id="logo-icon" src="imagenes/favicon.svg" alt="Logotipo emblemático de Laure Joyas" />
+        <h1>Laure Joyas</h1>
+      </a>
+      <ul id="nav-enlaces">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="catalogo.html">Catálogo</a></li>
+        <li><a href="cotizador.html">Cotizador</a></li>
+        <li><a href="contacto.html" class="activo">Contacto</a></li>
+        <li>
+          <a href="carrito.html">Carrito <span id="badge-carrito">0</span></a>
+        </li>
+      </ul>
+      <div id="nav-usuario">
+        <a id="nav-acceso" href="login.html">Acceso</a>
+        <div id="nav-sesion" hidden>
+          <div class="nav-sesion-contenido">
+            <span class="usuario-activo">Hola, <strong id="nav-nombre"></strong></span>
+            <form action="index.html" onsubmit="cerrarSesion()">
+              <button type="submit" class="btn-secundario">Salí</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="seccion-contacto" class="panel-contacto">
+      <h2>Contacto</h2>
+      <p class="subtitulo-seccion">Laure Joyas es un proyecto académico de Taller de Desarrollo Web de la Universidad Católica de Córdoba.</p>
+      <div class="contacto-grid">
+        <div>
+          <h3>Dirección de referencia</h3>
+          <address>Obispo Trejo 323<br />Córdoba, Argentina</address>
+          <p class="campo-ayuda">Referencia institucional del proyecto; las compras y cotizaciones del sitio son demostraciones.</p>
+        </div>
+        <div>
+          <h3>Equipo del proyecto</h3>
+          <p>Consultas académicas sobre el sitio:</p>
+          <ul class="contactos-equipo">
+            <li>Pedro Gatti — <a href="mailto:2519717@ucc.edu.ar">2519717@ucc.edu.ar</a></li>
+            <li>Joaquin Mármol — <a href="mailto:2514908@ucc.edu.ar">2514908@ucc.edu.ar</a></li>
+          </ul>
+          <p class="campo-ayuda">Los enlaces abren tu aplicación de correo. Este sitio no envía formularios ni confirma la recepción de mensajes.</p>
+        </div>
+      </div>
+      <div class="acciones-panel">
+        <a href="catalogo.html" class="btn-primario">Explorá el catálogo</a>
+        <a href="cotizador.html" class="btn-secundario">Cotizá una pieza</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div id="footer-contenedor">
+      <div id="footer-identidad">
+        <img id="footer-logo" src="imagenes/favicon.svg" alt="Logotipo emblemático de Laure Joyas" />
+        <span id="footer-brand">Laure Joyas</span>
+      </div>
+      <div id="footer-info">
+        <p>Obispo Trejo 323, Córdoba, Argentina &bull; Alta Joyería y Orfebrería Fina</p>
+        <p>Cátedra: Taller de Desarrollo Web &bull; Universidad Católica de Córdoba (UCC 2026)</p>
+        <p>Autores: Pedro Gatti (Legajo: 2519717) y Joaquin Mármol (Legajo: 2514908)</p>
+      </div>
+      <nav aria-label="Navegación secundaria">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li>&bull;</li>
+          <li><a href="catalogo.html">Catálogo</a></li>
+          <li>&bull;</li>
+          <li><a href="cotizador.html">Cotizador</a></li>
+          <li>&bull;</li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li>&bull;</li>
+          <li><a href="carrito.html">Carrito</a></li>
+          <li>&bull;</li>
+          <li><a href="login.html">Acceso</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

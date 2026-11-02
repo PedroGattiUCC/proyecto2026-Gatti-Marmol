@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body onload="inicializarApp()">
   <header>
     <nav>
       <a href="index.html" id="logo-brand">
@@ -23,24 +23,33 @@
         <li><a href="index.html">Inicio</a></li>
         <li><a href="catalogo.html">Catálogo</a></li>
         <li><a href="cotizador.html">Cotizador</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
         <li>
           <a href="carrito.html">Carrito <span id="badge-carrito">0</span></a>
         </li>
       </ul>
       <div id="nav-usuario">
-        <a href="login.html">Acceso</a>
+        <a id="nav-acceso" href="login.html">Acceso</a>
+        <div id="nav-sesion" hidden>
+          <div class="nav-sesion-contenido">
+            <span class="usuario-activo">Hola, <strong id="nav-nombre"></strong></span>
+            <form action="index.html" onsubmit="cerrarSesion()">
+              <button type="submit" class="btn-secundario">Salí</button>
+            </form>
+          </div>
+        </div>
       </div>
     </nav>
   </header>
 
   <main>
-    <section id="error-404" style="text-align: center; padding: 4rem 1rem;">
-      <h2 style="font-size: 3rem; margin-bottom: 0.5rem; color: #f5d77f;">404</h2>
-      <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Pieza No Encontrada</h3>
-      <p style="max-width: 500px; margin: 0 auto 2rem auto; color: #9ca3af;">
+    <section id="error-404">
+      <h2>404</h2>
+      <h3>Pieza No Encontrada</h3>
+      <p>
         La página o pieza que buscás no se encuentra disponible o ha cambiado de ubicación. Te invitamos a explorar nuestro catálogo de piezas exclusivas.
       </p>
-      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <div class="acciones-panel">
         <a href="index.html" class="btn-primario">Volvé al Inicio</a>
         <a href="catalogo.html" class="btn-secundario">Explorá el Catálogo</a>
       </div>
@@ -65,6 +74,8 @@
           <li><a href="catalogo.html">Catálogo</a></li>
           <li>&bull;</li>
           <li><a href="cotizador.html">Cotizador</a></li>
+          <li>&bull;</li>
+          <li><a href="contacto.html">Contacto</a></li>
           <li>&bull;</li>
           <li><a href="carrito.html">Carrito</a></li>
           <li>&bull;</li>
