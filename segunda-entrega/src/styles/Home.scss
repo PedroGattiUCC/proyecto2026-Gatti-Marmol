@@ -1,0 +1,141 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+.home-banner {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+
+  @media (max-width: $movil) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-banner-texto {
+  h2 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.home-banner-imagen {
+  border-radius: $radio;
+  display: block;
+  width: 100%;
+}
+
+.home-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.home-acciones-centradas {
+  justify-content: center;
+}
+
+.home-accion-principal {
+  @include boton-principal;
+}
+
+.home-accion-secundaria {
+  @include boton-secundario;
+}
+
+.home-seccion {
+  margin-bottom: 3rem;
+
+  h2 {
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+}
+
+.home-subtitulo {
+  color: $color-texto-suave;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.home-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.home-tarjeta {
+  background-color: $color-superficie;
+  border: 1px solid $color-borde;
+  border-radius: $radio;
+  overflow: hidden;
+
+  img {
+    aspect-ratio: 4 / 3;
+    display: block;
+    object-fit: cover;
+    width: 100%;
+  }
+}
+
+.home-tarjeta-cuerpo {
+  padding: 1.25rem;
+
+  h3 {
+    margin: 0.25rem 0 0.5rem;
+  }
+}
+
+.home-tarjeta-metal {
+  color: $color-dorado;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.home-tarjeta-precio {
+  color: $color-dorado-claro;
+  font-weight: 600;
+  margin-top: 0.75rem;
+}
+
+.home-tabla-contenedor {
+  overflow-x: auto;
+}
+
+.home-tabla {
+  border-collapse: collapse;
+  min-width: 600px;
+  width: 100%;
+
+  caption {
+    color: $color-texto-suave;
+    margin-bottom: 0.75rem;
+  }
+
+  th,
+  td {
+    border: 1px solid $color-borde;
+    padding: 0.75rem;
+    text-align: left;
+  }
+
+  th {
+    background-color: $color-superficie;
+    color: $color-dorado-claro;
+  }
+}
+
+.home-cotizador {
+  background-color: $color-superficie;
+  border: 1px solid $color-borde;
+  border-radius: $radio;
+  margin-bottom: 0;
+  padding: 2rem 1.5rem;
+}
