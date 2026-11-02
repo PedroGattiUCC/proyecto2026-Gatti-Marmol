@@ -1,0 +1,72 @@
+{
+  "productos": [
+    {
+      "id": 1,
+      "nombre": "Solitario Imperial",
+      "description": "Anillo solitario clásico con diamante engarzado en oro amarillo de 18 quilates.",
+      "categoria": "anillos",
+      "marca": "Laure Joyas",
+      "precio": 850000,
+      "web": "https://pedrogattiucc.github.io/proyecto2026-Gatti-Marmol/primera-entrega/catalogo.html",
+      "imagen": "joyas_hero.jpg",
+      "alt": "Anillo Solitario Imperial en oro amarillo 18k con diamante central"
+    },
+    {
+      "id": 2,
+      "nombre": "Colgante Luminance",
+      "description": "Gargantilla con colgante de platino pulido y pavé de gemas brillantes.",
+      "categoria": "collares",
+      "marca": "Laure Joyas",
+      "precio": 1250000,
+      "web": "https://pedrogattiucc.github.io/proyecto2026-Gatti-Marmol/primera-entrega/catalogo.html",
+      "imagen": "joyas_collar.jpg",
+      "alt": "Colgante Luminance en platino noble con diamante talla esmeralda"
+    },
+    {
+      "id": 3,
+      "nombre": "Aros Royal Brilliance",
+      "description": "Par de aros colgantes en oro blanco 18k con corte baguette deslumbrante.",
+      "categoria": "aros",
+      "marca": "Laure Joyas",
+      "precio": 620000,
+      "web": "https://pedrogattiucc.github.io/proyecto2026-Gatti-Marmol/primera-entrega/catalogo.html",
+      "imagen": "joyas_aros.jpg",
+      "alt": "Par de aros Royal Brilliance en oro blanco 18k con corte baguette"
+    },
+    {
+      "id": 4,
+      "nombre": "Brazalete Étoile",
+      "description": "Pulsera rígida de oro amarillo de 18 quilates con engarce artesanal.",
+      "categoria": "pulseras",
+      "marca": "Laure Joyas",
+      "precio": 980000,
+      "web": "https://pedrogattiucc.github.io/proyecto2026-Gatti-Marmol/primera-entrega/catalogo.html",
+      "imagen": "joyas_pulsera.jpg",
+      "alt": "Brazalete Étoile de oro amarillo 18k con engarce artesanal"
+    },
+    {
+      "id": 5,
+      "nombre": "Anillo Sublime Emerald",
+      "description": "Majestuoso anillo con esmeralda central colombiana y engarce en platino.",
+      "categoria": "anillos",
+      "marca": "Laure Joyas",
+      "precio": 1450000,
+      "web": "https://pedrogattiucc.github.io/proyecto2026-Gatti-Marmol/primera-entrega/catalogo.html",
+      "imagen": "joyas_anillo_esmeralda.jpg",
+      "alt": "Anillo Sublime Emerald con esmeralda colombiana y platino noble"
+    },
+    {
+      "id": 6,
+      "nombre": "Cronógrafo Prestige",
+      "description": "Reloj suizo de alta precisión con caja maciza en oro rosa de 18 quilates.",
+      "categoria": "relojes",
+      "marca": "Laure Joyas",
+      "precio": 2100000,
+      "web": "https://pedrogattiucc.github.io/proyecto2026-Gatti-Marmol/primera-entrega/catalogo.html",
+      "imagen": "joyas_reloj.jpg",
+      "alt": "Reloj Cronógrafo Prestige en oro rosa 18k con mecanismo suizo"
+    }
+  ],
+  "usuarios": [],
+  "pedidos": []
+}
