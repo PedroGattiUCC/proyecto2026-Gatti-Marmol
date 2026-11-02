@@ -1,0 +1,28 @@
+@use "variables" as *;
+
+.pie {
+  background-color: $color-superficie;
+  border-top: 1px solid $color-borde;
+  color: $color-texto-suave;
+  font-size: 0.85rem;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+.pie-enlaces {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  list-style: none;
+  margin-top: 1rem;
+
+  a {
+    color: $color-texto;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-dorado-claro;
+    }
+  }
+}
