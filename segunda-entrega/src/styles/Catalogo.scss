@@ -1,0 +1,65 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+.catalogo-titulo {
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.catalogo-subtitulo {
+  color: $color-texto-suave;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.catalogo-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.catalogo-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  input,
+  select {
+    background-color: $color-superficie;
+    border: 1px solid $color-borde;
+    border-radius: 8px;
+    color: $color-texto;
+    font-family: $fuente-texto;
+    padding: 0.6rem 0.8rem;
+
+    &:focus {
+      border-color: $color-dorado;
+      outline: 2px solid $color-dorado;
+    }
+  }
+}
+
+.catalogo-grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.catalogo-mensaje {
+  color: $color-texto-suave;
+  padding: 2rem;
+  text-align: center;
+}
+
+.catalogo-error {
+  color: $color-error;
+  padding: 2rem;
+  text-align: center;
+}
+
+.catalogo-restablecer {
+  @include boton-secundario;
+  margin-top: 1rem;
+}

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "mock": "json-server src/data/db.json --port 4000",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -20,6 +21,7 @@
     "@vitejs/plugin-react": "^6.1.2",
     "eslint": "^10.14.0",
     "globals": "^17.14.0",
+    "json-server": "^1.0.0-beta.15",
     "sass": "^1.106.1",
     "vite": "^8.3.4"
   },

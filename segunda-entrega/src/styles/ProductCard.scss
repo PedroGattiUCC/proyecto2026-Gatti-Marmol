@@ -1,0 +1,46 @@
+@use "variables" as *;
+
+.tarjeta-producto {
+  display: flex;
+  flex-direction: column;
+  background-color: $color-superficie;
+  border: 1px solid $color-borde;
+  border-radius: $radio;
+  overflow: hidden;
+
+  &:hover {
+    border-color: $color-dorado;
+  }
+}
+
+.tarjeta-imagen {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+
+.tarjeta-cuerpo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.5rem;
+  padding: 1.25rem;
+}
+
+.tarjeta-categoria {
+  color: $color-dorado;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.tarjeta-marca {
+  color: $color-texto-suave;
+  font-size: 0.9rem;
+}
+
+.tarjeta-precio {
+  color: $color-dorado-claro;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
