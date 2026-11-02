@@ -1,4 +1,5 @@
 @use "variables" as *;
+@use "mixins" as *;
 
 .catalogo-titulo {
   margin-bottom: 0.5rem;
@@ -59,17 +60,6 @@
 }
 
 .catalogo-restablecer {
-  background-color: transparent;
-  border: 1px solid $color-dorado;
-  border-radius: 8px;
-  color: $color-dorado-claro;
-  cursor: pointer;
-  font-family: $fuente-texto;
+  @include boton-secundario;
   margin-top: 1rem;
-  padding: 0.6rem 1.2rem;
-
-  &:hover {
-    background-color: $color-dorado;
-    color: $color-fondo;
-  }
 }

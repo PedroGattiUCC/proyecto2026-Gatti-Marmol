@@ -1,0 +1,37 @@
+@use "variables" as *;
+
+@mixin boton-principal {
+  background-color: $color-dorado;
+  border: 1px solid $color-dorado;
+  border-radius: 8px;
+  color: $color-fondo;
+  cursor: pointer;
+  display: inline-block;
+  font-family: $fuente-texto;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  text-decoration: none;
+
+  &:hover {
+    background-color: $color-dorado-claro;
+    border-color: $color-dorado-claro;
+  }
+}
+
+@mixin boton-secundario {
+  background-color: transparent;
+  border: 1px solid $color-dorado;
+  border-radius: 8px;
+  color: $color-dorado-claro;
+  cursor: pointer;
+  display: inline-block;
+  font-family: $fuente-texto;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  text-decoration: none;
+
+  &:hover {
+    background-color: $color-dorado;
+    color: $color-fondo;
+  }
+}
