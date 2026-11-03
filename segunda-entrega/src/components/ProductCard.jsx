@@ -10,7 +10,7 @@ import '@styles/ProductCard.scss';
  * @param {Function} props.onAgregar - Agrega una unidad al carrito
  * @return {JSX.Element} Tarjeta del producto
  */
-const ProductCard = ({ producto, onAgregar }) => {
+const ProductCard = ({ producto, onAgregar, bloqueado }) => {
   const [mensaje, setMensaje] = useState('');
 
   /**
@@ -31,7 +31,7 @@ const ProductCard = ({ producto, onAgregar }) => {
         <p>{producto.description}</p>
         <p className="tarjeta-marca">Marca: {producto.marca}</p>
         <p className="tarjeta-precio">$ {producto.precio.toLocaleString('es-AR')} ARS</p>
-        <Button onClick={agregar}>Agregá al carrito</Button>
+        <Button onClick={agregar} disabled={bloqueado}>Agregá al carrito</Button>
         <p role="status">{mensaje}</p>
         <a href={producto.web} target="_blank" rel="noreferrer">Ver en la web</a>
       </div>
