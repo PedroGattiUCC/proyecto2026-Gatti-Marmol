@@ -1,0 +1,47 @@
+@use "variables" as *;
+
+.carrito-lista {
+  list-style: none;
+  margin: 1.5rem 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.carrito-linea {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: $color-superficie;
+  border: 1px solid $color-borde;
+  border-radius: $radio;
+  overflow-wrap: anywhere;
+}
+
+.carrito-cantidad {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  select {
+    background-color: $color-fondo;
+    color: $color-texto;
+    border: 1px solid $color-borde;
+    border-radius: 8px;
+    padding: 0.6rem;
+  }
+}
+
+.carrito-total {
+  color: $color-dorado-claro;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.carrito-error {
+  color: $color-error;
+  margin: 1rem 0;
+}

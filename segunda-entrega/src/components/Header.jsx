@@ -4,9 +4,10 @@ import '@styles/Header.scss';
 /**
  * Muestra la cabecera del sitio con el logo y el menú de navegación
  * @method Header
+ * @param {Object} props - Cantidad de unidades del carrito
  * @return {JSX.Element} Cabecera con los enlaces a las páginas
  */
-const Header = () => {
+const Header = ({ cantidad }) => {
   return (
     <header className="cabecera">
       <nav className="cabecera-nav" aria-label="Navegación principal">
@@ -19,7 +20,7 @@ const Header = () => {
           <li><Link to="/catalogo">Catálogo</Link></li>
           <li><Link to="/cotizador">Cotizador</Link></li>
           <li><Link to="/contacto">Contacto</Link></li>
-          <li><Link to="/carrito">Carrito</Link></li>
+          <li><Link to="/carrito">Carrito ({cantidad})</Link></li>
           <li><Link to="/login">Acceso</Link></li>
         </ul>
       </nav>

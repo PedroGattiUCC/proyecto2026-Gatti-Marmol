@@ -6,13 +6,15 @@ import '@styles/MainLayout.scss';
 /**
  * Arma la estructura común de las páginas y renderiza la ruta hija en el main
  * @method MainLayout
+ * @param {Object} props - Cantidad y error del carrito
  * @return {JSX.Element} Cabecera, contenido de la ruta actual y pie
  */
-const MainLayout = () => {
+const MainLayout = ({ cantidad, errorCarrito }) => {
   return (
     <div className="contenedor-sitio">
-      <Header />
+      <Header cantidad={cantidad} />
       <main className="contenido">
+        {errorCarrito && <p className="carrito-error" role="alert">{errorCarrito}</p>}
         <Outlet />
       </main>
       <Footer />

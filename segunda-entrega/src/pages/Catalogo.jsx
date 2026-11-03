@@ -36,9 +36,10 @@ const filtrarYOrdenar = (productos, busqueda, categoria, orden) => {
 /**
  * Pide los productos al mock y los muestra con buscador, filtro y orden
  * @method Catalogo
+ * @param {Object} props - Acción para agregar piezas al carrito
  * @return {JSX.Element} Página del catálogo
  */
-const Catalogo = () => {
+const Catalogo = ({ onAgregar }) => {
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
@@ -118,7 +119,7 @@ const Catalogo = () => {
       {error && <p className="catalogo-error" role="alert">{error}</p>}
       <div className="catalogo-grilla">
         {productosVisibles.map((producto) => (
-          <ProductCard key={producto.id} producto={producto} />
+          <ProductCard key={producto.id} producto={producto} onAgregar={onAgregar} />
         ))}
       </div>
       {!cargando && !error && productosVisibles.length === 0 && (
