@@ -83,9 +83,9 @@ const Home = () => {
           Costos estándar por gramo de metal y mano de obra especializada utilizados en nuestro taller.
         </p>
 
-        <div className="home-tabla-contenedor">
+        <div className="home-tabla-contenedor" tabIndex={0} role="region" aria-labelledby="tarifas-caption">
           <table className="home-tabla">
-            <caption>Tabla de valores de referencia por gramo de metal precioso</caption>
+            <caption id="tarifas-caption">Tabla de valores de referencia por gramo de metal precioso</caption>
             <thead>
               <tr>
                 <th scope="col">Metal precioso</th>
@@ -96,19 +96,19 @@ const Home = () => {
             </thead>
             <tbody>
               <tr>
-                <td>Oro 18k (amarillo / blanco / rosa)</td>
+                <th scope="row">Oro 18k (amarillo / blanco / rosa)</th>
                 <td>18 quilates (750)</td>
                 <td>$ 95.000 ARS</td>
                 <td>Pulido espejo o satinado</td>
               </tr>
               <tr>
-                <td>Plata 925 de ley</td>
+                <th scope="row">Plata 925 de ley</th>
                 <td>925 milésimas</td>
                 <td>$ 12.000 ARS</td>
                 <td>Envejecido o rodinado</td>
               </tr>
               <tr>
-                <td>Platino 950 noble</td>
+                <th scope="row">Platino 950 noble</th>
                 <td>950 milésimas</td>
                 <td>$ 110.000 ARS</td>
                 <td>Brillo de alta durabilidad</td>

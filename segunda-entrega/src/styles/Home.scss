@@ -107,6 +107,11 @@
 
 .home-tabla-contenedor {
   overflow-x: auto;
+
+  &:focus-visible {
+    outline: 2px solid $color-dorado-claro;
+    outline-offset: 3px;
+  }
 }
 
 .home-tabla {
@@ -126,9 +131,13 @@
     text-align: left;
   }
 
-  th {
+  thead th {
     background-color: $color-superficie;
     color: $color-dorado-claro;
+  }
+
+  tbody th {
+    font-weight: 600;
   }
 }
 
