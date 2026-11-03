@@ -1,0 +1,47 @@
+@use "variables" as *;
+
+.cotizador {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.cotizador-formulario {
+  display: grid;
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+
+  select {
+    width: 100%;
+    min-width: 0;
+    padding: 0.6rem 0.8rem;
+    font-family: $fuente-texto;
+    color: $color-texto;
+    background-color: $color-superficie;
+    border: 1px solid $color-borde;
+    border-radius: 8px;
+  }
+}
+
+.cotizador-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cotizador-resultado {
+  padding: 1.5rem;
+  border: 1px solid $color-borde;
+  border-radius: $radio;
+  background-color: $color-superficie;
+  overflow-wrap: anywhere;
+
+  p {
+    margin: 0.75rem 0;
+  }
+}
+
+.cotizador-total {
+  color: $color-dorado-claro;
+  font-size: 1.25rem;
+  font-weight: 700;
+}

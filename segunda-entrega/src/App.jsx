@@ -116,7 +116,7 @@ const App = () => {
         <Route path="/" element={<MainLayout cantidad={carrito.reduce((total, producto) => total + producto.cantidad, 0)} errorCarrito={estadoCarrito.error} />}>
           <Route index element={<Home />} />
           <Route path="catalogo" element={<Catalogo onAgregar={agregarProducto} bloqueado={pedido.enviando} />} />
-          <Route path="cotizador" element={<Cotizador />} />
+          <Route path="cotizador" element={<Cotizador onAgregar={agregarProducto} bloqueado={pedido.enviando} />} />
           <Route path="carrito" element={<Carrito productos={carrito} onCantidad={cambiarCantidad} onEliminar={eliminarProducto} pedido={pedido} onConfirmar={confirmarPedido} />} />
           <Route path="contacto" element={<Contacto />} />
           <Route path="login" element={<Login />} />
