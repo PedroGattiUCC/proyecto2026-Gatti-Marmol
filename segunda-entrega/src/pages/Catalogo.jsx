@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { obtenerProductos } from '@api/productos.js';
 import ProductCard from '@components/ProductCard.jsx';
+import Button from '@components/Button.jsx';
 import '@styles/Catalogo.scss';
 
 /**
@@ -123,7 +124,7 @@ const Catalogo = () => {
       {!cargando && !error && productosVisibles.length === 0 && (
         <div className="catalogo-mensaje" aria-live="polite">
           <p>No se encontraron piezas con esos criterios.</p>
-          <button type="button" className="catalogo-restablecer" onClick={restablecerFiltros}>Restablecé los filtros</button>
+          <Button variante="secundario" onClick={restablecerFiltros}>Restablecé los filtros</Button>
         </div>
       )}
     </section>

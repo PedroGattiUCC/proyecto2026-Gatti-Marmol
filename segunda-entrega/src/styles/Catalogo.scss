@@ -1,5 +1,4 @@
 @use "variables" as *;
-@use "mixins" as *;
 
 .catalogo-titulo {
   margin-bottom: 0.5rem;
@@ -59,7 +58,3 @@
   text-align: center;
 }
 
-.catalogo-restablecer {
-  @include boton-secundario;
-  margin-top: 1rem;
-}
