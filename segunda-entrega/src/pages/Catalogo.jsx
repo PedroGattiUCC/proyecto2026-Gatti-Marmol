@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { obtenerProductos } from '@api/productos.js';
 import ProductCard from '@components/ProductCard.jsx';
 import Button from '@components/Button.jsx';
+import Input from '@components/Input.jsx';
 import '@styles/Catalogo.scss';
 
 /**
@@ -82,10 +83,9 @@ const Catalogo = ({ onAgregar, bloqueado }) => {
       <h2 className="catalogo-titulo">Catálogo de Piezas Exclusivas</h2>
       <p className="catalogo-subtitulo">Explorá nuestra colección de piezas en metales nobles y piedras preciosas.</p>
       <div className="catalogo-filtros">
-        <div className="catalogo-campo">
-          <label htmlFor="busqueda">Buscar joya o metal:</label>
-          <input
+          <Input
             id="busqueda"
+            label="Buscar joya o metal:"
             type="text"
             placeholder="Ej: anillo, platino, diamante"
             size="25"
@@ -93,7 +93,6 @@ const Catalogo = ({ onAgregar, bloqueado }) => {
             value={busqueda}
             onChange={(evento) => setBusqueda(evento.target.value)}
           />
-        </div>
         <div className="catalogo-campo">
           <label htmlFor="categoria">Filtrá por categoría:</label>
           <select id="categoria" value={categoria} onChange={(evento) => setCategoria(evento.target.value)}>
