@@ -167,3 +167,8 @@
     padding: 1.5rem 1rem;
   }
 }
+
+.home-acciones a:focus-visible {
+  outline: 2px solid $color-dorado-claro;
+  outline-offset: 3px;
+}
