@@ -153,7 +153,7 @@ Enlaces para volver al inicio o al catálogo.
   * `src/api/`: pedidos al mock con `fetch`.
   * `src/assets/`: imágenes importadas desde los componentes.
   * `src/components/`: componentes reutilizables, como `Button` e `Input`.
-  * `src/data/`: `db.json` del mock y lectura y guardado del carrito y la sesión.
+  * `src/data/`: `db.json` del mock, lectura y guardado del carrito y la sesión, cálculo del cotizador y validación de cuentas.
   * `src/layouts/`: `MainLayout`, con `Header`, `Footer` y `Outlet`.
   * `src/pages/`: una página por cada ruta.
   * `src/styles/`: hojas de estilos SCSS.
