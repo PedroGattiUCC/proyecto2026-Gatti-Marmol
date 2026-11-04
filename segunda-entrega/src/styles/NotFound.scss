@@ -36,3 +36,23 @@
 .notfound-accion-secundaria {
   @include boton-secundario;
 }
+
+@media (max-width: $movil) {
+  .notfound {
+    padding: 2rem 0;
+  }
+
+  .notfound-acciones {
+    flex-direction: column;
+
+    a {
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+  }
+}
+
+.notfound-acciones a:focus-visible {
+  outline: 2px solid $color-dorado-claro;
+  outline-offset: 3px;
+}
