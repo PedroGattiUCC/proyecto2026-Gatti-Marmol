@@ -32,6 +32,7 @@
 .cabecera-enlaces {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 1.5rem;
   list-style: none;
 
@@ -44,6 +45,12 @@
       color: $color-dorado-claro;
     }
   }
+}
+
+.cabecera-sesion {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 @media (max-width: $movil) {
