@@ -1,0 +1,33 @@
+@use "variables" as *;
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+
+  input {
+    background-color: $color-superficie;
+    border: 1px solid $color-borde;
+    border-radius: 8px;
+    color: $color-texto;
+    font-family: $fuente-texto;
+    padding: 0.6rem 0.8rem;
+    width: 100%;
+    min-width: 0;
+
+    &:focus {
+      border-color: $color-dorado;
+      outline: 2px solid $color-dorado;
+    }
+
+    &[aria-invalid="true"] {
+      border-color: $color-error;
+    }
+  }
+}
+
+.campo-error {
+  color: $color-error;
+  font-size: 0.9rem;
+}

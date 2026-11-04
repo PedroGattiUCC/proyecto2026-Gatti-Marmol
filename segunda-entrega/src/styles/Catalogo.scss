@@ -1,5 +1,4 @@
 @use "variables" as *;
-@use "mixins" as *;
 
 .catalogo-titulo {
   margin-bottom: 0.5rem;
@@ -25,7 +24,6 @@
   flex-direction: column;
   gap: 0.4rem;
 
-  input,
   select {
     background-color: $color-superficie;
     border: 1px solid $color-borde;
@@ -59,7 +57,3 @@
   text-align: center;
 }
 
-.catalogo-restablecer {
-  @include boton-secundario;
-  margin-top: 1rem;
-}

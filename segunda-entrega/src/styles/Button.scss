@@ -1,0 +1,24 @@
+@use "mixins" as *;
+@use "variables" as *;
+
+.boton-principal {
+  @include boton-principal;
+}
+
+.boton-secundario {
+  @include boton-secundario;
+}
+
+.boton {
+  white-space: normal;
+
+  &:focus-visible {
+    outline: 2px solid $color-dorado-claro;
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+}

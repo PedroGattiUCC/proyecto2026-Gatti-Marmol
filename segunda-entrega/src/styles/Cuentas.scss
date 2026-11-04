@@ -1,0 +1,43 @@
+@use "variables" as *;
+
+.cuenta {
+  background-color: $color-superficie;
+  border: 1px solid $color-borde;
+  border-radius: $radio;
+  margin: 0 auto;
+  max-width: 480px;
+  padding: 2rem;
+}
+
+.cuenta-titulo {
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.cuenta-subtitulo,
+.cuenta-enlace,
+.cuenta-aviso {
+  color: $color-texto-suave;
+  text-align: center;
+}
+
+.cuenta-formulario {
+  display: grid;
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.cuenta-error {
+  color: $color-error;
+}
+
+.cuenta-aviso {
+  font-size: 0.85rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: $movil) {
+  .cuenta {
+    padding: 1.25rem;
+  }
+}
