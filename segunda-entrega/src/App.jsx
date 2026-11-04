@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { registrarPedido } from '@api/pedidos.js';
 import { leerCarrito, guardarCarrito } from '@/data/carrito.js';
+import { leerSesion, guardarSesion, borrarSesion } from '@/data/sesion.js';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MainLayout from '@layouts/MainLayout.jsx';
 import Carrito from '@pages/Carrito.jsx';
@@ -21,6 +22,28 @@ const App = () => {
   const [estadoCarrito, setEstadoCarrito] = useState(leerCarrito);
   const carrito = estadoCarrito.productos;
   const [pedido, setPedido] = useState({ enviando: false, mensaje: '', error: '', registrado: false });
+  const [usuario, setUsuario] = useState(leerSesion);
+
+  /**
+   * Guarda la sesión del usuario que ingresó
+   * @method iniciarSesion
+   * @param {Object} datos - Nombre y correo del usuario
+   * @return {void} No retorna un valor
+   */
+  const iniciarSesion = (datos) => {
+    guardarSesion(datos);
+    setUsuario(datos);
+  };
+
+  /**
+   * Elimina la sesión del usuario
+   * @method cerrarSesion
+   * @return {void} No retorna un valor
+   */
+  const cerrarSesion = () => {
+    borrarSesion();
+    setUsuario(null);
+  };
 
   /**
    * Guarda un cambio e informa si el navegador impide persistirlo
@@ -113,13 +136,13 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainLayout cantidad={carrito.reduce((total, producto) => total + producto.cantidad, 0)} errorCarrito={estadoCarrito.error} />}>
+        <Route path="/" element={<MainLayout cantidad={carrito.reduce((total, producto) => total + producto.cantidad, 0)} errorCarrito={estadoCarrito.error} usuario={usuario} onSalir={cerrarSesion} />}>
           <Route index element={<Home />} />
           <Route path="catalogo" element={<Catalogo onAgregar={agregarProducto} bloqueado={pedido.enviando} />} />
           <Route path="cotizador" element={<Cotizador onAgregar={agregarProducto} bloqueado={pedido.enviando} />} />
           <Route path="carrito" element={<Carrito productos={carrito} onCantidad={cambiarCantidad} onEliminar={eliminarProducto} pedido={pedido} onConfirmar={confirmarPedido} />} />
           <Route path="contacto" element={<Contacto />} />
-          <Route path="login" element={<Login />} />
+          <Route path="login" element={<Login usuario={usuario} onIngresar={iniciarSesion} />} />
           <Route path="registro" element={<Registro />} />
           <Route path="*" element={<NotFound />} />
         </Route>
