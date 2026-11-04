@@ -80,14 +80,14 @@ const Catalogo = ({ onAgregar, bloqueado }) => {
 
   return (
     <section>
-      <h2 className="catalogo-titulo">Catálogo de Piezas Exclusivas</h2>
+      <h2 className="catalogo-titulo">Catálogo de piezas exclusivas</h2>
       <p className="catalogo-subtitulo">Explorá nuestra colección de piezas en metales nobles y piedras preciosas.</p>
       <div className="catalogo-filtros">
           <Input
             id="busqueda"
-            label="Buscar joya o metal:"
+            label="Buscá una joya o un metal:"
             type="text"
-            placeholder="Ej: anillo, platino, diamante"
+            placeholder="Ej.: anillo, platino, diamante"
             size="25"
             maxLength="30"
             value={busqueda}

@@ -35,7 +35,7 @@ const Contacto = () => {
               Pedro Gatti — <a href="mailto:2519717@ucc.edu.ar">2519717@ucc.edu.ar</a>
             </li>
             <li>
-              Joaquin Mármol — <a href="mailto:2514908@ucc.edu.ar">2514908@ucc.edu.ar</a>
+              Joaquín Mármol — <a href="mailto:2514908@ucc.edu.ar">2514908@ucc.edu.ar</a>
             </li>
           </ul>
           <p className="contacto-aclaracion">

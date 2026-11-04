@@ -11,7 +11,7 @@ const Footer = () => {
     <footer className="pie">
       <p>Obispo Trejo 323, Córdoba, Argentina</p>
       <p>Cátedra: Taller de Desarrollo Web, Universidad Católica de Córdoba (UCC 2026)</p>
-      <p>Autores: Pedro Gatti (Legajo: 2519717) y Joaquin Mármol (Legajo: 2514908)</p>
+      <p>Autores: Pedro Gatti (Legajo: 2519717) y Joaquín Mármol (Legajo: 2514908)</p>
       <nav aria-label="Navegación secundaria">
         <ul className="pie-enlaces">
           <li><Link to="/">Inicio</Link></li>
