@@ -68,7 +68,7 @@ const Registro = () => {
           id="registro-nombre"
           name="nombre"
           label="Nombre:"
-          placeholder="Ej: Ana Pérez"
+          placeholder="Ej.: Ana Pérez"
           size="30"
           maxLength="60"
           autoComplete="name"

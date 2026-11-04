@@ -89,7 +89,7 @@ const Home = () => {
             <thead>
               <tr>
                 <th scope="col">Metal precioso</th>
-                <th scope="col">Pureza / Ley</th>
+                <th scope="col">Pureza / ley</th>
                 <th scope="col">Valor estimado por gramo</th>
                 <th scope="col">Acabado disponible</th>
               </tr>

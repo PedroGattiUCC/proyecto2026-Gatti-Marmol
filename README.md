@@ -21,7 +21,7 @@ Proyecto integrador para la cátedra **Taller de Desarrollo Web** (2026) - [Univ
 | Apellido | Nombre | Legajo | Correo Institucional | GitHub |
 | :--- | :--- | :--- | :--- | :--- |
 | **Gatti** | Pedro | 2519717 | [2519717@ucc.edu.ar](mailto:2519717@ucc.edu.ar) | [@PedroGattiUCC](https://github.com/PedroGattiUCC) |
-| **Mármol** | Joaquin | 2514908 | [2514908@ucc.edu.ar](mailto:2514908@ucc.edu.ar) | [@Gu4co](https://github.com/Gu4co) |
+| **Mármol** | Joaquín | 2514908 | [2514908@ucc.edu.ar](mailto:2514908@ucc.edu.ar) | [@Gu4co](https://github.com/Gu4co) |
 
 ---
 
