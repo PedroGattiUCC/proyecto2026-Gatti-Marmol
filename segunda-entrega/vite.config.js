@@ -11,9 +11,11 @@ export default defineConfig({
       '@api': path.resolve(import.meta.dirname, 'src/api'),
       '@assets': path.resolve(import.meta.dirname, 'src/assets'),
       '@components': path.resolve(import.meta.dirname, 'src/components'),
+      '@data': path.resolve(import.meta.dirname, 'src/data'),
       '@layouts': path.resolve(import.meta.dirname, 'src/layouts'),
       '@pages': path.resolve(import.meta.dirname, 'src/pages'),
       '@styles': path.resolve(import.meta.dirname, 'src/styles'),
+      '@utils': path.resolve(import.meta.dirname, 'src/utils'),
     },
   },
 });

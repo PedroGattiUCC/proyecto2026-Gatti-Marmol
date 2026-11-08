@@ -1,4 +1,18 @@
 /**
+ * Comprueba el peso, las gemas y el grabado antes de presupuestar
+ * @method validarCotizacion
+ * @param {Object} valores - Valores actuales del formulario
+ * @return {Object} Mensajes por campo; vacíos cuando el valor es válido
+ */
+export const validarCotizacion = ({ peso, gemas, grabado }) => ({
+  peso: peso.trim() === '' || !Number.isFinite(Number(peso)) || Number(peso) < 1 || Number(peso) > 500
+    ? 'Ingresá un peso entre 1 y 500 gramos.' : '',
+  gemas: gemas.trim() === '' || !Number.isInteger(Number(gemas)) || Number(gemas) < 0 || Number(gemas) > 30
+    ? 'Ingresá una cantidad entera entre 0 y 30 gemas.' : '',
+  grabado: grabado.length > 25 ? 'El grabado puede tener hasta 25 caracteres.' : '',
+});
+
+/**
  * Normaliza un correo para compararlo sin espacios ni mayúsculas
  * @method normalizarCorreo
  * @param {string} email - Correo ingresado
@@ -47,3 +61,14 @@ export const validarRegistro = ({ nombre, email, password, confirmacion }) => {
     confirmacion: password !== confirmacion ? 'Las contraseñas no coinciden.' : '',
   };
 };
+
+/**
+ * Comprueba que cada línea del carrito guardado tenga valores usables
+ * @method validarCarrito
+ * @param {Array} productos - Líneas recuperadas del almacenamiento
+ * @return {boolean} true cuando todas las líneas son válidas
+ */
+export const validarCarrito = (productos) => Array.isArray(productos) && productos.every((producto) =>
+  producto && typeof producto.id === 'string' && typeof producto.nombre === 'string'
+  && Number.isFinite(producto.precio) && producto.precio > 0
+  && Number.isInteger(producto.cantidad) && producto.cantidad >= 1 && producto.cantidad <= 99);

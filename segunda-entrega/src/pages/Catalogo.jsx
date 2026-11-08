@@ -37,7 +37,9 @@ const filtrarYOrdenar = (productos, busqueda, categoria, orden) => {
 /**
  * Pide los productos al mock y los muestra con buscador, filtro y orden
  * @method Catalogo
- * @param {Object} props - Acción para agregar piezas al carrito
+ * @param {Object} props - Propiedades del componente
+ * @param {Function} props.onAgregar - Agrega una pieza al carrito
+ * @param {boolean} props.bloqueado - Impide agregar mientras se guarda otro pedido
  * @return {JSX.Element} Página del catálogo
  */
 const Catalogo = ({ onAgregar, bloqueado }) => {
@@ -83,16 +85,16 @@ const Catalogo = ({ onAgregar, bloqueado }) => {
       <h2 className="catalogo-titulo">Catálogo de piezas exclusivas</h2>
       <p className="catalogo-subtitulo">Explorá nuestra colección de piezas en metales nobles y piedras preciosas.</p>
       <div className="catalogo-filtros">
-          <Input
-            id="busqueda"
-            label="Buscá una joya o un metal:"
-            type="text"
-            placeholder="Ej.: anillo, platino, diamante"
-            size="25"
-            maxLength="30"
-            value={busqueda}
-            onChange={(evento) => setBusqueda(evento.target.value)}
-          />
+        <Input
+          id="busqueda"
+          label="Buscá una joya o un metal:"
+          type="text"
+          placeholder="Ej.: anillo, platino, diamante"
+          size="25"
+          maxLength="30"
+          value={busqueda}
+          onChange={(evento) => setBusqueda(evento.target.value)}
+        />
         <div className="catalogo-campo">
           <label htmlFor="categoria">Filtrá por categoría:</label>
           <select id="categoria" value={categoria} onChange={(evento) => setCategoria(evento.target.value)}>
@@ -107,7 +109,7 @@ const Catalogo = ({ onAgregar, bloqueado }) => {
         <div className="catalogo-campo">
           <label htmlFor="orden">Ordená por:</label>
           <select id="orden" value={orden} onChange={(evento) => setOrden(evento.target.value)}>
-            <option value="defecto">Defecto</option>
+            <option value="defecto">Por defecto</option>
             <option value="precio-menor">Menor precio</option>
             <option value="precio-mayor">Mayor precio</option>
             <option value="nombre-az">Nombre A-Z</option>

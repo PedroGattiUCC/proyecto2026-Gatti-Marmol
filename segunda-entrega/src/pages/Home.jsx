@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import imagenHero from '@assets/imagenes/joyas_hero.jpg';
+import { metales } from '@data/cotizacion.json';
 import '@styles/Home.scss';
 
 /**
@@ -95,24 +96,14 @@ const Home = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">Oro 18k (amarillo / blanco / rosa)</th>
-                <td>18 quilates (750)</td>
-                <td>$ 95.000 ARS</td>
-                <td>Pulido espejo o satinado</td>
-              </tr>
-              <tr>
-                <th scope="row">Plata 925 de ley</th>
-                <td>925 milésimas</td>
-                <td>$ 12.000 ARS</td>
-                <td>Envejecido o rodinado</td>
-              </tr>
-              <tr>
-                <th scope="row">Platino 950 noble</th>
-                <td>950 milésimas</td>
-                <td>$ 110.000 ARS</td>
-                <td>Brillo de alta durabilidad</td>
-              </tr>
+              {Object.entries(metales).map(([clave, metal]) => (
+                <tr key={clave}>
+                  <th scope="row">{metal.detalle}</th>
+                  <td>{metal.pureza}</td>
+                  <td>$ {metal.precio.toLocaleString('es-AR')} ARS</td>
+                  <td>{metal.acabado}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

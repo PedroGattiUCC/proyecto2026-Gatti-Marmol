@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { crearUsuario, obtenerUsuarios } from '@api/usuarios.js';
 import Button from '@components/Button.jsx';
 import Input from '@components/Input.jsx';
-import { normalizarCorreo, validarRegistro } from '@/data/cuentas.js';
+import { normalizarCorreo, validarRegistro } from '@utils/validaciones.js';
 import '@styles/Cuentas.scss';
 
 /**

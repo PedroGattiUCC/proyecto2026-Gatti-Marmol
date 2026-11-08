@@ -1,0 +1,29 @@
+{
+  "metales": {
+    "oro18k": {
+      "nombre": "Oro 18k",
+      "detalle": "Oro 18k (amarillo / blanco / rosa)",
+      "pureza": "18 quilates (750)",
+      "acabado": "Pulido espejo o satinado",
+      "precio": 95000
+    },
+    "plata925": {
+      "nombre": "Plata 925",
+      "detalle": "Plata 925 de ley",
+      "pureza": "925 milésimas",
+      "acabado": "Envejecido o rodinado",
+      "precio": 12000
+    },
+    "platino": {
+      "nombre": "Platino 950",
+      "detalle": "Platino 950 noble",
+      "pureza": "950 milésimas",
+      "acabado": "Brillo de alta durabilidad",
+      "precio": 110000
+    }
+  },
+  "tarifas": {
+    "gema": 25000,
+    "grabado": 5000
+  }
+}

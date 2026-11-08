@@ -8,6 +8,7 @@ import '@styles/ProductCard.scss';
  * @param {Object} props - Propiedades del componente
  * @param {Object} props.producto - Producto que se muestra en la tarjeta
  * @param {Function} props.onAgregar - Agrega una unidad al carrito
+ * @param {boolean} props.bloqueado - Impide agregar mientras se guarda otro pedido
  * @return {JSX.Element} Tarjeta del producto
  */
 const ProductCard = ({ producto, onAgregar, bloqueado }) => {
