@@ -27,9 +27,9 @@ Proyecto integrador para la cátedra **Taller de Desarrollo Web** (2026) - [Univ
 
 ## Sitio en Vivo
 
-🌐 **Despliegue en GitHub Pages:** [https://pedrogattiucc.github.io/proyecto2026-Gatti-Marmol/](https://pedrogattiucc.github.io/proyecto2026-Gatti-Marmol/)
+🌐 **Despliegue en GitHub Pages:** [https://pedrogattiucc.github.io/proyecto2026-Gatti-Marmol/primera-entrega/](https://pedrogattiucc.github.io/proyecto2026-Gatti-Marmol/primera-entrega/)
 
-El `index.html` de la raíz redirige a la carpeta `primera-entrega/`. La segunda entrega usa un mock local, así que se ejecuta siguiendo los [pasos de ejecución](#pasos-de-ejecución).
+La segunda entrega usa un mock local, así que se ejecuta siguiendo los [pasos de ejecución](#pasos-de-ejecución).
 
 ---
 
@@ -46,7 +46,7 @@ Sitio web para una tienda de joyería artesanal, con un catálogo con filtros, u
 
 ### Primera entrega
 
-No necesita instalación. Se puede ver en el [despliegue de GitHub Pages](https://pedrogattiucc.github.io/proyecto2026-Gatti-Marmol/) o abriendo `primera-entrega/index.html` en el navegador.
+No necesita instalación. Se puede ver en el [despliegue de GitHub Pages](https://pedrogattiucc.github.io/proyecto2026-Gatti-Marmol/primera-entrega/) o abriendo `primera-entrega/index.html` en el navegador.
 
 ### Segunda entrega
 
@@ -153,8 +153,9 @@ Enlaces para volver al inicio o al catálogo.
   * `src/api/`: pedidos al mock con `fetch`.
   * `src/assets/`: imágenes importadas desde los componentes.
   * `src/components/`: componentes reutilizables, como `Button` e `Input`.
-  * `src/data/`: `db.json` del mock, lectura y guardado del carrito y la sesión, cálculo del cotizador y validación de cuentas.
+  * `src/data/`: datos en formato JSON: `db.json` del mock y `cotizacion.json` con los metales y las tarifas del cotizador.
   * `src/layouts/`: `MainLayout`, con `Header`, `Footer` y `Outlet`.
   * `src/pages/`: una página por cada ruta.
   * `src/styles/`: hojas de estilos SCSS.
+  * `src/utils/`: funciones auxiliares: validaciones, cálculo del cotizador y guardado del carrito y la sesión.
   * `Requerimientos.md`: consigna de la segunda entrega.
