@@ -1,0 +1,11 @@
+{
+  "metales": {
+    "oro18k": { "nombre": "Oro 18k", "precio": 95000 },
+    "plata925": { "nombre": "Plata 925", "precio": 12000 },
+    "platino": { "nombre": "Platino 950", "precio": 110000 }
+  },
+  "tarifas": {
+    "gema": 25000,
+    "grabado": 5000
+  }
+}

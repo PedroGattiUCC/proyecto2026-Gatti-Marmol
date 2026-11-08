@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { registrarPedido } from '@api/pedidos.js';
-import { leerCarrito, guardarCarrito } from '@/data/carrito.js';
-import { leerSesion, guardarSesion, borrarSesion } from '@/data/sesion.js';
+import { leerCarrito, guardarCarrito } from '@utils/carrito.js';
+import { leerSesion, guardarSesion, borrarSesion } from '@utils/sesion.js';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MainLayout from '@layouts/MainLayout.jsx';
 import Carrito from '@pages/Carrito.jsx';

@@ -1,3 +1,5 @@
+import { validarCarrito } from '@utils/validaciones.js';
+
 const CLAVE_CARRITO = 'laure_carrito_react';
 const ERROR_CARRITO = 'No se pudo recuperar el carrito guardado. Podés empezar uno nuevo.';
 
@@ -9,11 +11,7 @@ const ERROR_CARRITO = 'No se pudo recuperar el carrito guardado. Podés empezar 
 export const leerCarrito = () => {
   try {
     const productos = JSON.parse(localStorage.getItem(CLAVE_CARRITO) || '[]');
-    const valido = Array.isArray(productos) && productos.every((producto) =>
-      producto && typeof producto.id === 'string' && typeof producto.nombre === 'string'
-      && Number.isFinite(producto.precio) && producto.precio > 0
-      && Number.isInteger(producto.cantidad) && producto.cantidad >= 1 && producto.cantidad <= 99);
-    return valido ? { productos, error: '' } : { productos: [], error: ERROR_CARRITO };
+    return validarCarrito(productos) ? { productos, error: '' } : { productos: [], error: ERROR_CARRITO };
   } catch {
     return { productos: [], error: ERROR_CARRITO };
   }

@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '@components/Button.jsx';
 import Input from '@components/Input.jsx';
-import { METALES, validarCotizacion, calcularCotizacion } from '@/data/cotizacion.js';
+import { metales, tarifas } from '@data/cotizacion.json';
+import { calcularCotizacion } from '@utils/cotizacion.js';
+import { validarCotizacion } from '@utils/validaciones.js';
 import '@styles/Cotizador.scss';
 
 const VALORES_INICIALES = { metal: 'oro18k', peso: '', gemas: '0', grabado: '' };
@@ -73,7 +75,7 @@ const Cotizador = ({ onAgregar, bloqueado }) => {
     const configuracion = [valores.metal, Number(valores.peso), Number(valores.gemas), valores.grabado.trim()];
     const agregado = onAgregar({
       id: `personalizada-${encodeURIComponent(JSON.stringify(configuracion))}`,
-      nombre: `Joya a medida (${METALES[valores.metal].nombre}, ${valores.peso} g, ${valores.gemas} gemas${valores.grabado.trim() ? `, grabado: ${valores.grabado.trim()}` : ', sin grabado'})`,
+      nombre: `Joya a medida (${metales[valores.metal].nombre}, ${valores.peso} g, ${valores.gemas} gemas${valores.grabado.trim() ? `, grabado: ${valores.grabado.trim()}` : ', sin grabado'})`,
       precio: resultado.total,
     });
     setMensaje(agregado ? 'Joya personalizada agregada al carrito.' : 'No se pudo agregar la pieza. Revisá el aviso del carrito.');
@@ -87,14 +89,14 @@ const Cotizador = ({ onAgregar, bloqueado }) => {
         <div className="campo">
           <label htmlFor="tipo-metal">Elegí el metal precioso:</label>
           <select id="tipo-metal" name="metal" value={valores.metal} onChange={cambiarCampo}>
-            {Object.entries(METALES).map(([clave, metal]) => (
+            {Object.entries(metales).map(([clave, metal]) => (
               <option key={clave} value={clave}>{metal.nombre} ($ {metal.precio.toLocaleString('es-AR')}/g)</option>
             ))}
           </select>
         </div>
         <Input id="peso-joya" name="peso" label="Peso aproximado en gramos (1 - 500 g):" type="number" min="1" max="500" step="any" required value={valores.peso} onChange={cambiarCampo} error={tocados.peso ? errores.peso : ''} />
-        <Input id="cantidad-gemas" name="gemas" label="Cantidad de gemas a engarzar ($ 25.000 por gema):" type="number" min="0" max="30" step="1" required value={valores.gemas} onChange={cambiarCampo} error={tocados.gemas ? errores.gemas : ''} />
-        <Input id="texto-grabado" name="grabado" label="Grabado opcional (hasta 25 caracteres, $ 5.000):" maxLength={25} value={valores.grabado} onChange={cambiarCampo} error={tocados.grabado ? errores.grabado : ''} />
+        <Input id="cantidad-gemas" name="gemas" label={`Cantidad de gemas a engarzar ($ ${tarifas.gema.toLocaleString('es-AR')} por gema):`} type="number" min="0" max="30" step="1" required value={valores.gemas} onChange={cambiarCampo} error={tocados.gemas ? errores.gemas : ''} />
+        <Input id="texto-grabado" name="grabado" label={`Grabado opcional (hasta 25 caracteres, $ ${tarifas.grabado.toLocaleString('es-AR')}):`} maxLength={25} value={valores.grabado} onChange={cambiarCampo} error={tocados.grabado ? errores.grabado : ''} />
         <div className="cotizador-acciones">
           <Button type="submit">Calculá tu presupuesto</Button>
           <Button variante="secundario" onClick={restablecer}>Restablecé</Button>
@@ -103,7 +105,7 @@ const Cotizador = ({ onAgregar, bloqueado }) => {
       {resultado && (
         <div className="cotizador-resultado" aria-live="polite">
           <h3>Presupuesto estimativo</h3>
-          <p>{valores.peso} g de {METALES[valores.metal].nombre}: $ {resultado.importeMetal.toLocaleString('es-AR')} ARS</p>
+          <p>{valores.peso} g de {metales[valores.metal].nombre}: $ {resultado.importeMetal.toLocaleString('es-AR')} ARS</p>
           <p>{valores.gemas} gemas engarzadas: $ {resultado.importeGemas.toLocaleString('es-AR')} ARS</p>
           <p>{valores.grabado.trim() ? `Grabado: ${valores.grabado.trim()}` : 'Sin grabado personalizado'}: $ {resultado.importeGrabado.toLocaleString('es-AR')} ARS</p>
           <p className="cotizador-total">Total estimado: $ {resultado.total.toLocaleString('es-AR')} ARS</p>
