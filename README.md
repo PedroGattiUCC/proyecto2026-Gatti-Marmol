@@ -149,9 +149,9 @@ Enlaces para volver al inicio o al catálogo.
   * `Wireframe/`: wireframes de cada pantalla ([ver](primera-entrega/Wireframe/README.md)).
   * `Requerimientos.md`: consigna de la primera entrega.
 * `segunda-entrega/`: todo lo de la segunda entrega.
-  * `public/`: favicon e imágenes servidas por ruta directa.
+  * `public/`: favicon, servido por ruta directa.
   * `src/api/`: pedidos al mock con `fetch`.
-  * `src/assets/`: imágenes importadas desde los componentes.
+  * `src/assets/`: imágenes de las joyas, importadas desde los componentes.
   * `src/components/`: componentes reutilizables, como `Button` e `Input`.
   * `src/data/`: datos en formato JSON: `db.json` del mock y `cotizacion.json` con los metales y las tarifas del cotizador.
   * `src/layouts/`: `MainLayout`, con `Header`, `Footer` y `Outlet`.

@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import imagenAros from '@assets/imagenes/joyas_aros.jpg';
+import imagenCollar from '@assets/imagenes/joyas_collar.jpg';
 import imagenHero from '@assets/imagenes/joyas_hero.jpg';
 import { metales } from '@data/cotizacion.json';
 import '@styles/Home.scss';
@@ -41,7 +43,7 @@ const Home = () => {
 
         <div className="home-tarjetas">
           <article className="home-tarjeta">
-            <img src="/imagenes/joyas_hero.jpg" alt="Anillo Solitario Imperial en oro amarillo 18k con diamante central" />
+            <img src={imagenHero} alt="Anillo Solitario Imperial en oro amarillo 18k con diamante central" />
             <div className="home-tarjeta-cuerpo">
               <span className="home-tarjeta-metal">Oro amarillo 18k</span>
               <h3>Solitario Imperial</h3>
@@ -51,7 +53,7 @@ const Home = () => {
           </article>
 
           <article className="home-tarjeta">
-            <img src="/imagenes/joyas_collar.jpg" alt="Colgante Luminance en platino noble con diamante talla esmeralda" />
+            <img src={imagenCollar} alt="Colgante Luminance en platino noble con diamante talla esmeralda" />
             <div className="home-tarjeta-cuerpo">
               <span className="home-tarjeta-metal">Platino noble</span>
               <h3>Colgante Luminance</h3>
@@ -61,7 +63,7 @@ const Home = () => {
           </article>
 
           <article className="home-tarjeta">
-            <img src="/imagenes/joyas_aros.jpg" alt="Par de aros Royal Brilliance en oro blanco 18k con corte baguette" />
+            <img src={imagenAros} alt="Par de aros Royal Brilliance en oro blanco 18k con corte baguette" />
             <div className="home-tarjeta-cuerpo">
               <span className="home-tarjeta-metal">Oro blanco 18k</span>
               <h3>Aros Royal Brilliance</h3>
