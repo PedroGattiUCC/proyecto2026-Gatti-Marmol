@@ -25,7 +25,7 @@ const ProductCard = ({ producto, onAgregar, bloqueado }) => {
 
   return (
     <article className="tarjeta-producto">
-      <img className="tarjeta-imagen" src={`/imagenes/${producto.imagen}`} alt={producto.alt} />
+      <img className="tarjeta-imagen" src={new URL(`../assets/imagenes/${producto.imagen}`, import.meta.url).href} alt={producto.alt} />
       <div className="tarjeta-cuerpo">
         <span className="tarjeta-categoria">{producto.categoria}</span>
         <h3>{producto.nombre}</h3>
@@ -34,7 +34,6 @@ const ProductCard = ({ producto, onAgregar, bloqueado }) => {
         <p className="tarjeta-precio">$ {producto.precio.toLocaleString('es-AR')} ARS</p>
         <Button onClick={agregar} disabled={bloqueado}>Agregá al carrito</Button>
         <p role="status">{mensaje}</p>
-        <a href={producto.web} target="_blank" rel="noreferrer">Ver en la web</a>
       </div>
     </article>
   );
